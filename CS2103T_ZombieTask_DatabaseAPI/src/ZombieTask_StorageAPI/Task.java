@@ -24,7 +24,7 @@ public class Task
 	private String taskName = "";
 	private Calendar deadline = null;
 	private ArrayList<String> tags = new ArrayList<String>();
-	private Vector<Task> subtasks = new Vector<Task>();
+	private ArrayList<Task> subtasks = new ArrayList<Task>();
 	//////////////////// CONSTRUCTORS ////////////////////
 	public Task(String taskName)	{	setTaskName(taskName);	}
 	public Task(String taskName, Calendar deadline)
@@ -70,6 +70,7 @@ public class Task
 		if(hasTag(tag.toUpperCase()))	tags.remove(tag.toUpperCase());
 	}
 	//////////////////// SUBTASKS METHODS ////////////////////
+	
 	public void addSubtask(String subtask) {
 		subtasks.add(new Task(subtask));	}
 	public void addSubtask(String subtask, Calendar date) {
