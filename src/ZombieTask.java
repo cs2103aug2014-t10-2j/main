@@ -31,18 +31,25 @@ public class ZombieTask {
 	 * Instantiation of ZombieTask data attributes
 	 */
 	
-	private static String lastCommandString = null;
-	private static Command lastCommand = null;
-	private static ArrayList<Command> commandList = new ArrayList<Command>();
+	private static String currentCommandString = null;
+	private static Command currentCommand = null;
+	private static Task currentTask = null;
+	private static ArrayList<Command> futureCommandList = new ArrayList<Command>();
+	private static ArrayList<Task> futureTaskList = new ArrayList<Task>();
+	private static ArrayList<Command> pastCommandList = new ArrayList<Command>();
+	private static ArrayList<Task> pastTaskList = new ArrayList<Task>();
 	
 	/*
 	 * Constants for Command Types
 	 */
 	
-	private static String COMMAND_ADD = "ADD";
-	private static String COMMAND_DELETE = "DELETE";
-	private static String COMMAND_UPDATE = "UPDATE";
-	private static String COMMAND_VIEW = "VIEW";
+	private static String COMMAND_ADD = "add";
+	private static String COMMAND_DELETE = "delete";
+	private static String COMMAND_UPDATE = "update";
+	private static String COMMAND_VIEW = "view";
+	private static String COMMAND_UNDO = "undo";
+	private static String COMMAND_REDO = "redo";
+	private static String COMMAND_INVALID = "invalid";
 	
 	/*
 	 * Constants for Calendar Views
@@ -61,6 +68,7 @@ public class ZombieTask {
 	private static String MESSAGE_FILE_OPENED = "%s is ready for use";
 	private static String MESSAGE_MISSING_ARGUMENTS = "Command Missing Arguments:\n%s";
 	private static String MESSAGE_INVALID_COMMAND = "Invalid Command:\n%s";
+	private static String MESSAGE_INVALID_FILENAME = "Invalid FileName: %s";
 	
 	/**
 	 * Method that will be invoked when ZombieTask is called.
@@ -74,16 +82,36 @@ public class ZombieTask {
 		initStorage(args);
 		
 		while(sc.hasNext()){
-			lastCommandString = sc.nextLine();
-			lastCommand = parser.getCommand(lastCommandString);
-			if(lastCommand.hasMissingArgs()){
-				showToUser(String.format(MESSAGE_MISSING_ARGUMENTS, lastCommandString));
+			currentCommandString = sc.nextLine();
+			currentCommand = parser.getCommand(currentCommandString);
+			if(currentCommand.hasMissingArgs()){
+				showToUser(String.format(MESSAGE_MISSING_ARGUMENTS, currentCommandString));
 				continue;
 			}
-			switch(lastCommand.getCommandType()){
-			
+			switch(currentCommand.getCommandType()){
+			case COMMAND_ADD:
+				addCommand(currentCommand);
+				break;
+			case COMMAND_DELETE:
+				deleteCommand(currentCommand);
+				break;
+			case COMMAND_VIEW:
+				viewCommand(currentCommand);
+				break;
+			case COMMAND_UPDATE:
+				updateCommand(currentCommand);
+				break;
+			case COMMAND_UNDO:
+				undo();
+				break;
+			case COMMAND_REDO:
+				redo();
+				break;
+			case COMMAND_INVALID:
+				invalidCommand(currentCommandString);
+				break;
 			default:
-				invalidCommand();
+				invalidCommand(currentCommandString);
 				break;
 			}
 			
@@ -95,9 +123,58 @@ public class ZombieTask {
 	
 	
 	/*
-	 * storage mutators
+	 * Command Handlers
 	 */
 	
+	private static void addCommand(Command command) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void deleteCommand(Command command) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void viewCommand(Command command) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private static void updateCommand(Command command) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void invalidCommand(Command commandString) {
+		showToUser(String.format(MESSAGE_INVALID_COMMAND, commandString));
+	}
+
+	private static void undo() {
+		try{
+			currentCommand = removeLastCommand(pastCommandList);
+		} catch(Exception err) {
+			showToUser(err.getMessage());
+		}
+	}
+	
+	private static void redo() {
+		try{
+			currentCommand = removeLastCommand(futureCommandList);
+		} catch(Exception err) {
+			showToUser(err.getMessage());
+		}
+		
+	}
+
+	
+
+	
+
+
+
+
+
 	/**
 	 * Initialises storage with first args
 	 * 
@@ -105,16 +182,36 @@ public class ZombieTask {
 	 */
 	
 	private static void initStorage(String[] args) {
-		if (args.length > 0){
-			storage.setFileName(args[0]);
+		try {
+			if (args.length > 0){
+				storage.setFileName(args[0]);
+			}
+			storage.createFile();
+		} catch (Exception err){
+			showToUser(String.format(MESSAGE_INVALID_FILENAME, args[0]))
+		} finally {
+			showToUser(String.format(MESSAGE_FILE_OPENED, storage.getFileName));
 		}
-		storage.createFile();
-		showToUser(String.format(MESSAGE_FILE_OPENED, storage.getFileName));
+		
 	}
 	
 	/*
 	 * commandList mutators
 	 */
+	
+	private static boolean addCommand(Command command, Task task){
+		pastCommandList.add(command);
+		pastTaskList.add(task);
+		if (futureCommandList.size() > 0){
+			futureCommandList.clear();
+			futureTaskList.clear();
+		}
+		return true;
+	}
+	
+	private static Command removeLastCommand(ArrayList<Command> commandList) throws Exception{
+		ssss
+	}
 	
 	/*
 	 * Miscellaneous Helper Functions
