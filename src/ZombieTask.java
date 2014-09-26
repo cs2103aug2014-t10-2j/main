@@ -19,7 +19,7 @@ import java.util.Scanner;
 public class ZombieTask {
 
 	/*
-	 * Instantiation of External Objects
+	 * Instantiation of External Interfaces and Static Classes
 	 */
 	
 	private static UI ui = new UI();
@@ -33,9 +33,7 @@ public class ZombieTask {
 	
 	private static String lastCommandString = null;
 	private static Command lastCommand = null;
-	private static String fileName = null;
 	private static ArrayList<Command> commandList = new ArrayList<Command>();
-	
 	
 	/*
 	 * Standard Messages
@@ -43,9 +41,9 @@ public class ZombieTask {
 	
 	private static String MESSAGE_WELCOME = "Welcome to Zombie Task!";
 	private static String MESSAGE_FILE_OPENED = "%s is ready for use";
+	private static String MESSAGE_INVALID_COMMAND = "Invalid Command:\n%s\n%s";
 	
 	/**
-	 * 
 	 * Method that will be invoked when ZombieTask is called.
 	 * 
 	 * @param args
@@ -53,7 +51,7 @@ public class ZombieTask {
 	
 	public static void main(String[] args) {
 		
-		System.out.println(WELCOME_MESSAGE);
+		showToUser();
 		initStorage(args);
 		
 		while(sc.hasNext()){
@@ -62,19 +60,44 @@ public class ZombieTask {
 		}
 	}
 
-	private static void initStorage(String[] args) {
-		if (args.length > 0){
-			storage.setFile(args[0]);
-		}
-		storage.createFile();
-	}
+	
+
+	
 	
 	/*
-	 * filename mutators
+	 * storage mutators
 	 */
+	
+	/**
+	 * Initialises storage with first args
+	 * 
+	 * @param args optional first element of args[] will be set as file accessed
+	 */
+	
+	private static void initStorage(String[] args) {
+		if (args.length > 0){
+			storage.setFileName(args[0]);
+		}
+		storage.createFile();
+		showToUser(String.format(MESSAGE_FILE_OPENED, storage.getFileName));
+	}
 	
 	/*
 	 * commandList mutators
 	 */
+	
+	/*
+	 * Miscellenous Helper Functions
+	 */
+	
+	/**
+	 * Displays formatted string to users, seperate from UI interface
+	 * 
+	 * @param displayString String to be displayed
+	 */
+	
+	private static void showToUser(String displayString) {
+		System.out.println(displayString);
+	}
 
 }
