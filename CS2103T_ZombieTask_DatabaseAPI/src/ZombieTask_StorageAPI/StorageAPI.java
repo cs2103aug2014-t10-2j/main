@@ -3,24 +3,39 @@ package ZombieTask_StorageAPI;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import json.JSONArray;
+import json.JSONObject;
+
+
 
 public class StorageAPI {
-	private static File file;
+	
 	private static String MESSAGE_FILENAME ="ZombieStorage";
-	private BufferedReader br;
-	private BufferedWriter bw;
+	private static File file = new File(MESSAGE_FILENAME);
+	private static BufferedReader br;
+	private static BufferedWriter bw;
+	private static JSONObject jsonTaskList =null ;
+	private static String newTaskList,lastStep,tempTaskList;
 	ArrayList<Task> taskList;
+	
+	
 
 
 /*	+add(): Task(newTask)
 		add(Task): 									Task(newTask)
 		add(ArrayList<Task>):						ArrayList<Task> taskList(newTask)
 */
-	public Task add(Task newTask){
+	public Task add(Task newTask) throws IOException{
+		readFile();
+		
+		writeFile();
 		return newTask;
 	}
 	public ArrayList<Task> add(ArrayList<Task> taskList){
@@ -74,9 +89,47 @@ public class StorageAPI {
 		return taskList;
 	}
 	
+	//opens file to write content into memory
+	private static void writeFile() throws IOException {
+		bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(MESSAGE_FILENAME), "utf-8"));
+		bw.write(jsonTaskList.toString());
+		bw.flush();
+		bw.close();
+	}
+	
+	private static void readFile() throws IOException{
+		br = new BufferedReader(new FileReader(file));
+		tempTaskList = br.readLine();
+		if (tempTaskList != null) {
+			jsonTaskList = new JSONObject(tempTaskList);
+		}else{
+			jsonTaskList = new JSONObject();
+		}
+		br.close();
+	}
+	
+	private static JSONObject convertTaskToJSON(Task tempTask){
+		JSONObject JSONTempTask = new JSONObject();
+		
+		return JSONTempTask;
+	}
+	private static Task convertJSONToTask(JSONObject JSONTempTask){
+		
+		
+		Task tempTask = new Task("");
+		
+		return tempTask;
+	}
 	
 	
-	private static void createFile() throws IOException{
+	
+	
+	
+	
+	
+	
+	
+	public static void createFile() throws IOException{
 		file = new File(MESSAGE_FILENAME);
 		if(!file.exists()){
 			file.createNewFile();
