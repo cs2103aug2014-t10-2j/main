@@ -210,7 +210,31 @@ public class ZombieTask {
 	}
 	
 	private static Command removeLastCommand(ArrayList<Command> commandList) throws Exception{
-		ssss
+		
+	}
+	
+	/**
+	 * 
+	 * Polymorphic method for 
+	 * 
+	 * @param newCommandList new CommandList
+	 * @return
+	 */
+	
+	static boolean setPastCommandList(ArrayList<Command> newCommandList){
+		pastCommandList = newCommandList;
+	}
+	
+	static ArrayList<Command> getPastCommandList(){
+		return pastCommandList;
+	}
+	
+	static boolean setFutureCommandList(ArrayList<Command> newCommandList){
+		futureCommandList = newCommandList;
+	}
+	
+	static ArrayList<Command> getFutureCommandList(){
+		return futureCommandList;
 	}
 	
 	/*
