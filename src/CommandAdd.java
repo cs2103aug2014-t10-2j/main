@@ -11,7 +11,6 @@ public class CommandAdd extends Command {
 	String taskName = null;
 	Calendar dateTime = null;
 	ArrayList<String> tags = null;
-	ArrayList<String> args = null;
 	boolean missingArgs = false;
 	
 	/**
