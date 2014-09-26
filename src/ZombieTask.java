@@ -14,6 +14,13 @@
 public class ZombieTask {
 
 	/**
+	 * Instantiation of Class Objects
+	 */
+	
+	UI ui = new UI();
+	Interpreter parser = new Interpreter();
+	
+	/**
 	 * Standard Messages
 	 */
 	
@@ -27,7 +34,7 @@ public class ZombieTask {
 	 */
 	
 	public static void main(String[] args) {
-		
+		UI.print()
 	}
 	
 	
