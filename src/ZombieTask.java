@@ -36,12 +36,31 @@ public class ZombieTask {
 	private static ArrayList<Command> commandList = new ArrayList<Command>();
 	
 	/*
+	 * Constants for Command Types
+	 */
+	
+	private static String COMMAND_ADD = "ADD";
+	private static String COMMAND_DELETE = "DELETE";
+	private static String COMMAND_UPDATE = "UPDATE";
+	private static String COMMAND_VIEW = "VIEW";
+	
+	/*
+	 * Constants for Calendar Views
+	 */
+	
+	private static String VIEW_AGENDA = "AGENDA";
+	private static String VIEW_WEEK = "WEEK";
+	private static String VIEW_MONTH = "MONTH";
+	private static String VIEW_CALENDAR = "CALENDAR";
+	
+	/*
 	 * Standard Messages
 	 */
 	
 	private static String MESSAGE_WELCOME = "Welcome to Zombie Task!";
 	private static String MESSAGE_FILE_OPENED = "%s is ready for use";
-	private static String MESSAGE_INVALID_COMMAND = "Invalid Command:\n%s\n%s";
+	private static String MESSAGE_MISSING_ARGUMENTS = "Command Missing Arguments:\n%s";
+	private static String MESSAGE_INVALID_COMMAND = "Invalid Command:\n%s";
 	
 	/**
 	 * Method that will be invoked when ZombieTask is called.
@@ -51,11 +70,22 @@ public class ZombieTask {
 	
 	public static void main(String[] args) {
 		
-		showToUser();
+		showToUser(MESSAGE_WELCOME);
 		initStorage(args);
 		
 		while(sc.hasNext()){
-			lastCommand = sc.nextLine();
+			lastCommandString = sc.nextLine();
+			lastCommand = parser.getCommand(lastCommandString);
+			if(lastCommand.hasMissingArgs()){
+				showToUser(String.format(MESSAGE_MISSING_ARGUMENTS, lastCommandString));
+				continue;
+			}
+			switch(lastCommand.getCommandType()){
+			
+			default:
+				invalidCommand();
+				break;
+			}
 			
 		}
 	}
@@ -87,11 +117,11 @@ public class ZombieTask {
 	 */
 	
 	/*
-	 * Miscellenous Helper Functions
+	 * Miscellaneous Helper Functions
 	 */
 	
 	/**
-	 * Displays formatted string to users, seperate from UI interface
+	 * Displays formatted string to users, separate from UI interface
 	 * 
 	 * @param displayString String to be displayed
 	 */
