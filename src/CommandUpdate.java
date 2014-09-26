@@ -15,9 +15,8 @@ public class CommandUpdate extends Command {
 	 * @param newLineNo the line number of the task to be updated
 	 * @param newMissingArgs boolean variable to indicate missing arguments
 	 */
-	public CommandUpdate(String newCommandType, int newLineNo, 
-			boolean newMissingArgs) {
-		super(newCommandType);
+	public CommandUpdate( int newLineNo, boolean newMissingArgs) {
+		super(Interpreter.UPDATE);
 		lineNo = newLineNo;
 		missingArgs = newMissingArgs;
 	}

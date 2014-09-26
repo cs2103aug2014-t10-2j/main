@@ -15,9 +15,8 @@ public class CommandView extends Command {
 	 * @param newViewType the type of view chosen to see tasks
 	 * @param newMissingArgs boolean variable to indicate missing arguments
 	 */
-	public CommandView(String newCommandType, String newViewType,
-			boolean newMissingArgs) {
-		super(newCommandType);
+	public CommandView(String newViewType, boolean newMissingArgs) {
+		super(Interpreter.VIEW);
 		viewType = newViewType;
 		missingArgs = newMissingArgs;
 	}

@@ -17,11 +17,11 @@ public class CommandAtd {
 	
 	@Test
 	public void testCommand() {
-		// Test 1: valid arguments
+		// Test 1: valid argument
 		Command undo = new Command("undo");
-		assertEquals("undo", undo.getCommandType());
+		assertEquals(Interpreter.UNDO, undo.getCommandType());
 		
-		// Test 2: invalid/missing arguments
+		// Test 2: invalid argument
 		undo = new Command(null);
 		assertEquals(null, undo.getCommandType());
 	}
@@ -33,16 +33,15 @@ public class CommandAtd {
 		ArrayList<String> tags = new ArrayList<String>();
 		tags.add("food");
 		tags.add("important");
-		CommandAdd add = new CommandAdd("add", "eat lunch", date, tags, false);
-		assertEquals("add", add.getCommandType());
+		CommandAdd add = new CommandAdd("eat lunch", date, tags, false);
+		assertEquals(Interpreter.ADD, add.getCommandType());
 		assertEquals("eat lunch", add.getTaskName());
 		assertEquals(date, add.getDateTime());
 		assertEquals(tags, add.getTags());
 		assertFalse(add.hasMissingArgs());
 		
 		// Test 2: invalid/missing arguments
-		add = new CommandAdd("", null, null, null, true);
-		assertEquals("", add.getCommandType());
+		add = new CommandAdd(null, null, null, true);
 		assertEquals(null, add.getTaskName());
 		assertEquals(null, add.getDateTime());
 		assertEquals(null, add.getTags());
@@ -52,14 +51,13 @@ public class CommandAtd {
 	@Test
 	public void testCommandDelete() {
 		// Test 1: valid arguments
-		CommandDelete delete = new CommandDelete("delete", 1, false);
-		assertEquals("delete", delete.getCommandType());
+		CommandDelete delete = new CommandDelete(1, false);
+		assertEquals(Interpreter.DELETE, delete.getCommandType());
 		assertEquals(1, delete.getLineNo());
 		assertFalse(delete.hasMissingArgs());
 		
 		// Test 2: invalid/missing arguments
-		delete = new CommandDelete(null, -1, true);
-		assertEquals(null, delete.getCommandType());
+		delete = new CommandDelete(-1, true);
 		assertEquals(-1, delete.getLineNo());
 		assertTrue(delete.hasMissingArgs());
 	}
@@ -67,14 +65,13 @@ public class CommandAtd {
 	@Test
 	public void testCommandUpdate() {
 		// Test 1: valid arguments
-		CommandUpdate update = new CommandUpdate("update", 1, false);
-		assertEquals("update", update.getCommandType());
+		CommandUpdate update = new CommandUpdate(1, false);
+		assertEquals(Interpreter.UPDATE, update.getCommandType());
 		assertEquals(1, update.getLineNo());
 		assertFalse(update.hasMissingArgs());
 		
 		// Test 2: invalid/missing arguments
-		update = new CommandUpdate(null, -1, true);
-		assertEquals(null, update.getCommandType());
+		update = new CommandUpdate(-1, true);
 		assertEquals(-1, update.getLineNo());
 		assertTrue(update.hasMissingArgs());
 	}
@@ -82,14 +79,13 @@ public class CommandAtd {
 	@Test
 	public void testCommandView() {
 		// Test 1: valid arguments
-		CommandView view = new CommandView("view", "calendar", false);
-		assertEquals("view", view.getCommandType());
+		CommandView view = new CommandView("calendar", false);
+		assertEquals(Interpreter.VIEW, view.getCommandType());
 		assertEquals("calendar", view.getViewType());
 		assertFalse(view.hasMissingArgs());
 		
 		// Test 2: invalid/missing arguments
-		view = new CommandView(null, "", true);
-		assertEquals(null, view.getCommandType());
+		view = new CommandView("", true);
 		assertEquals("", view.getViewType());
 		assertTrue(view.hasMissingArgs());
 	}

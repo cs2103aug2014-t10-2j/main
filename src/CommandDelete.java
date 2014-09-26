@@ -15,8 +15,8 @@ public class CommandDelete extends Command{
 	 * @param newLineNo the line number of the task to be deleted
 	 * @param newMissingArgs boolean variable to indicate missing arguments
 	 */
-	public CommandDelete(String newCommandType, int newLineNo, boolean newMissingArgs) {
-		super(newCommandType);
+	public CommandDelete(int newLineNo, boolean newMissingArgs) {
+		super(Interpreter.DELETE);
 		lineNo = newLineNo;
 		missingArgs = newMissingArgs;
 	}

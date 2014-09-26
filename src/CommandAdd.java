@@ -23,10 +23,10 @@ public class CommandAdd extends Command {
 	 * @param newTags the list of tags associated with the new add command
 	 * @param newMissingArgs boolean variable to indicate missing arguments
 	 */
-	public CommandAdd(String newCommandType, String newTaskName, 
+	public CommandAdd(String newTaskName, 
 			Calendar newDateTime, ArrayList<String> newTags, 
 			boolean newMissingArgs) {
-		super(newCommandType);
+		super(Interpreter.ADD);
 		taskName = newTaskName;
 		dateTime = newDateTime;
 		tags = newTags;
