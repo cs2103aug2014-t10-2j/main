@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * Class to create command objects with command type and arguments. Super-class
  * of CommandAdd, CommandDelete, CommandUpdate, CommandView and CommandUndo.
@@ -26,3 +27,9 @@ public class Command {
 	}
 
 }
+=======
+
+public class Command {
+
+}
+>>>>>>> c48a6eb49378c8db4e9533d93b66dfa890a40c7b
