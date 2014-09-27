@@ -21,6 +21,18 @@ public class Interpreter {
 	public static final String UPDATE = "update";
 	public static final String VIEW = "view";
 	public static final String UNDO = "undo";
+	
+	// types of view
+	public static final String AGENDA = "-agenda";
+	public static final String DAILY = "-daily";
+	public static final String WEEKLY = "-weekly";
+	public static final String MONTHLY = "-monthly";
+	public static final String YEARLY = "-yearly";
+	public static final String CALENDAR = "-calendar";
+	public static final String INVALID = "invalid";
+	
+	public static final int INVALID_NO = -1;
+	
 
 	/**
 	 * Returns the command type based on the first word of the user input
@@ -62,16 +74,26 @@ public class Interpreter {
 			String commandType = getCommandType(userInputTokens[0]);
 			switch (commandType) {
 				case DELETE:
-					return getCommandDelete(userInput);
+					return getCommandDelete(userInputTokens[1]);
 				case UPDATE:
-					return getCommandUpdate(userInput);
+					return getCommandUpdate(userInputTokens[1]);
 				case VIEW:
-					return getCommandUpdate(userInput);
+					return getCommandView(userInputTokens[1]);
 				case UNDO:
 					return new Command("undo");
 				default:
 					return getCommandAdd(userInput);
 			}
+		}
+	}
+
+	private static Command getCommandView(String secondWord) {
+		switch(secondWord) {
+			case AGENDA: case DAILY: case WEEKLY: 
+				case MONTHLY: case YEARLY: case CALENDAR:
+				return new CommandView(secondWord.substring(1), false);
+			default:
+				return new CommandView(INVALID, true);
 		}
 	}
 
@@ -183,14 +205,35 @@ public class Interpreter {
 
 		return new CommandAdd(taskName, date, tags, hasMissingArgs);
 	}
-
-	private static CommandUpdate getCommandUpdate(String userInput) {
+	
+	/**
+	 * Creates a CommandUpdate object from user input
+	 * @param secondWord the second word of the user input
+	 * @return a CommandUpdate object with integer value of line number and a
+	 * boolean value to indicate missing arguments
+	 */
+	private static CommandUpdate getCommandUpdate(String secondWord) {
 		// TODO Auto-generated method stub
-		return null;
+		try {
+			int lineNo = Integer.parseInt(secondWord);
+			return new CommandUpdate(lineNo, false);
+		} catch (Exception e) { // invalid number
+			return new CommandUpdate(INVALID_NO, true);
+		}
 	}
 
-	private static CommandDelete getCommandDelete(String userInput) {
-		// TODO Auto-generated method stub
-		return null;
+	/**
+	 * Creates a CommandDelete object from user input
+	 * @param secondWord the second word of the user input
+	 * @return a CommandDelte object with integer value of line number and a
+	 * boolean value to indicate missing arguments
+	 */
+	private static CommandDelete getCommandDelete(String secondWord) {
+		try {
+			int lineNo = Integer.parseInt(secondWord);
+			return new CommandDelete(lineNo, false);
+		} catch (Exception e) { // invalid number
+			return new CommandDelete(INVALID_NO, true);
+		}
 	}
 }
