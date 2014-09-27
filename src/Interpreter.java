@@ -70,15 +70,27 @@ public class Interpreter {
 
 			String[] userInputTokens = userInput.trim().toLowerCase()
 					.split(" ");
-
+			
 			String commandType = getCommandType(userInputTokens[0]);
 			switch (commandType) {
 				case DELETE:
-					return getCommandDelete(userInputTokens[1]);
+					if (userInputTokens.length > 1) {
+						return getCommandDelete(userInputTokens[1]);
+					} else {
+						return new CommandDelete(INVALID_NO, true);
+					}
 				case UPDATE:
-					return getCommandUpdate(userInputTokens[1]);
+					if (userInputTokens.length > 1) {
+						return getCommandUpdate(userInputTokens[1]);
+					} else {
+						return new CommandUpdate(INVALID_NO, true);
+					}
 				case VIEW:
-					return getCommandView(userInputTokens[1]);
+					if (userInputTokens.length > 1) {
+						return getCommandView(userInputTokens[1]);
+					} else {
+						return new CommandView(INVALID, true);
+					}
 				case UNDO:
 					return new Command("undo");
 				default:
@@ -87,11 +99,17 @@ public class Interpreter {
 		}
 	}
 
+	/**
+	 * Creates a CommandView object based on user input
+	 * @param secondWord the second word from the user input
+	 * @return a CommandView object with a string representing the command
+	 * type and a boolean value to indicate missing arguments
+	 */
 	private static Command getCommandView(String secondWord) {
 		switch(secondWord) {
 			case AGENDA: case DAILY: case WEEKLY: 
 				case MONTHLY: case YEARLY: case CALENDAR:
-				return new CommandView(secondWord.substring(1), false);
+				return new CommandView(secondWord, false);
 			default:
 				return new CommandView(INVALID, true);
 		}
@@ -106,7 +124,7 @@ public class Interpreter {
 	 * @throws Exception
 	 *             for unspecified date and time
 	 */
-	public static Calendar getDate(String userInput) throws Exception {
+	private static Calendar getDate(String userInput) throws Exception {
 		Calendar cal = Calendar.getInstance();
 		Parser parser = new Parser();
 		List<DateGroup> groups = parser.parse(userInput);
@@ -131,10 +149,11 @@ public class Interpreter {
 	 *            an array of words entered by the user
 	 * @return an arraylist of the tags contained in the command
 	 */
-	public static ArrayList<String> getTags(String[] userInputWords) {
+	private static ArrayList<String> getTags(String[] userInputWords) {
 		ArrayList<String> tags = new ArrayList<String>();
 		for (String word : userInputWords) {
-			if (word.charAt(0) == '#') {
+			word = word.trim();
+			if (word.length() > 1 && word.charAt(0) == '#') {
 				tags.add(word);
 			}
 		}
@@ -149,7 +168,7 @@ public class Interpreter {
 	 * @return the task name, or a description of the task
 	 * @throws Exception no task name specified
 	 */
-	public static String getTaskName(String userInput, ArrayList<String> tags) 
+	private static String getTaskName(String userInput, ArrayList<String> tags) 
 			throws Exception {
 		// remove time-related keywords
 		Parser parser = new Parser();
@@ -158,10 +177,13 @@ public class Interpreter {
 		for (DateGroup group : groups) {
 			dateKeyWords = group.getText();
 		}
-			
-		userInput = userInput.replace(dateKeyWords + " ", "");
-		userInput = userInput.replace(" " + dateKeyWords, "");
-		userInput = userInput.replace(dateKeyWords, "");
+		
+		if (dateKeyWords != null && !dateKeyWords.isEmpty()) {
+			userInput = userInput.replace(dateKeyWords + " ", "");
+			userInput = userInput.replace(" " + dateKeyWords, "");
+			userInput = userInput.replace(dateKeyWords, "");
+		}
+		
 		// remove tags
 		for (String tag: tags) {
 			userInput = userInput.replaceAll(tag + " ", "");
@@ -172,7 +194,7 @@ public class Interpreter {
 		if (userInput.trim() == "") {
 			throw new Exception("No task name.");
 		}
-		return userInput;
+		return userInput.trim();
 
 	}
 
@@ -189,14 +211,15 @@ public class Interpreter {
 		String taskName = null;
 		String[] userInputWords = userInput.trim().toLowerCase().split(" ");
 
-		try {
-			date = getDate(userInput);
-		} catch (Exception e) {
-			hasMissingArgs = true;
+		date = getDate(userInput);
+		if (date == null) {
+			hasMissingArgs = true; // indicates a floating task
 		}
+
 
 		tags = getTags(userInputWords);
 
+		userInput = userInput.trim();
 		if (userInputWords[0].equals(ADD)) {
 			userInput = userInput.substring(4);
 		}
