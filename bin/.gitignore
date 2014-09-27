@@ -1,12 +1,3 @@
-/Command.class
-/CommandAdd.class
-/CommandAtd.class
-/CommandDelete.class
-/CommandUpdate.class
-/CommandView.class
-/Interpreter.class
-/InterpreterAtd.class
-/Parser.class
 /Storage.class
 /Task.class
 /UI.class
