@@ -55,9 +55,9 @@ public class ZombieTaskAtd {
 	
 	@Test
 	public void filenameTester01() {
-		String[] = new String[1];
-		String[0] = EMPTY_STRING;
-		ZombieTask.initStorage()
+		String[] testInput = new String[1];
+		testInput[0] = EMPTY_STRING;
+		ZombieTask.initStorage(testInput);
 		fail("Not yet implemented");
 	}
 	
