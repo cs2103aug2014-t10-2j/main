@@ -1,5 +1,3 @@
-package ZombieTask_StorageAPI;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -260,6 +258,21 @@ public class StorageAPI {
 		if(!file.exists()){
 			file.createNewFile();
 		}
+	}
+	
+	public Object getFileName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public Object getDefaultFileName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public void setFileName(String string) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

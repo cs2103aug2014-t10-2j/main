@@ -1,4 +1,3 @@
-package ZombieTask_StorageAPI;
 // Task.java
 // Basic class for creating Task objects
 // 23/09 Updated with Calendar and Vector to optimize code.
@@ -128,5 +127,14 @@ public class Task
 	public int getDate()
 	{
 		return (deadline == null) ? 0 : deadline.get(Calendar.DATE);
+	}
+	
+	public void addSubtask(Task task) {
+		// TODO Auto-generated method stub
+		
+	}
+	public boolean getSubtasks() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

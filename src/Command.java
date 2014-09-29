@@ -25,4 +25,8 @@ public class Command {
 		return commandType;
 	}
 
+	public boolean hasMissingArgs() {
+		return false;
+	}
+
 }
