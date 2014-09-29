@@ -20,7 +20,13 @@ import org.junit.Test;
 public class ZombieTaskAtd {
 	
 	/*
-	 * 
+	 * Constants
+	 */
+	
+	private static final String EMPTY_STRING = "";
+	
+	/*
+	 * Initalisation statements for Automatic Testing
 	 */
 
 	@BeforeClass
@@ -48,12 +54,74 @@ public class ZombieTaskAtd {
 	 */
 	
 	@Test
-	public void filenameTester() {
+	public void filenameTester01() {
+		String[] = new String[1];
+		String[0] = EMPTY_STRING;
+		ZombieTask.initStorage()
 		fail("Not yet implemented");
 	}
 	
 	@Test
-	public void filenameTester() {
+	public void filenameTester02() {
+		
+		fail("Not yet implemented");
+	}
+	
+	/*
+	 * Command Testers
+	 */
+	
+	@Test
+	public void addCommandTester() {
+		fail("Not yet implemented");
+	}
+	
+	@Test
+	public void deleteCommandTester() {
+		fail("Not yet implemented");
+	}
+	
+	@Test
+	public void viewCommandTester() {
+		fail("Not yet implemented");
+	}
+	
+	@Test
+	public void updateCommandTester() {
+		fail("Not yet implemented");
+	}
+	
+	@Test
+	public void invalidCommandTester() {
+		fail("Not yet implemented");
+	}
+	
+	@Test
+	public void undoCommandTester() {
+		fail("Not yet implemented");
+	}
+	
+	@Test
+	public void redoCommandTester() {
+		fail("Not yet implemented");
+	}
+	
+	@Test
+	public void helpCommandTester() {
+		fail("Not yet implemented");
+	}
+	
+	/*
+	 * CommandList Mutators Testers
+	 */
+	
+	@Test
+	public void addCommandToListTester() {
+		fail("Not yet implemented");
+	}
+	
+	@Test
+	public void removeLastCommandFromListTester() {
 		fail("Not yet implemented");
 	}
 	
