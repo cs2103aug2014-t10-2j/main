@@ -18,6 +18,10 @@ import org.junit.Test;
 
 
 public class ZombieTaskAtd {
+	
+	/*
+	 * 
+	 */
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -26,6 +30,10 @@ public class ZombieTaskAtd {
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 	}
+	
+	/*
+	 * Generic setup and teardown functions. To be deleted before final implementation
+	 */
 
 	@Before
 	public void setUp() throws Exception {
@@ -35,9 +43,45 @@ public class ZombieTaskAtd {
 	public void tearDown() throws Exception {
 	}
 
+	/*
+	 * Main Logic Testing
+	 */
+	
 	@Test
-	public void test() {
+	public void filenameTester() {
 		fail("Not yet implemented");
 	}
-
+	
+	@Test
+	public void filenameTester() {
+		fail("Not yet implemented");
+	}
+	
+	/*
+	 * Storage Testing
+	 */
+	
+	@Test
+	public void storageTest() {
+		fail("Not yet implemented");
+	}
+	
+	/*
+	 * Interpreter Testing
+	 */
+	
+	@Test
+	public void interpreterTest() {
+		fail("Not yet implemented");
+	}
+	
+	/*
+	 * UI Testing
+	 */
+	
+	@Test
+	public void uiTest() {
+		fail("Not yet implemented");
+	}
+	
 }
