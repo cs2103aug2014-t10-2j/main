@@ -68,7 +68,7 @@ public class ZombieTaskAtd {
 		String[] testInput = new String[1];
 		testInput[0] = "myDataBase.json";
 		ZombieTask.initStorage(testInput);
-		assertArrayEquals("filename assignment test failed - correct input", ZombieTask.getStorage().getFileName(), "myDataBase.json");
+		assertArrayEquals("filename assignment test failed - correct input syntax", ZombieTask.getStorage().getFileName(), "myDataBase.json");
 	}
 	
 	@Test
