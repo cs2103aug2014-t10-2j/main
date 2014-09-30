@@ -21,7 +21,6 @@ public class ZombieTask {
 	/*
 	 * Instantiation of External Interfaces and Static Classes
 	 */
-	
 	private static UI ui = new UI();
 	private static Interpreter parser = new Interpreter();
 	private static StorageAPI storage = new StorageAPI();
