@@ -209,7 +209,7 @@ public class StorageAPI {
 		if(tempTask.getTags()!=null){
 			JSONTempTask.put(MESSAGE_TAGS, tempTask.getTags());
 		}
-		if(tempTask.getSubtasks()){
+		if(tempTask.getSubtasks()!=null){
 			JSONTempTask.put(MESSAGE_SUBTASKS, tempTask.getSubtasks());
 		}
 		return JSONTempTask;
