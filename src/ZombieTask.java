@@ -158,8 +158,20 @@ public class ZombieTask {
 	}
 	
 	private static void updateCommand(Command command) {
-		// TODO Auto-generated method stub
 		
+		showToUser(MESSAGE_WELCOME);
+		initStorage(args);
+		
+		while(sc.hasNext()){
+			currentCommandString = sc.nextLine();
+			currentCommand = Interpreter.getCommand(currentCommandString);
+			if(currentCommand.hasMissingArgs()){
+				showToUser(String.format(MESSAGE_MISSING_ARGUMENTS, currentCommandString));
+				continue;
+			}
+			execute();
+			
+		}
 	}
 
 	private static void invalidCommand(String commandString) {
