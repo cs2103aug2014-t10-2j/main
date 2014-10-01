@@ -86,6 +86,12 @@ public class Task
 		}
 		return str;
 	}
+	public ArrayList<Task> getSubtask(){
+		return subtasks;
+	}
+	public void addSubtask(Task subTask){
+		subtasks.add(subTask);
+	}
 	//////////////////// MISCELLENEOUS ////////////////////
 	public String toString()
 	{
