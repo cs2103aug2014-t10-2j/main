@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -21,6 +22,7 @@ public class ZombieTask {
 	/*
 	 * Instantiation of External Interfaces and Static Classes
 	 */
+	
 	private static UI ui = new UI();
 	private static Interpreter parser = new Interpreter();
 	private static StorageAPI storage = new StorageAPI();
@@ -42,7 +44,7 @@ public class ZombieTask {
 	 * Constants for Command Types
 	 */
 	
-	private final static String COMMAND_ADD = "add";
+	private final static String COMMAND_ADD = Interpreter.ADD; //edit out
 	private final static String COMMAND_DELETE = "delete";
 	private final static String COMMAND_UPDATE = "update";
 	private final static String COMMAND_VIEW = "view";
@@ -55,7 +57,7 @@ public class ZombieTask {
 	 * Constants for Calendar Views
 	 */
 	
-	private final static String VIEW_AGENDA = "AGENDA";
+	private final static String VIEW_AGENDA = UI.AGENDA; // edit this out
 	private final static String VIEW_WEEK = "WEEK";
 	private final static String VIEW_MONTH = "MONTH";
 	private final static String VIEW_CALENDAR = "CALENDAR";
@@ -88,7 +90,7 @@ public class ZombieTask {
 		while(sc.hasNext()){
 			currentCommandString = sc.nextLine();
 			currentCommand = Interpreter.getCommand(currentCommandString);
-			if(currentCommand.hasMissingArgs()){
+			if(FAILURE && currentCommand.hasMissingArgs()){
 				showToUser(String.format(MESSAGE_MISSING_ARGUMENTS, currentCommandString));
 				continue;
 			}
@@ -143,6 +145,11 @@ public class ZombieTask {
 	
 	private static void addCommand(Command command) {
 		// TODO Auto-generated method stub
+		try{
+			storage.add(new Task(new String()));
+		} catch (Exception err){
+			showToUser(err.toString());
+		}
 		
 	}
 
@@ -159,7 +166,6 @@ public class ZombieTask {
 	private static void updateCommand(Command command) {
 		// TODO Auto-generated method stub
 		
-		}
 	}
 
 	private static void invalidCommand(String commandString) {
@@ -265,7 +271,7 @@ public class ZombieTask {
 	}
 	
 	/*
-	 * Polymorphic Methods for Storage
+	 * Stubs for Storage
 	 */
 	
 	static StorageAPI getStorage(){
