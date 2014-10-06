@@ -11,6 +11,7 @@ import org.junit.Test;
 public class StorageAPITest {
 	
 	String filename = "ZombieStorage.txt";
+	String filenameTest = "Text.txt";
 	File file = null;
 
 	@Before
@@ -38,8 +39,11 @@ public class StorageAPITest {
 	}
 
 	@Test
-	public void testSetFile() {
-		fail("Not yet implemented");
+	public void testSetFile() throws IOException {
+		StorageAPI.setFile(filenameTest);
+		file = StorageAPI.createFile();
+		assertEquals(file.getName(),filenameTest);
+		//fail("Not yet implemented");
 	}
 
 	@Test
