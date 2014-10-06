@@ -266,11 +266,12 @@ public class StorageAPI {
 	public static void setFile(String newFileName) throws IOException{
 		filename = newFileName;
 	}
-	public static void createFile() throws IOException{
+	public static File createFile() throws IOException{
 		file = new File(filename);
 		if(!file.exists()){
 			file.createNewFile();
 		}
+		return file;
 	}
 	
 	
