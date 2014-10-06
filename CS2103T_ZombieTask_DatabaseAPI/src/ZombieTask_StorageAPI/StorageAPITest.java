@@ -56,9 +56,13 @@ public class StorageAPITest {
 	public void testSearchIntArray() throws IOException {
 		testStorage.add(tempTask);
 		ArrayList<Task> testResult = testStorage.search(testArray);
-		ArrayList<Task> testExpected = new ArrayList<Task> () ;
+		ArrayList<Task> testExpected = new ArrayList<Task> ();
 		testExpected.add(tempTask);
-		assertEquals(testExpected,testResult);
+		assertEquals(testExpected.get(0).getSubtask(),testResult.get(0).getSubtask());
+		assertEquals(testExpected.get(0).getDeadline(),testResult.get(0).getDeadline());
+		assertEquals(testExpected.get(0).getTags(),testResult.get(0).getTags());
+		assertEquals(testExpected.get(0).getTaskName(),testResult.get(0).getTaskName());
+
 		//fail("Not yet implemented");
 	}
 
