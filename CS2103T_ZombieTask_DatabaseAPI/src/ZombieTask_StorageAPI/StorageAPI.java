@@ -233,7 +233,7 @@ public class StorageAPI {
 		if(JSONTempTask.has(MESSAGE_TAGS)){
 			ArrayList<String> tempList = (ArrayList<String>)JSONTempTask.get(MESSAGE_TAGS);
 			int index =0;
-			while(tempList.get(index)!=null){
+			while(index<tempList.size()){
 				tempTask.addTag(tempList.get(index));
 				index++;
 			}
@@ -241,7 +241,7 @@ public class StorageAPI {
 		if(JSONTempTask.has(MESSAGE_SUBTASKS)){
 			ArrayList<Task> tempList = (ArrayList<Task>)JSONTempTask.get(MESSAGE_SUBTASKS);
 			int index = 0;
-			while(tempList.get(index)!=null){
+			while(index<tempList.size()){
 				tempTask.addSubtask(tempList.get(index));
 			}
 		}
