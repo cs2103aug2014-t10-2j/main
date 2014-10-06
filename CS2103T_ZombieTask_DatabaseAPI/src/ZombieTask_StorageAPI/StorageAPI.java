@@ -250,9 +250,9 @@ public class StorageAPI {
 	private static boolean compareTask(Task tempTask, JSONObject jsonTask){
 		boolean result =false;
 		if(tempTask.getTaskName().equals(jsonTask.getString(MESSAGE_TASKNAME))){
-			if(tempTask.getDeadline().equals((Calendar)jsonTask.get(MESSAGE_DEADLINE))){
+			//if(tempTask.getDeadline().equals((Calendar)jsonTask.get(MESSAGE_DEADLINE))){
 				result = true;
-			}
+			//}
 		}
 		return result;
 	}
