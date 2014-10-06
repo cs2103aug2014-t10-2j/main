@@ -7,18 +7,17 @@
 public class CommandDelete extends Command{
 	int INVALID_NO = -1;
 	int lineNo = INVALID_NO;
-	boolean missingArgs = false;
 	
 	/**
 	 * Constructor for the Delete command object. It is initialised with a line
 	 * number and a boolean variable to indicate if there are missing arguments.
 	 * @param newLineNo the line number of the task to be deleted
-	 * @param newMissingArgs boolean variable to indicate missing arguments
+	 * @param userInput the original user input
+	 * @param hasMissingArgs boolean variable to indicate missing arguments
 	 */
-	public CommandDelete(int newLineNo, boolean newMissingArgs) {
-		super(Interpreter.DELETE);
+	public CommandDelete(int newLineNo, String userInput, boolean hasMissingArgs) {
+		super(Command.DELETE, userInput, hasMissingArgs);
 		lineNo = newLineNo;
-		missingArgs = newMissingArgs;
 	}
 	
 	/**
@@ -27,14 +26,6 @@ public class CommandDelete extends Command{
 	 */
 	public int getLineNo() {
 		return lineNo;
-	}
-	
-	/**
-	 * Accessor for missing arguments
-	 * @return a boolean variable indicating if arguments are missing
-	 */
-	public boolean hasMissingArgs() {
-		return missingArgs;
 	}
 	
 }

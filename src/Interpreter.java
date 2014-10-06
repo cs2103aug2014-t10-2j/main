@@ -15,24 +15,7 @@ import com.joestelmach.natty.*;
  */
 public class Interpreter {
 
-	// valid command types
-	public static final String ADD = "add";
-	public static final String DELETE = "delete";
-	public static final String UPDATE = "update";
-	public static final String VIEW = "view";
-	public static final String UNDO = "undo";
-	
-	// types of view
-	public static final String AGENDA = "-agenda";
-	public static final String DAILY = "-daily";
-	public static final String WEEKLY = "-weekly";
-	public static final String MONTHLY = "-monthly";
-	public static final String YEARLY = "-yearly";
-	public static final String CALENDAR = "-calendar";
-	public static final String INVALID = "invalid";
-	
 	public static final int INVALID_NO = -1;
-	
 
 	/**
 	 * Returns the command type based on the first word of the user input
@@ -43,12 +26,10 @@ public class Interpreter {
 	 *         ADD, if the first word is not a valid command
 	 */
 	public static String getCommandType(String firstWord) {
-		List<String> validCommands = Arrays.asList(ADD, DELETE, UPDATE, VIEW,
-				UNDO);
-		if (validCommands.contains(firstWord)) {
+		if (Command.validCommands.contains(firstWord)) {
 			return firstWord;
 		} else {
-			return ADD;
+			return Command.ADD;
 		}
 	}
 
@@ -70,29 +51,39 @@ public class Interpreter {
 
 			String[] userInputTokens = userInput.trim().toLowerCase()
 					.split(" ");
-			
+
 			String commandType = getCommandType(userInputTokens[0]);
 			switch (commandType) {
-				case DELETE:
+				case Command.DELETE:
 					if (userInputTokens.length > 1) {
-						return getCommandDelete(userInputTokens[1]);
+						return getCommandDelete(userInputTokens[1], userInput);
 					} else {
-						return new CommandDelete(INVALID_NO, true);
+						return new CommandDelete(INVALID_NO, userInput, true);
 					}
-				case UPDATE:
+				case Command.UPDATE:
 					if (userInputTokens.length > 1) {
-						return getCommandUpdate(userInputTokens[1]);
+						return getCommandUpdate(userInputTokens[1], userInput);
 					} else {
-						return new CommandUpdate(INVALID_NO, true);
+						return new CommandUpdate(INVALID_NO, userInput, true);
 					}
-				case VIEW:
+				case Command.VIEW:
 					if (userInputTokens.length > 1) {
-						return getCommandView(userInputTokens[1]);
+						return getCommandView(userInputTokens[1], userInput);
 					} else {
-						return new CommandView(INVALID, true);
+						return new CommandView(UI.INVALID, userInput, true);
 					}
-				case UNDO:
-					return new Command("undo");
+				case Command.HELP:
+					if (userInputTokens.length > 1) {
+						return getCommandHelp(userInputTokens[1], userInput);
+					} else {
+						return new Command(null, userInput, true);
+					}
+				case Command.UNDO:
+					return new Command(Command.UNDO, userInput, false);
+				case Command.REDO:
+					return new Command(Command.REDO, userInput, false);
+				case Command.EXIT:
+					return new Command(Command.EXIT, userInput, false);
 				default:
 					return getCommandAdd(userInput);
 			}
@@ -101,17 +92,37 @@ public class Interpreter {
 
 	/**
 	 * Creates a CommandView object based on user input
-	 * @param secondWord the second word from the user input
-	 * @return a CommandView object with a string representing the command
-	 * type and a boolean value to indicate missing arguments
+	 * 
+	 * @param secondWord
+	 *            the second word from the user input
+	 * @param userInput
+	 *            the original user input
+	 * @return a CommandView object with a the view format and a boolean value
+	 * to indicate missing arguments
 	 */
-	private static Command getCommandView(String secondWord) {
-		switch(secondWord) {
-			case AGENDA: case DAILY: case WEEKLY: 
-				case MONTHLY: case YEARLY: case CALENDAR:
-				return new CommandView(secondWord, false);
-			default:
-				return new CommandView(INVALID, true);
+	private static Command getCommandView(String secondWord, String userInput) {
+		FORMAT viewType = UI.getFormat(secondWord);
+		if (viewType == UI.INVALID) {
+			return new CommandView(viewType, userInput, true);
+		}
+		return new CommandView(viewType, userInput, false);
+	}
+	
+	/**
+	 * Creates a CommandHelp object based on user input
+	 * 
+	 * @param secondWord
+	 *            the second word from the user input
+	 * @param userInput
+	 *            the original user input
+	 * @return a CommandHelp object with the command that the user needs help
+	 * with and a boolean value to indicate missing arguments
+	 */
+	private static Command getCommandHelp(String secondWord, String userInput) {
+		if (Command.validCommands.contains(secondWord)) {
+			return new CommandHelp(secondWord, userInput, false);
+		} else {
+			return new CommandHelp(null, userInput, true);
 		}
 	}
 
@@ -159,16 +170,20 @@ public class Interpreter {
 		}
 		return tags;
 	}
-	
+
 	/**
 	 * Returns task name by removing time-related keywords and tags from the
 	 * user input
-	 * @param userInput the command entered by the user
-	 * @param tags a list of tags parsed from user input
+	 * 
+	 * @param userInput
+	 *            the command entered by the user
+	 * @param tags
+	 *            a list of tags parsed from user input
 	 * @return the task name, or a description of the task
-	 * @throws Exception no task name specified
+	 * @throws Exception
+	 *             no task name specified
 	 */
-	private static String getTaskName(String userInput, ArrayList<String> tags) 
+	private static String getTaskName(String userInput, ArrayList<String> tags)
 			throws Exception {
 		// remove time-related keywords
 		Parser parser = new Parser();
@@ -177,20 +192,20 @@ public class Interpreter {
 		for (DateGroup group : groups) {
 			dateKeyWords = group.getText();
 		}
-		
+
 		if (dateKeyWords != null && !dateKeyWords.isEmpty()) {
 			userInput = userInput.replace(dateKeyWords + " ", "");
 			userInput = userInput.replace(" " + dateKeyWords, "");
 			userInput = userInput.replace(dateKeyWords, "");
 		}
-		
+
 		// remove tags
-		for (String tag: tags) {
+		for (String tag : tags) {
 			userInput = userInput.replaceAll(tag + " ", "");
 			userInput = userInput.replaceAll(" " + tag, "");
 			userInput = userInput.replaceAll(tag, "");
 		}
-		
+
 		if (userInput.trim() == "") {
 			throw new Exception("No task name.");
 		}
@@ -216,47 +231,50 @@ public class Interpreter {
 			hasMissingArgs = true; // indicates a floating task
 		}
 
-
 		tags = getTags(userInputWords);
 
-		userInput = userInput.trim();
-		if (userInputWords[0].equals(ADD)) {
-			userInput = userInput.substring(4);
+		String userInputTemp = userInput.trim();
+		if (userInputWords[0].equals(Command.ADD)) {
+			userInputTemp = userInputTemp.substring(4);
 		}
-		
-		taskName = getTaskName(userInput, tags);
 
-		return new CommandAdd(taskName, date, tags, hasMissingArgs);
+		taskName = getTaskName(userInputTemp, tags);
+
+		return new CommandAdd(taskName, date, tags, userInput, hasMissingArgs);
 	}
-	
+
 	/**
 	 * Creates a CommandUpdate object from user input
-	 * @param secondWord the second word of the user input
+	 * 
+	 * @param secondWord
+	 *            the second word of the user input
 	 * @return a CommandUpdate object with integer value of line number and a
-	 * boolean value to indicate missing arguments
+	 *         boolean value to indicate missing arguments
 	 */
-	private static CommandUpdate getCommandUpdate(String secondWord) {
-		// TODO Auto-generated method stub
+	private static CommandUpdate getCommandUpdate(String secondWord, String userInput) {
 		try {
 			int lineNo = Integer.parseInt(secondWord);
-			return new CommandUpdate(lineNo, false);
+			return new CommandUpdate(lineNo, userInput, false);
 		} catch (Exception e) { // invalid number
-			return new CommandUpdate(INVALID_NO, true);
+			return new CommandUpdate(INVALID_NO, userInput, true);
 		}
 	}
 
 	/**
 	 * Creates a CommandDelete object from user input
-	 * @param secondWord the second word of the user input
+	 * 
+	 * @param secondWord
+	 *            the second word of the user input
 	 * @return a CommandDelte object with integer value of line number and a
-	 * boolean value to indicate missing arguments
+	 *         boolean value to indicate missing arguments
 	 */
-	private static CommandDelete getCommandDelete(String secondWord) {
+	private static CommandDelete getCommandDelete(String secondWord, 
+			String userInput) {
 		try {
 			int lineNo = Integer.parseInt(secondWord);
-			return new CommandDelete(lineNo, false);
+			return new CommandDelete(lineNo, userInput, false);
 		} catch (Exception e) { // invalid number
-			return new CommandDelete(INVALID_NO, true);
+			return new CommandDelete(INVALID_NO, userInput, true);
 		}
 	}
 }

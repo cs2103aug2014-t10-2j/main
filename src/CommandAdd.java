@@ -11,7 +11,6 @@ public class CommandAdd extends Command {
 	String taskName = null;
 	Calendar dateTime = null;
 	ArrayList<String> tags = null;
-	boolean missingArgs = false;
 	
 	/**
 	 * Constructor for the Add command object. It is initialised with a task
@@ -20,16 +19,14 @@ public class CommandAdd extends Command {
 	 * @param newTaskName the task name of the new add command
 	 * @param newDateTime the date and time of the new add command
 	 * @param newTags the list of tags associated with the new add command
-	 * @param newMissingArgs boolean variable to indicate missing arguments
+	 * @param hasMissingArgs boolean variable to indicate missing arguments
 	 */
-	public CommandAdd(String newTaskName, 
-			Calendar newDateTime, ArrayList<String> newTags, 
-			boolean newMissingArgs) {
-		super(Interpreter.ADD);
+	public CommandAdd(String newTaskName, Calendar newDateTime, 
+			ArrayList<String> newTags, String userInput, boolean hasMissingArgs) {
+		super(Command.ADD, userInput, hasMissingArgs);
 		taskName = newTaskName;
 		dateTime = newDateTime;
 		tags = newTags;
-		missingArgs = newMissingArgs;
 	}
 	
 	/**
@@ -54,14 +51,6 @@ public class CommandAdd extends Command {
 	 */
 	public ArrayList<String> getTags() {
 		return tags;
-	}
-	
-	/**
-	 * Accessor for missing arguments
-	 * @return a boolean variable indicating if arguments are missing
-	 */
-	public boolean hasMissingArgs() {
-		return missingArgs;
 	}
 	
 }
