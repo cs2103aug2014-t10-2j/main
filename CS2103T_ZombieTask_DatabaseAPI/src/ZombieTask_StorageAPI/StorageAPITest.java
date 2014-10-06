@@ -5,7 +5,9 @@ import static org.junit.Assert.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.junit.Before;
@@ -20,7 +22,7 @@ public class StorageAPITest {
 	String result = null;
 	String taskName = "tempTask";
 	String updateName = "updateName";
-	
+	int [] testArray = {0};
 	Calendar deadline; //= Calendar.getInstance();
 	Task tempTask = new Task(taskName, deadline);
 	Task updateTask = new Task(updateName, deadline);
@@ -29,14 +31,13 @@ public class StorageAPITest {
 	public void setUp() throws Exception {
 		file = StorageAPI.createFile();
 		
-		//For test process only
-		BufferedReader br = new BufferedReader(new FileReader(file));
-	/*	while(br.readLine()!=""){
-			testStorage.delete(updateTask);
-			testStorage.delete(tempTask);
-			testStorage.delete(updateTask);
-		}
-		br.close();*/
+	    	FileWriter fw = new FileWriter(file,false);
+			fw.write("");
+			fw.flush();
+			fw.close();
+		
+
+	
 	}
 
 	@Test
@@ -52,8 +53,12 @@ public class StorageAPITest {
 	}
 
 	@Test
-	public void testSearchIntArray() {
-		fail("Not yet implemented");
+	public void testSearchIntArray() throws IOException {
+		testStorage.add(tempTask);
+		ArrayList<Task> testResult = testStorage.search(testArray);
+		testStorage.delete(tempTask);
+		assertEquals(testResult.get(0),tempTask);
+		//fail("Not yet implemented");
 	}
 
 	@Test
