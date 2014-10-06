@@ -19,16 +19,22 @@ public class StorageAPITest {
 	String expected = null;
 	String result = null;
 	String taskName = "tempTask";
+	String updateName = "updateName";
+	
 	Calendar deadline; //= Calendar.getInstance();
-	
-	
 	Task tempTask = new Task(taskName, deadline);
+	Task updateTask = new Task(updateName, deadline);
+	
 	@Before
 	public void setUp() throws Exception {
 		file = StorageAPI.createFile();
-	/*	BufferedReader br = new BufferedReader(new FileReader(file));
-		while(br.readLine()!=""){
+		
+		//For test process only
+		BufferedReader br = new BufferedReader(new FileReader(file));
+	/*	while(br.readLine()!=""){
+			testStorage.delete(updateTask);
 			testStorage.delete(tempTask);
+			testStorage.delete(updateTask);
 		}
 		br.close();*/
 	}
@@ -53,7 +59,7 @@ public class StorageAPITest {
 	@Test
 	public void testDeleteTask() throws IOException {
 		//testStorage.add(tempTask);
-		testStorage.delete(tempTask);
+		testStorage.delete(updateTask);
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		result = br.readLine();
 		br.close();
@@ -63,8 +69,15 @@ public class StorageAPITest {
 	}
 
 	@Test
-	public void testUpdateTaskTask() {
-		fail("Not yet implemented");
+	public void testUpdateTaskTask() throws IOException {
+		
+		testStorage.update(tempTask, updateTask);
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		result = br.readLine();
+		br.close();
+		expected = "[{\"tags\":[],\"subtasks\":[],\"taskName\":\"updateName\"}]";
+		assertEquals(expected, result);
+		//fail("Not yet implemented");
 	}
 
 	@Test
