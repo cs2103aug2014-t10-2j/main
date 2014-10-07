@@ -140,6 +140,13 @@ public class StorageAPI {
 	}
 	
 	
+/*
+ * +displayAll(): ArrayList<Task>	
+ */
+	
+	
+	
+	
 /*	+delete(): ArrayList<Task> taskList(deleted)
 		delete(ArrayList<Task>):					ArrayList<Task> taskList(deleted)
 		delete(Task):								Task(original)
@@ -266,17 +273,17 @@ public class StorageAPI {
 	
 	
 	
-	public static void setFile(String newFileName) throws IOException{
+	public void setFile(String newFileName) throws IOException{
 		filename = newFileName;
 	}
-	public static File createFile() throws IOException{
+	public File createFile() throws IOException{
 		file = new File(filename);
 		if(!file.exists()){
 			file.createNewFile();
 		}
 		return file;
 	}
-	public static String getFileName(){
+	public String getFileName(){
 		return file.getName();
 	}
 	
