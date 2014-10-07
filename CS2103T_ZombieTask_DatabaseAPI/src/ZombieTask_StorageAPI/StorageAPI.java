@@ -86,6 +86,7 @@ public class StorageAPI {
 		return searchTaskList;
 	}
 	public ArrayList<Task> search(Calendar date1, Calendar date2){
+		
 		return taskList;
 	}
 	public ArrayList<Task> search(Calendar date){
@@ -273,7 +274,9 @@ public class StorageAPI {
 		}
 		return file;
 	}
-	
+	public static String getFileName(){
+		return file.getName();
+	}
 	
 	
 }
