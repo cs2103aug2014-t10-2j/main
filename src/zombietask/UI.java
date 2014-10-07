@@ -1,3 +1,4 @@
+package zombietask;
 //UI.java
 //Author: Lian Jie Nicholas
 /**
