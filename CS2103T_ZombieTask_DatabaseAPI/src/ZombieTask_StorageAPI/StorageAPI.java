@@ -86,8 +86,18 @@ public class StorageAPI {
 		return searchTaskList;
 	}
 	public ArrayList<Task> search(Calendar date1, Calendar date2){
-		
-		return taskList;
+		ArrayList<Task> searchTaskList = new ArrayList<Task> ();
+		Task temp;
+		for(int i=0;i<jsonTaskList.length();i++){
+			temp = convertJSONToTask((JSONObject)jsonTaskList.get(i));
+			if(temp.getDeadline().compareTo(date1)>=0 && temp.getDeadline().compareTo(date2)<=0){
+				searchTaskList.add(temp);
+			}
+		}
+		if(searchTaskList.isEmpty()){
+			return null;
+		}
+		return searchTaskList;
 	}
 	public ArrayList<Task> search(Calendar date){
 		return taskList;
