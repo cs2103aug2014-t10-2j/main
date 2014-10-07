@@ -73,10 +73,13 @@ public class InterpreterAtd {
 		assertEquals(8, add.getDateTime().get(Calendar.MONTH));
 		assertEquals("Lunch", add.getTaskName());
 		assertEquals("30 Sep Lunch #impt #food", add.getUserInput());
-		
+	}
+	
+	@Test (expected = Exception.class)
+	public void testGetCommandAddFloating() throws Exception {
 		// Test 4: floating task, missing date
-		command = Interpreter.getCommand("     \n#food Eat #impt");
-		add = (CommandAdd) command;
+		Command	command = Interpreter.getCommand("     \n#food Eat #impt");
+		CommandAdd add = (CommandAdd) command;
 		assertTrue(add.hasMissingArgs());
 		assertEquals("     \n#food Eat #impt", add.getUserInput());
 	}
@@ -117,18 +120,37 @@ public class InterpreterAtd {
 	@Test
 	public void testGetCommandUpdate() throws Exception {
 		// Test 1: Basic function
-		Command command = Interpreter.getCommand("update 2");
+		Command command = Interpreter.getCommand("update 2 go lunch sep 21"
+				+ " #food");
 		assertEquals(Command.UPDATE, command.getCommandType());
 		CommandUpdate update = (CommandUpdate) command;
 		assertEquals(2, update.getLineNo());
-		assertEquals("update 2", update.getUserInput());
+		assertEquals("update 2 go lunch sep 21 #food", update.getUserInput());
+		
+		CommandAdd updatedTask = update.getUpdatedTask();
+		ArrayList<String> tags = new ArrayList<String>();
+		tags.add("#food");
+		assertEquals("go lunch", updatedTask.getTaskName());
+		assertEquals(tags, updatedTask.getTags());
+		assertEquals(8, updatedTask.getDateTime().get(Calendar.MONTH));
+		assertEquals(21, updatedTask.getDateTime().get(Calendar.DATE));
+		
 		
 		// Test 2: case-insensitivity
-		command = Interpreter.getCommand("UpDate 2");
+		command = Interpreter.getCommand("uPdATe 2 go lunch sep 21"
+				+ " #food");
 		assertEquals(Command.UPDATE, command.getCommandType());
 		update = (CommandUpdate) command;
 		assertEquals(2, update.getLineNo());
-		assertEquals("UpDate 2", update.getUserInput());
+		assertEquals("uPdATe 2 go lunch sep 21 #food", update.getUserInput());
+		
+		updatedTask = update.getUpdatedTask();
+		tags.clear();
+		tags.add("#food");
+		assertEquals("go lunch", updatedTask.getTaskName());
+		assertEquals(tags, updatedTask.getTags());
+		assertEquals(8, updatedTask.getDateTime().get(Calendar.MONTH));
+		assertEquals(21, updatedTask.getDateTime().get(Calendar.DATE));
 		
 		// Test 3: invalid arguments
 		command = Interpreter.getCommand("update me");
@@ -144,6 +166,13 @@ public class InterpreterAtd {
 		assertEquals(Interpreter.INVALID_NO, update.getLineNo());
 		assertTrue(update.hasMissingArgs());
 		assertEquals("update", update.getUserInput());
+		
+		command = Interpreter.getCommand("update 3");
+		assertEquals(Command.UPDATE, command.getCommandType());
+		update = (CommandUpdate) command;
+		assertEquals(Interpreter.INVALID_NO, update.getLineNo());
+		assertTrue(update.hasMissingArgs());
+		assertEquals("update 3", update.getUserInput());
 
 	}
 	

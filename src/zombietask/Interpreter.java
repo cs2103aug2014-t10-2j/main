@@ -1,6 +1,6 @@
 package zombietask;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -42,12 +42,12 @@ public class Interpreter {
 	 *            the command from the user
 	 * @return a command object with command type and arguments based on the
 	 *         command type
-	 * @throws Exception
+	 * @throws NoCommandException
 	 *             for invalid user input, such as null or an empty string
 	 */
 	public static Command getCommand(String userInput) throws Exception {
 		if (userInput == null || userInput.trim() == "") {
-			throw new Exception("No command entered.");
+			throw new NoCommandException("No command entered");
 		} else {
 
 			String[] userInputTokens = userInput.trim().toLowerCase()
@@ -62,10 +62,11 @@ public class Interpreter {
 						return new CommandDelete(INVALID_NO, userInput, true);
 					}
 				case Command.UPDATE:
-					if (userInputTokens.length > 1) {
+					if (userInputTokens.length > 2) {
 						return getCommandUpdate(userInputTokens[1], userInput);
 					} else {
-						return new CommandUpdate(INVALID_NO, userInput, true);
+						return new CommandUpdate(INVALID_NO, null, userInput,
+								true);
 					}
 				case Command.VIEW:
 					if (userInputTokens.length > 1) {
@@ -99,7 +100,7 @@ public class Interpreter {
 	 * @param userInput
 	 *            the original user input
 	 * @return a CommandView object with a the view format and a boolean value
-	 * to indicate missing arguments
+	 *         to indicate missing arguments
 	 */
 	private static Command getCommandView(String secondWord, String userInput) {
 		FORMAT viewType = UI.getFormat(secondWord);
@@ -108,7 +109,7 @@ public class Interpreter {
 		}
 		return new CommandView(viewType, userInput, false);
 	}
-	
+
 	/**
 	 * Creates a CommandHelp object based on user input
 	 * 
@@ -117,7 +118,7 @@ public class Interpreter {
 	 * @param userInput
 	 *            the original user input
 	 * @return a CommandHelp object with the command that the user needs help
-	 * with and a boolean value to indicate missing arguments
+	 *         with and a boolean value to indicate missing arguments
 	 */
 	private static Command getCommandHelp(String secondWord, String userInput) {
 		if (Command.validCommands.contains(secondWord)) {
@@ -133,22 +134,27 @@ public class Interpreter {
 	 * @param userInput
 	 *            the command entered by user
 	 * @return a calendar date object indicating the date and time
-	 * @throws Exception
+	 * @throws NoDateException
 	 *             for unspecified date and time
 	 */
 	private static Calendar getDate(String userInput) throws Exception {
 		Calendar cal = Calendar.getInstance();
 		Parser parser = new Parser();
 		List<DateGroup> groups = parser.parse(userInput);
-		for (DateGroup group : groups) {
-			List<Date> dates = group.getDates();
-			if (dates.isEmpty()) {
-				throw new Exception("No date/time given.");
-			} else {
-				Date date = dates.get(0);
-				cal.setTime(date);
 
-				return cal;
+		if (groups.isEmpty()) {
+			throw new NoDateException("No date/time given.");
+		} else {
+			for (DateGroup group : groups) {
+				List<Date> dates = group.getDates();
+				if (dates.isEmpty()) {
+					throw new NoDateException("No date/time given.");
+				} else {
+					Date date = dates.get(0);
+					cal.setTime(date);
+
+					return cal;
+				}
 			}
 		}
 		return null;
@@ -181,7 +187,7 @@ public class Interpreter {
 	 * @param tags
 	 *            a list of tags parsed from user input
 	 * @return the task name, or a description of the task
-	 * @throws Exception
+	 * @throws NoTaskNameException
 	 *             no task name specified
 	 */
 	private static String getTaskName(String userInput, ArrayList<String> tags)
@@ -208,7 +214,7 @@ public class Interpreter {
 		}
 
 		if (userInput.trim() == "") {
-			throw new Exception("No task name.");
+			throw new NoTaskNameException("No task name.");
 		}
 		return userInput.trim();
 
@@ -251,13 +257,24 @@ public class Interpreter {
 	 *            the second word of the user input
 	 * @return a CommandUpdate object with integer value of line number and a
 	 *         boolean value to indicate missing arguments
+	 * @throws Exception
+	 *             for invalid line number or date
 	 */
-	private static CommandUpdate getCommandUpdate(String secondWord, String userInput) {
+	private static CommandUpdate getCommandUpdate(String secondWord,
+			String userInput) throws Exception {
 		try {
 			int lineNo = Integer.parseInt(secondWord);
-			return new CommandUpdate(lineNo, userInput, false);
-		} catch (Exception e) { // invalid number
-			return new CommandUpdate(INVALID_NO, userInput, true);
+
+			// get third word onwards to parse as an add command
+			int spaceIndex = userInput.indexOf(" ");
+			String userInputTemp = userInput.substring(spaceIndex + 1);
+			spaceIndex = userInputTemp.indexOf(" ");
+			userInputTemp = userInputTemp.substring(spaceIndex + 1);
+
+			CommandAdd updatedTask = getCommandAdd(userInputTemp);
+			return new CommandUpdate(lineNo, updatedTask, userInput, false);
+		} catch (Exception e) { // invalid number or date
+			throw e;
 		}
 	}
 
@@ -269,7 +286,7 @@ public class Interpreter {
 	 * @return a CommandDelte object with integer value of line number and a
 	 *         boolean value to indicate missing arguments
 	 */
-	private static CommandDelete getCommandDelete(String secondWord, 
+	private static CommandDelete getCommandDelete(String secondWord,
 			String userInput) {
 		try {
 			int lineNo = Integer.parseInt(secondWord);
