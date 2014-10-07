@@ -193,7 +193,11 @@ public class StorageAPI {
 		update(ArrayList<Task>):					ArrayList<Task> taskList(original)
 		
 */		
-	
+	public Task update(int taskID, Task newTask) throws IOException{
+		Task originalTask = search(taskID);
+		update(originalTask, newTask);
+		return originalTask;
+	}
 	
 	public Task update(Task originalTask, Task newTask) throws IOException{
 		delete(originalTask);
