@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
-import java.util.Vector;
 
 public class Task
 {	
@@ -86,6 +85,12 @@ public class Task
 		}
 		return str;
 	}
+	public ArrayList<Task> getSubtask(){
+		return subtasks;
+	}
+	public void addSubtask(Task subTask){
+		subtasks.add(subTask);
+	}
 	//////////////////// MISCELLENEOUS ////////////////////
 	public String toString()
 	{
@@ -127,14 +132,5 @@ public class Task
 	public int getDate()
 	{
 		return (deadline == null) ? 0 : deadline.get(Calendar.DATE);
-	}
-	
-	public void addSubtask(Task task) {
-		// TODO Auto-generated method stub
-		
-	}
-	public boolean getSubtasks() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }

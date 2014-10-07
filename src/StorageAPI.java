@@ -56,6 +56,16 @@ public class StorageAPI {
 		search(Calendar date, dates): 				ArrayList<Task> taskList(searched task)
 		search(Calendar date):						ArrayList<Task> taskList(searched task)
 */
+	public ArrayList<Task> search(int[] taskID){
+		ArrayList<Task> searchTaskList= new ArrayList<Task>();
+		for(int i=0;i<taskID.length;i++){
+			searchTaskList.add(convertJSONToTask((JSONObject)jsonTaskList.get(taskID[i])));
+		}
+		return searchTaskList;
+	}
+	
+	
+	
 	public ArrayList<Task> search(String keyword){
 		ArrayList<Task> searchTaskList= new ArrayList<Task>();
 		int index=0;
@@ -164,6 +174,7 @@ public class StorageAPI {
 	+update(): ArrayList<Task> taskList(updated)
 		update(Task):								Task(original)
 		update(ArrayList<Task>):					ArrayList<Task> taskList(original)
+		
 */		
 	public Task update(Task originalTask, Task newTask) throws IOException{
 		delete(originalTask);
@@ -207,8 +218,8 @@ public class StorageAPI {
 		if(tempTask.getTags()!=null){
 			JSONTempTask.put(MESSAGE_TAGS, tempTask.getTags());
 		}
-		if(tempTask.getSubtasks()){
-			JSONTempTask.put(MESSAGE_SUBTASKS, tempTask.getSubtasks());
+		if(tempTask.getSubtask()!=null){
+			JSONTempTask.put(MESSAGE_SUBTASKS, tempTask.getSubtask());
 		}
 		return JSONTempTask;
 	}
@@ -220,7 +231,7 @@ public class StorageAPI {
 		if(JSONTempTask.has(MESSAGE_TAGS)){
 			ArrayList<String> tempList = (ArrayList<String>)JSONTempTask.get(MESSAGE_TAGS);
 			int index =0;
-			while(tempList.get(index)!=null){
+			while(index<tempList.size()){
 				tempTask.addTag(tempList.get(index));
 				index++;
 			}
@@ -228,7 +239,7 @@ public class StorageAPI {
 		if(JSONTempTask.has(MESSAGE_SUBTASKS)){
 			ArrayList<Task> tempList = (ArrayList<Task>)JSONTempTask.get(MESSAGE_SUBTASKS);
 			int index = 0;
-			while(tempList.get(index)!=null){
+			while(index<tempList.size()){
 				tempTask.addSubtask(tempList.get(index));
 			}
 		}
@@ -237,9 +248,9 @@ public class StorageAPI {
 	private static boolean compareTask(Task tempTask, JSONObject jsonTask){
 		boolean result =false;
 		if(tempTask.getTaskName().equals(jsonTask.getString(MESSAGE_TASKNAME))){
-			if(tempTask.getDeadline().equals((Calendar)jsonTask.get(MESSAGE_DEADLINE))){
+			//if(tempTask.getDeadline().equals((Calendar)jsonTask.get(MESSAGE_DEADLINE))){
 				result = true;
-			}
+			//}
 		}
 		return result;
 	}
@@ -253,26 +264,12 @@ public class StorageAPI {
 	public static void setFile(String newFileName) throws IOException{
 		filename = newFileName;
 	}
-	public static void createFile() throws IOException{
+	public static File createFile() throws IOException{
 		file = new File(filename);
 		if(!file.exists()){
 			file.createNewFile();
 		}
-	}
-	
-	public Object getFileName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public Object getDefaultFileName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public void setFileName(String string) {
-		// TODO Auto-generated method stub
-		
+		return file;
 	}
 	
 	
