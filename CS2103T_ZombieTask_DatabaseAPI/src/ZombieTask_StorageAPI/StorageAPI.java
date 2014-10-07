@@ -58,12 +58,12 @@ public class StorageAPI {
 		search(Calendar date, dates): 				ArrayList<Task> taskList(searched task)
 		search(Calendar date):						ArrayList<Task> taskList(searched task)
 */
-	public ArrayList<Task> search(int[] taskID){
-		ArrayList<Task> searchTaskList= new ArrayList<Task>();
-		for(int i=0;i<taskID.length;i++){
-			searchTaskList.add(convertJSONToTask((JSONObject)jsonTaskList.get(taskID[i])));
-		}
-		return searchTaskList;
+	public Task search(int taskID){
+		Task searchTask= null;
+		
+		searchTask = convertJSONToTask((JSONObject)jsonTaskList.get(taskID));
+		
+		return searchTask;
 	}
 	
 	
@@ -179,6 +179,8 @@ public class StorageAPI {
 		update(ArrayList<Task>):					ArrayList<Task> taskList(original)
 		
 */		
+	
+	
 	public Task update(Task originalTask, Task newTask) throws IOException{
 		delete(originalTask);
 		add(newTask);
