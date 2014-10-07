@@ -81,8 +81,6 @@ public class StorageAPI {
 			}
 			index++;
 		}
-		
-		
 		return searchTaskList;
 	}
 	public ArrayList<Task> search(Calendar date1, Calendar date2){
