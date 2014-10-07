@@ -9,6 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,8 +26,13 @@ public class StorageAPITest {
 	String updateName = "updateName";
 	int  testID = 0;
 	Calendar deadline; //= Calendar.getInstance();
+	Calendar date1 = new GregorianCalendar(2000,1,1) ;
+	Calendar date2 = new GregorianCalendar(2000,1,2) ;
+	
 	Task tempTask = new Task(taskName, deadline);
 	Task updateTask = new Task(updateName, deadline);
+	Task task1 = new Task(taskName, date1);
+	Task task2 = new Task(updateName, date2);
 	
 	@Before
 	public void setUp() throws Exception {
@@ -64,6 +71,27 @@ public class StorageAPITest {
 		assertEquals(testExpected.getTaskName(),testResult.getTaskName());
 
 		//fail("Not yet implemented");
+	}
+	
+	@Test
+	public void testSearchTwoDate() throws IOException {
+		testStorage.add(task1);
+		testStorage.add(task2);
+		ArrayList<Task> tempTest = new ArrayList<Task> ();
+		tempTest = testStorage.search(date1, date2);
+		ArrayList<Task> expectedTest= new ArrayList<Task>();
+		expectedTest.add(task1);
+		expectedTest.add(task2);
+		testStorage.delete(task2);
+		testStorage.delete(task1);
+		assertEquals(expectedTest.get(0).getSubtask(),tempTest.get(0).getSubtask());
+		assertEquals(expectedTest.get(0).getDeadline(),tempTest.get(0).getDeadline());
+		assertEquals(expectedTest.get(0).getTags(),tempTest.get(0).getTags());
+		assertEquals(expectedTest.get(0).getTaskName(),tempTest.get(0).getTaskName());
+		assertEquals(expectedTest.get(1).getSubtask(),tempTest.get(1).getSubtask());
+		assertEquals(expectedTest.get(1).getDeadline(),tempTest.get(1).getDeadline());
+		assertEquals(expectedTest.get(1).getTags(),tempTest.get(1).getTags());
+		assertEquals(expectedTest.get(1).getTaskName(),tempTest.get(1).getTaskName());
 	}
 
 	@Test
@@ -125,6 +153,8 @@ public class StorageAPITest {
 		assertEquals(file.getName(),filename);
 		//fail("Not yet implemented");
 	}
+	
+	
 	
 
 }
