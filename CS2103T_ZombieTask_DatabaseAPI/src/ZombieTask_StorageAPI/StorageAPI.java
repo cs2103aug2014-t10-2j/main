@@ -143,7 +143,14 @@ public class StorageAPI {
 /*
  * +displayAll(): ArrayList<Task>	
  */
-	
+	public ArrayList <Task> displayAll(){
+		ArrayList <Task> displayTaskList = new ArrayList <Task>();
+		for(int i =0; i <jsonTaskList.length(); i++){
+			displayTaskList.add(convertJSONToTask((JSONObject)jsonTaskList.get(i)));
+		}
+		
+		return displayTaskList;
+	}
 	
 	
 	

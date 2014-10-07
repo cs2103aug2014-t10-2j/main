@@ -29,7 +29,7 @@ public class StorageAPITest {
 	
 	@Before
 	public void setUp() throws Exception {
-		file = StorageAPI.createFile();
+		file = testStorage.createFile();
 		
 	    	FileWriter fw = new FileWriter(file,false);
 			fw.write("");
@@ -92,15 +92,15 @@ public class StorageAPITest {
 
 	@Test
 	public void testSetFile() throws IOException {
-		StorageAPI.setFile(filenameTest);
-		file = StorageAPI.createFile();
+		testStorage.setFile(filenameTest);
+		file = testStorage.createFile();
 		assertEquals(file.getName(),filenameTest);
 		//fail("Not yet implemented");
 	}
 
 	@Test
 	public void testCreateFile() throws IOException {
-		file = StorageAPI.createFile();
+		file = testStorage.createFile();
 		assertEquals(file.getName(),filename);
 		//fail("Not yet implemented");
 	}
