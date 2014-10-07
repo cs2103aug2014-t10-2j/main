@@ -22,7 +22,7 @@ public class StorageAPITest {
 	String result = null;
 	String taskName = "tempTask";
 	String updateName = "updateName";
-	int [] testArray = {0};
+	int  testID = 0;
 	Calendar deadline; //= Calendar.getInstance();
 	Task tempTask = new Task(taskName, deadline);
 	Task updateTask = new Task(updateName, deadline);
@@ -55,13 +55,13 @@ public class StorageAPITest {
 	@Test
 	public void testSearchIntArray() throws IOException {
 		testStorage.add(tempTask);
-		ArrayList<Task> testResult = testStorage.search(testArray);
-		ArrayList<Task> testExpected = new ArrayList<Task> ();
-		testExpected.add(tempTask);
-		assertEquals(testExpected.get(0).getSubtask(),testResult.get(0).getSubtask());
-		assertEquals(testExpected.get(0).getDeadline(),testResult.get(0).getDeadline());
-		assertEquals(testExpected.get(0).getTags(),testResult.get(0).getTags());
-		assertEquals(testExpected.get(0).getTaskName(),testResult.get(0).getTaskName());
+		Task testResult = testStorage.search(testID);
+		Task testExpected = tempTask;
+		
+		assertEquals(testExpected.getSubtask(),testResult.getSubtask());
+		assertEquals(testExpected.getDeadline(),testResult.getDeadline());
+		assertEquals(testExpected.getTags(),testResult.getTags());
+		assertEquals(testExpected.getTaskName(),testResult.getTaskName());
 
 		//fail("Not yet implemented");
 	}
