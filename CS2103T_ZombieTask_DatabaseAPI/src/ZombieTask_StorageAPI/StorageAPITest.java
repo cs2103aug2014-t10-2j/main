@@ -91,6 +91,27 @@ public class StorageAPITest {
 	}
 
 	@Test
+	public void testDisplayAll() throws IOException{
+		testStorage.add(tempTask);
+		testStorage.add(updateTask);
+		ArrayList <Task> tempTest = new ArrayList <Task> ();
+		ArrayList <Task> expectedTest = new ArrayList <Task> ();
+		tempTest = testStorage.displayAll();
+		expectedTest.add(tempTask);
+		expectedTest.add(updateTask);
+		testStorage.delete(tempTask);
+		testStorage.delete(updateTask);
+		assertEquals(expectedTest.get(0).getSubtask(),tempTest.get(0).getSubtask());
+		assertEquals(expectedTest.get(0).getDeadline(),tempTest.get(0).getDeadline());
+		assertEquals(expectedTest.get(0).getTags(),tempTest.get(0).getTags());
+		assertEquals(expectedTest.get(0).getTaskName(),tempTest.get(0).getTaskName());
+		assertEquals(expectedTest.get(1).getSubtask(),tempTest.get(1).getSubtask());
+		assertEquals(expectedTest.get(1).getDeadline(),tempTest.get(1).getDeadline());
+		assertEquals(expectedTest.get(1).getTags(),tempTest.get(1).getTags());
+		assertEquals(expectedTest.get(1).getTaskName(),tempTest.get(1).getTaskName());
+	}
+
+	@Test
 	public void testSetFile() throws IOException {
 		testStorage.setFile(filenameTest);
 		file = testStorage.createFile();
@@ -104,5 +125,6 @@ public class StorageAPITest {
 		assertEquals(file.getName(),filename);
 		//fail("Not yet implemented");
 	}
+	
 
 }
