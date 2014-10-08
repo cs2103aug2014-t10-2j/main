@@ -1,4 +1,4 @@
-package ZombieTask_StorageAPI;
+package zombietask;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
