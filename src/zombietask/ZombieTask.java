@@ -50,11 +50,11 @@ public class ZombieTask {
 	 * Redo, Help, Invalid are commands to be implemented in Interpreter Class
 	 */
 	
-	private final static String COMMAND_ADD = Interpreter.ADD; //edit out
-	private final static String COMMAND_DELETE = Interpreter.DELETE;
-	private final static String COMMAND_UPDATE = Interpreter.UPDATE;
-	private final static String COMMAND_VIEW = Interpreter.VIEW;
-	private final static String COMMAND_UNDO = Interpreter.UNDO;
+	private final static String COMMAND_ADD = Command.ADD; //edit out
+	private final static String COMMAND_DELETE = Command.DELETE;
+	private final static String COMMAND_UPDATE = Command.UPDATE;
+	private final static String COMMAND_VIEW = Command.VIEW;
+	private final static String COMMAND_UNDO = Command.UNDO;
 	private final static String COMMAND_REDO = "redo";
 	private final static String COMMAND_HELP = "help";
 	private final static String COMMAND_INVALID = "invalid command %s";
@@ -209,8 +209,7 @@ public class ZombieTask {
 		// TODO Auto-generated method stub
 		try{
 			CommandView currentViewCommand = (CommandView) command;
-			String viewType = currentViewCommand.getViewType();
-			FORMAT viewFormat = convertToFormat(viewType);
+			FORMAT viewFormat = currentViewCommand.getViewType();
 			ArrayList<Task> allTasks = storage.search(new String());
 			
 			switch (viewFormat){
@@ -278,6 +277,32 @@ public class ZombieTask {
 
 	private static void updateCommand(Command command) {
 		// TODO Auto-generated method stub
+		
+		CommandUpdate currentUpdateCommand = (CommandUpdate) command;
+		
+		// Create New Task
+		
+		CommandAdd currentAddCommand = command.getUpdatedTask();
+		String taskName = currentAddCommand.getTaskName();
+		Calendar taskTime = currentAddCommand.getDateTime();
+		ArrayList<String> tags = currentAddCommand.getTags();
+		
+		currentTask = null;
+		if (taskTime != null){
+			currentTask = new Task(taskName, taskTime);
+		}else{
+			currentTask = new Task(taskName);
+		}
+		
+		//Add Tags
+		for (String tag : tags){
+			currentTask.addTag(tag);
+		}
+		
+		//Update
+		
+		storage.api(command.getLineNo());
+		
 	}
 
 	private static void invalidCommand(String commandString) {
@@ -512,32 +537,6 @@ public class ZombieTask {
 	
 	private static void setMaximumCalendarField(Calendar time, int calendarField) {
 		time.set(calendarField, time.getActualMaximum(calendarField));
-	}
-	
-	private static FORMAT convertToFormat(String viewType) {
-		
-		if (viewType.isEmpty()) {
-			return UI.INVALID;
-		}
-		
-		switch (viewType){
-		case Interpreter.AGENDA:
-			return UI.AGENDA;
-		case Interpreter.DAILY:
-			return UI.DAILY;
-		case Interpreter.WEEKLY:
-			return UI.WEEKLY;
-		case Interpreter.MONTHLY:
-			return UI.MONTHLY;
-		case Interpreter.YEARLY:
-			return UI.YEARLY;
-		case Interpreter.CALENDAR:
-			return UI.CALENDAR;
-		default:
-		case Interpreter.INVALID:
-			return UI.INVALID;
-		
-		}
 	}
 	
 	/**
