@@ -1,4 +1,4 @@
-package ZombieTask_StorageAPI;
+package zombietask;
 
 import static org.junit.Assert.*;
 
