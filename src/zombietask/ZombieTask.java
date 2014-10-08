@@ -282,7 +282,7 @@ public class ZombieTask {
 		
 		// Create New Task
 		
-		CommandAdd currentAddCommand = command.getUpdatedTask();
+		CommandAdd currentAddCommand = currentUpdateCommand.getUpdatedTask();
 		String taskName = currentAddCommand.getTaskName();
 		Calendar taskTime = currentAddCommand.getDateTime();
 		ArrayList<String> tags = currentAddCommand.getTags();
@@ -301,7 +301,7 @@ public class ZombieTask {
 		
 		//Update
 		
-		storage.api(command.getLineNo());
+		storage.search(currentUpdateCommand.getLineNo());
 		
 	}
 
@@ -395,9 +395,9 @@ public class ZombieTask {
 	static void initStorage(String[] args) {
 		try {
 			if (args.length > 0){
-				storage.setFileName(args[0]);
+				storage.setFile(args[0]);
 			}
-			StorageAPI.createFile();
+			storage.createFile();
 		} catch (Exception err){
 			showToUser(String.format(MESSAGE_INVALID_FILENAME, args[0]));
 		} finally {
