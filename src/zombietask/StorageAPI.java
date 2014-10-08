@@ -1,4 +1,5 @@
-package zombietask;
+package ZombieTask_StorageAPI;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -57,12 +58,12 @@ public class StorageAPI {
 		search(Calendar date, dates): 				ArrayList<Task> taskList(searched task)
 		search(Calendar date):						ArrayList<Task> taskList(searched task)
 */
-	public ArrayList<Task> search(int[] taskID){
-		ArrayList<Task> searchTaskList= new ArrayList<Task>();
-		for(int i=0;i<taskID.length;i++){
-			searchTaskList.add(convertJSONToTask((JSONObject)jsonTaskList.get(taskID[i])));
-		}
-		return searchTaskList;
+	public Task search(int taskID){
+		Task searchTask= null;
+		
+		searchTask = convertJSONToTask((JSONObject)jsonTaskList.get(taskID));
+		
+		return searchTask;
 	}
 	
 	
@@ -80,12 +81,21 @@ public class StorageAPI {
 			}
 			index++;
 		}
-		
-		
 		return searchTaskList;
 	}
 	public ArrayList<Task> search(Calendar date1, Calendar date2){
-		return taskList;
+		ArrayList<Task> searchTaskList = new ArrayList<Task> ();
+		Task temp;
+		for(int i=0;i<jsonTaskList.length();i++){
+			temp = convertJSONToTask((JSONObject)jsonTaskList.get(i));
+			if(temp.getDeadline().compareTo(date1)>=0 && temp.getDeadline().compareTo(date2)<=0){
+				searchTaskList.add(temp);
+			}
+		}
+		if(searchTaskList.isEmpty()){
+			return null;
+		}
+		return searchTaskList;
 	}
 	public ArrayList<Task> search(Calendar date){
 		return taskList;
@@ -138,6 +148,20 @@ public class StorageAPI {
 	}
 	
 	
+/*
+ * +displayAll(): ArrayList<Task>	
+ */
+	public ArrayList <Task> displayAll(){
+		ArrayList <Task> displayTaskList = new ArrayList <Task>();
+		for(int i =0; i <jsonTaskList.length(); i++){
+			displayTaskList.add(convertJSONToTask((JSONObject)jsonTaskList.get(i)));
+		}
+		
+		return displayTaskList;
+	}
+	
+	
+	
 /*	+delete(): ArrayList<Task> taskList(deleted)
 		delete(ArrayList<Task>):					ArrayList<Task> taskList(deleted)
 		delete(Task):								Task(original)
@@ -177,6 +201,12 @@ public class StorageAPI {
 		update(ArrayList<Task>):					ArrayList<Task> taskList(original)
 		
 */		
+	public Task update(int taskID, Task newTask) throws IOException{
+		Task originalTask = search(taskID);
+		update(originalTask, newTask);
+		return originalTask;
+	}
+	
 	public Task update(Task originalTask, Task newTask) throws IOException{
 		delete(originalTask);
 		add(newTask);
@@ -262,17 +292,19 @@ public class StorageAPI {
 	
 	
 	
-	public static void setFile(String newFileName) throws IOException{
+	public void setFile(String newFileName) throws IOException{
 		filename = newFileName;
 	}
-	public static File createFile() throws IOException{
+	public File createFile() throws IOException{
 		file = new File(filename);
 		if(!file.exists()){
 			file.createNewFile();
 		}
 		return file;
 	}
-	
+	public String getFileName(){
+		return file.getName();
+	}
 	
 	
 }
