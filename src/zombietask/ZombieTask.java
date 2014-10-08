@@ -210,7 +210,7 @@ public class ZombieTask {
 		try{
 			CommandView currentViewCommand = (CommandView) command;
 			FORMAT viewFormat = currentViewCommand.getViewType();
-			ArrayList<Task> allTasks = storage.search(new String());
+			ArrayList<Task> allTasks = storage.displayAll();
 			
 			switch (viewFormat){
 			case AGENDA:
