@@ -307,9 +307,18 @@ public class ZombieTask {
 			currentTask.addTag(tag);
 		}
 		
-		//Update
+		//Get old task
+		Task oldTask = storage.search(currentUpdateCommand.getLineNo());
 		
-		storage.search(currentUpdateCommand.getLineNo());
+		//delete old task
+		try {
+			storage.delete(oldTask);
+			storage.add(currentTask);
+		} catch (Exception err){
+			showToUser(err.getMessage());
+		}
+		
+		
 		
 	}
 
