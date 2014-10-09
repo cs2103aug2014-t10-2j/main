@@ -79,7 +79,7 @@ public class UI
 		if(tasks.get(0).getDeadline().before(time))
 		{
 			str += "!!! Overdue !!!\n";
-			while(tasks.get(index).isOverdue())
+			while(tasks.get(index).isOverdue() && index < tasks.size())
 				str += String.format("[%d]: %s\n", index, tasks.get(index++).toString());
 		}
 		str += "Today, " + FORMAT_TODAY.format(time.getTime()) + "\n";
