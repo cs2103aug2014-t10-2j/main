@@ -107,7 +107,7 @@ public class ZombieTask {
 				}
 				execute();
 			} catch (Exception err){
-				showToUser(err.toString());
+				showToUser(err.getMessage());
 			}
 
 		}
@@ -177,7 +177,7 @@ public class ZombieTask {
 			showToUser(String.format(MESSAGE_ADD, currentTask.getTaskName()));
 			
 		} catch (Exception err){
-			showToUser(err.toString());
+			showToUser(err.getMessage());
 		}
 	}
 
@@ -200,7 +200,7 @@ public class ZombieTask {
 			}
 			
 		} catch (Exception err){
-			showToUser(err.toString());
+			showToUser(err.getMessage());
 		}
 		
 	}
@@ -215,6 +215,7 @@ public class ZombieTask {
 			switch (viewFormat){
 			case AGENDA:
 				UI.printPerspective(viewFormat, allTasks);
+				break;
 			case DAILY:
 				Calendar startDay = new GregorianCalendar();
 				setMinimumCalendarField(startDay, Calendar.HOUR_OF_DAY);
@@ -225,6 +226,7 @@ public class ZombieTask {
 				setMaximumCalendarField(endDay, Calendar.MINUTE);
 				setMaximumCalendarField(endDay, Calendar.SECOND);
 				UI.printPerspective(viewFormat, storage.search(startDay, endDay));
+				break;
 			case WEEKLY:
 				Calendar startWeek = new GregorianCalendar();
 				setMinimumCalendarField(startWeek, Calendar.DAY_OF_WEEK);
@@ -237,6 +239,7 @@ public class ZombieTask {
 				setMaximumCalendarField(endWeek, Calendar.MINUTE);
 				setMaximumCalendarField(endWeek, Calendar.SECOND);
 				UI.printPerspective(viewFormat, storage.search(startWeek, endWeek));
+				break;
 			case MONTHLY:
 				Calendar startMonth = new GregorianCalendar();
 				setMinimumCalendarField(startMonth, Calendar.DAY_OF_MONTH);
@@ -249,6 +252,7 @@ public class ZombieTask {
 				setMaximumCalendarField(endMonth, Calendar.MINUTE);
 				setMaximumCalendarField(endMonth, Calendar.SECOND);
 				UI.printPerspective(viewFormat, storage.search(startMonth, endMonth));
+				break;
 			case YEARLY:
 				Calendar startYear = new GregorianCalendar();
 				setMinimumCalendarField(startYear, Calendar.DAY_OF_YEAR);
@@ -261,16 +265,19 @@ public class ZombieTask {
 				setMaximumCalendarField(endYear, Calendar.MINUTE);
 				setMaximumCalendarField(endYear, Calendar.SECOND);
 				UI.printPerspective(viewFormat, storage.search(startYear, endYear));
+				break;
 			case CALENDAR:
 				Calendar startCalendar = null;
 				Calendar endCalendar = null;
 				UI.printPerspective(viewFormat, storage.search(startCalendar, endCalendar));
+				break;
 			default:
 			case INVALID:
 				showToUser(String.format(COMMAND_INVALID, currentViewCommand.viewType));
+				break;
 			}
 		} catch (Exception err){
-			showToUser(err.toString());
+			showToUser(err.getMessage());
 		}
 	}
 
