@@ -192,6 +192,7 @@ public class ZombieTask {
 			
 			if (lineNumber < allTasks.size() && lineNumber >= 0){
 				currentTask = allTasks.remove(lineNumber);
+				storage.delete(currentTask);
 				recordCommand();
 				showToUser(String.format(MESSAGE_DELETE, currentTask.getTaskName()));
 			}else{
