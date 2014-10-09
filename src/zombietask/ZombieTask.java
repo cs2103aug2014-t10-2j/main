@@ -188,7 +188,7 @@ public class ZombieTask {
 			//Get details from Command Object
 			CommandDelete currentDeleteCommand = (CommandDelete) command;
 			int lineNumber = currentDeleteCommand.getLineNo();
-			ArrayList<Task> allTasks = storage.search(new String());
+			ArrayList<Task> allTasks = storage.displayAll();
 			
 			if (lineNumber < allTasks.size() && lineNumber >= 0){
 				currentTask = allTasks.remove(lineNumber);
