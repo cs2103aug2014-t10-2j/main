@@ -17,21 +17,46 @@ import json.JSONObject;
 
 public class StorageAPI {
 	
-	private static String filename ="ZombieStorage.txt";
-	private static String MESSAGE_TASKNAME ="taskName";
-	private static String MESSAGE_DEADLINE ="deadline";
-	private static String MESSAGE_TAGS ="tags";
-	private static String MESSAGE_SUBTASKS ="subtasks";
+	/*
+	 * Constants
+	 */
+	
+	private static final String MESSAGE_TASKNAME ="taskName";
+	private static final String MESSAGE_DEADLINE ="deadline";
+	private static final String MESSAGE_TAGS ="tags";
+	private static final String MESSAGE_SUBTASKS ="subtasks";
+	
+	/*
+	 * Instance variables
+	 */
+	
+	private static boolean hasRead = false;
+	private static String filename;
 	private static File file;
 	private static BufferedReader br;
 	private static BufferedWriter bw;
-	private static JSONArray jsonTaskList = new JSONArray() ;
+	private static JSONArray jsonTaskList ;
 	private static String tempTaskList;
-	private static boolean hasRead = false;
 	ArrayList<Task> taskList;
 	
 	
-
+	/**
+	 * Constructor for storage module
+	 */
+	
+	public StorageAPI(){
+		filename = "ZombieStorage.txt";
+		file = null;
+		br = null;
+		bw = null;
+		jsonTaskList = new JSONArray();
+		taskList = null;
+	}
+	
+	public StorageAPI(String newFilename){
+		StorageAPI();
+		if (newFilename != null) { filename = newFilename; };
+	}
 
 /*	+add(): Task(newTask)
 		add(Task): 									Task(newTask)
