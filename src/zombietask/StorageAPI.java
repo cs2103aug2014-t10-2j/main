@@ -202,7 +202,7 @@ public class StorageAPI {
 	public Task delete(Task tempTask) throws IOException{
 		readFileOnce();
 		int index=0;
-		while(jsonTaskList.get(index)!= null){
+		while(index < jsonTaskList.length()){
 			if(compareTask(tempTask,(JSONObject)jsonTaskList.get(index))){
 				jsonTaskList.remove(index);
 				writeFile();
