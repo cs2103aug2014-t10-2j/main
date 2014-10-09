@@ -54,8 +54,16 @@ public class StorageAPI {
 	}
 	
 	public StorageAPI(String newFilename){
-		StorageAPI();
-		if (newFilename != null) { filename = newFilename; };
+		if (newFilename != null) {
+			filename = newFilename;
+		}else{
+			filename = "ZombieStorage.txt";
+		};
+		file = null;
+		br = null;
+		bw = null;
+		jsonTaskList = new JSONArray();
+		taskList = null;
 	}
 
 /*	+add(): Task(newTask)
