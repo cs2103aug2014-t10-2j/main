@@ -52,6 +52,11 @@ public class StorageAPI {
 		jsonTaskList = new JSONArray();
 		taskList = null;
 	}
+	
+	public StorageAPI(String newFilename){
+		StorageAPI();
+		if (newFilename != null) { filename = newFilename; };
+	}
 
 /*	+add(): Task(newTask)
 		add(Task): 									Task(newTask)
