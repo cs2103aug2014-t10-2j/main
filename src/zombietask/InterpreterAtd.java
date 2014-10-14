@@ -33,7 +33,7 @@ public class InterpreterAtd {
 		
 		// Test 1: Basic test
 		Command command = Interpreter.getCommand("add today #food eat "
-				+ "something #impt");
+				+ "something1 #impt");
 		assertEquals(Command.ADD, command.getCommandType());
 		CommandAdd add = (CommandAdd) command;
 		Calendar today = Calendar.getInstance();
@@ -51,8 +51,8 @@ public class InterpreterAtd {
 		tags.add("#food");
 		tags.add("#impt");
 		assertEquals(tags, add.getTags());
-		assertEquals("eat something", add.getTaskName());
-		assertEquals("add today #food eat something #impt", add.getUserInput());
+		assertEquals("eat something1", add.getTaskName());
+		assertEquals("add today #food eat something1 #impt", add.getUserInput());
 		
 		// Test 2: case-insensitivity and white space
 		command = Interpreter.getCommand("   Add   30 Sep \n#food Eat #impt");
@@ -73,6 +73,25 @@ public class InterpreterAtd {
 		assertEquals(8, add.getDateTime().get(Calendar.MONTH));
 		assertEquals("Lunch", add.getTaskName());
 		assertEquals("30 Sep Lunch #impt #food", add.getUserInput());
+		
+
+		// Test 4: repeated dates
+		command = Interpreter.getCommand("30 Sep Lunch on 30 sep #impt #food");
+		assertEquals(Command.ADD, command.getCommandType());
+		add = (CommandAdd) command;
+		assertEquals(30, add.getDateTime().get(Calendar.DATE));
+		assertEquals(8, add.getDateTime().get(Calendar.MONTH));
+		assertEquals("Lunch on 30 sep", add.getTaskName());
+		assertEquals("30 Sep Lunch on 30 sep #impt #food", add.getUserInput());
+		
+		// Test 5: different dates
+		command = Interpreter.getCommand("30 Sep read 9/11 book");
+		assertEquals(Command.ADD, command.getCommandType());
+		add = (CommandAdd) command;
+		assertEquals(30, add.getDateTime().get(Calendar.DATE));
+		assertEquals(8, add.getDateTime().get(Calendar.MONTH));
+		assertEquals("read 9/11 book", add.getTaskName());
+		assertEquals("30 Sep read 9/11 book", add.getUserInput());
 	}
 	
 	@Test (expected = Exception.class)

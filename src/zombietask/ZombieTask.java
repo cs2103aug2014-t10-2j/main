@@ -19,7 +19,6 @@ import java.util.Calendar;
  * 
  */
 
-
 public class ZombieTask {
 
 	/*
@@ -202,6 +201,7 @@ public class ZombieTask {
 			
 		} catch (Exception err){
 			showToUser(err.getMessage());
+			err.printStackTrace();
 		}
 		
 	}
@@ -279,6 +279,7 @@ public class ZombieTask {
 			}
 		} catch (Exception err){
 			showToUser(err.getMessage());
+			err.printStackTrace();
 		}
 	}
 
@@ -316,6 +317,7 @@ public class ZombieTask {
 			storage.add(currentTask);
 		} catch (Exception err){
 			showToUser(err.getMessage());
+			err.printStackTrace();
 		}
 		
 		
@@ -358,6 +360,7 @@ public class ZombieTask {
 			
 		} catch (Exception err) {
 			showToUser(err.getMessage());
+			err.printStackTrace();
 		}
 	}
 	
@@ -394,6 +397,7 @@ public class ZombieTask {
 			
 		} catch (Exception err) {
 			showToUser(err.getMessage());
+			err.printStackTrace();
 		}
 		
 	}
@@ -539,8 +543,6 @@ public class ZombieTask {
 	/*
 	 * Miscellaneous Helper Functions
 	 */
-	
-
 	private static void reinitializeCurrentVariables() {
 		currentCommandDescriptor = null;
 		currentCommandString = null;

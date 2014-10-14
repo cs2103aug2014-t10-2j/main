@@ -196,14 +196,14 @@ public class Interpreter {
 		Parser parser = new Parser();
 		String dateKeyWords = null;
 		List<DateGroup> groups = parser.parse(userInput);
-		for (DateGroup group : groups) {
-			dateKeyWords = group.getText();
-		}
+		
+		// get and remove first keyword
+		dateKeyWords = groups.get(0).getText();		
 
 		if (dateKeyWords != null && !dateKeyWords.isEmpty()) {
-			userInput = userInput.replace(dateKeyWords + " ", "");
-			userInput = userInput.replace(" " + dateKeyWords, "");
-			userInput = userInput.replace(dateKeyWords, "");
+			userInput = userInput.replaceFirst(dateKeyWords + " ", "");
+			userInput = userInput.replaceFirst(" " + dateKeyWords, "");
+			userInput = userInput.replaceFirst(dateKeyWords, "");
 		}
 
 		// remove tags
