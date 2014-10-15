@@ -12,18 +12,23 @@ public class Command {
 	
 	// static command types
 	public static final String ADD = "add";
+	public static final String ADD_FLOATING = "add-floating";
+	public static final String ADD_TIMED = "add-timed";
 	public static final String DELETE = "delete";
 	public static final String UPDATE = "update";
 	public static final String VIEW = "view";
 	public static final String UNDO = "undo";
 	public static final String REDO = "redo";
 	public static final String HELP = "help";
+	public static final String SEARCH_NAME = "search-name";
+	public static final String SEARCH_TIME = "search-time";
 	public static final String EXIT = "exit";
 	
 	// list for ease of checking valid commands
-	public static List<String> validCommands = Arrays.asList(Command.ADD, Command.DELETE,
+	public static List<String> validCommands = Arrays.asList(Command.ADD, 
+			Command.ADD_FLOATING, Command.ADD_TIMED, Command.DELETE,
 			Command.UPDATE, Command.VIEW, Command.UNDO, Command.REDO,
-			Command.HELP, Command.EXIT);
+			Command.HELP, Command.SEARCH_NAME, Command.SEARCH_TIME, Command.EXIT);
 	
 	String commandType = null;
 	String userInput = null;
@@ -67,5 +72,4 @@ public class Command {
 		return hasMissingArgs;
 	}
 	
-
 }
