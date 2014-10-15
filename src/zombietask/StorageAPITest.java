@@ -99,7 +99,7 @@ public class StorageAPITest {
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		result = br.readLine();
 		br.close();
-		expected = "[]";
+		expected = null;
 		assertEquals(expected, result);
 		//fail("Not yet implemented");
 	}

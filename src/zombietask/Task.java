@@ -27,18 +27,42 @@ public class Task
 	private ArrayList<String> tags = new ArrayList<String>();
 	private ArrayList<Task> subtasks = new ArrayList<Task>();
 	//////////////////// CONSTRUCTORS ////////////////////
-	public Task(String taskName)	{	setTaskName(taskName);	}
+	public Task(String taskName)	{	
+		setTaskName(taskName);	
+		setDeadline(null);
+		}
 	public Task(String taskName, Calendar deadline)
 	{
 		setTaskName(taskName);
 		setDeadline(deadline);
 	}
+	public Task(String taskName, Calendar deadline,Calendar deadline2)
+	{
+		setTaskName(taskName);
+		setDeadline(deadline);
+		setDeadline2(deadline2);
+	}
 	//////////////////// TASKNAME METHODS ////////////////////
 	public void setTaskName(String taskName) {
-		this.taskName = taskName;	}
+		this.taskName = taskName;
+		}
 	public String getTaskName() {
 		return this.taskName;	}
 	//////////////////// DEADLINE METHODS ////////////////////
+	public boolean hasDeadline(){
+		boolean result = false;
+		if(this.getDeadline()!=null){
+			result = true;
+		}
+		return result;
+	}
+	public boolean hasDeadline2(){
+		boolean result = false;
+		if(this.getDeadline2()!=null){
+			result = true;
+		}
+		return result;
+	}
 	public void setDeadline(Calendar deadline) {
 		this.deadline = deadline;	}
 	public void setDeadline(int year, int mth, int date, int hour, int min)

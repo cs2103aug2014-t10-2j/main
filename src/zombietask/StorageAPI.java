@@ -23,6 +23,7 @@ public class StorageAPI {
 	
 	private static final String MESSAGE_TASKNAME ="taskName";
 	private static final String MESSAGE_DEADLINE ="deadline";
+	private static final String MESSAGE_DEADLINE2 = "deadline2";
 	private static final String MESSAGE_TAGS ="tags";
 	private static final String MESSAGE_SUBTASKS ="subtasks";
 	
@@ -123,10 +124,18 @@ public class StorageAPI {
 		ArrayList<Task> searchTaskList = new ArrayList<Task> ();
 		Task temp;
 		for(int i=0;i<jsonTaskList.length();i++){
+			
 			temp = convertJSONToTask((JSONObject)jsonTaskList.get(i));
-			if(temp.getDeadline().compareTo(date1)>=0 && temp.getDeadline().compareTo(date2)<=0){
-				searchTaskList.add(temp);
+			if(convertJSONToTask((JSONObject)jsonTaskList.get(i)).hasDeadline2()){
+				if(temp.getDeadline().compareTo(date1)>=0 && temp.getDeadline2().compareTo(date2)<=0){
+					searchTaskList.add(temp);
+				}
+			}else if(convertJSONToTask((JSONObject)jsonTaskList.get(i)).getDeadline()!=null){
+				if(temp.getDeadline().compareTo(date1)>=0 && temp.getDeadline().compareTo(date2)<=0){
+					searchTaskList.add(temp);
+				}
 			}
+			
 		}
 		if(searchTaskList.isEmpty()){
 			return null;
