@@ -296,6 +296,9 @@ public class StorageAPI {
 		if(tempTask.getDeadline()!=null){
 			JSONTempTask.put(MESSAGE_DEADLINE, tempTask.getDeadline());
 		}
+		if(tempTask.hasDeadline2()){
+			JSONTempTask.put(MESSAGE_DEADLINE2, tempTask.getDeadline2());
+		}
 		if(tempTask.getTags()!=null){
 			JSONTempTask.put(MESSAGE_TAGS, tempTask.getTags());
 		}
@@ -308,6 +311,9 @@ public class StorageAPI {
 		Task tempTask = new Task(JSONTempTask.getString(MESSAGE_TASKNAME));
 		if(JSONTempTask.has(MESSAGE_DEADLINE)){
 			tempTask.setDeadline((Calendar)JSONTempTask.get(MESSAGE_DEADLINE));
+		}
+		if(JSONTempTask.has(MESSAGE_DEADLINE2)){
+			tempTask.setDeadline2((Calendar)JSONTempTask.get(MESSAGE_DEADLINE2));
 		}
 		if(JSONTempTask.has(MESSAGE_TAGS)){
 			ArrayList<String> tempList = (ArrayList<String>)JSONTempTask.get(MESSAGE_TAGS);
