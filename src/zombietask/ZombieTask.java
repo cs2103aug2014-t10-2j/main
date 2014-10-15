@@ -124,7 +124,7 @@ public class ZombieTask {
 		}
 	}
 
-	private static void execute() throws IOException {
+	private static void execute() throws Exception {
 		currentCommandDescriptor = currentCommand.getCommandType();
 		switch(currentCommandDescriptor){
 		case COMMAND_ADD:
@@ -199,7 +199,7 @@ public class ZombieTask {
 			//Get details from Command Object
 			CommandDelete currentDeleteCommand = (CommandDelete) command;
 			int lineNumber = currentDeleteCommand.getLineNo();
-			ArrayList<Task> allTasks = storage.displayAll();
+			ArrayList<Task> allTasks = storage.getAllTasks();
 			
 			if (lineNumber < allTasks.size() && lineNumber >= 0){
 				currentTask = allTasks.remove(lineNumber);
@@ -223,7 +223,7 @@ public class ZombieTask {
 		try{
 			CommandView currentViewCommand = (CommandView) command;
 			FORMAT viewFormat = currentViewCommand.getViewType();
-			ArrayList<Task> allTasks = storage.displayAll();
+			ArrayList<Task> allTasks = storage.getAllTasks();
 			
 			switch (viewFormat){
 			case AGENDA:
@@ -296,7 +296,7 @@ public class ZombieTask {
 	}
 
 
-	private static void updateCommand(Command command) throws IOException {
+	private static void updateCommand(Command command) throws Exception {
 		// TODO Auto-generated method stub
 		
 		CommandUpdate currentUpdateCommand = (CommandUpdate) command;

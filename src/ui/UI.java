@@ -74,7 +74,7 @@ public class UI
 		Calendar time = Calendar.getInstance();
 		int index = 0;
 		String str = "(Agenda)\n";
-		if(tasks.get(0).getDeadline().before(time))
+		if(tasks.get(0).getEndTime().before(time))
 		{
 			str += "!!! Overdue !!!\n";
 			while(index < tasks.size()){
@@ -89,7 +89,7 @@ public class UI
 		time.add(Calendar.DATE, 1);
 		while(index < tasks.size())
 		{
-			if(time.before(tasks.get(index).getDeadline()))
+			if(time.before(tasks.get(index).getEndTime()))
 			{
 				str += FORMAT_DAYDATE.format(time.getTime()) + "\n";
 				time.add(Calendar.DATE, 1);
@@ -105,7 +105,7 @@ public class UI
 		String str = "(Daily)\n";
 		Calendar time = Calendar.getInstance();
 		int index = 0;
-		if(tasks.get(0).getDeadline().before(time))
+		if(tasks.get(0).getEndTime().before(time))
 		{
 			str += "!!! Overdue !!!\n";
 			while(tasks.get(index).isOverdue())
@@ -117,7 +117,7 @@ public class UI
 		{
 			str += String.format("|- %sh:", FORMAT_DATETIME.format(time.getTime()));
 			time.add(Calendar.HOUR_OF_DAY, 1);
-			while(index < tasks.size() && tasks.get(index).getDeadline().before(time))
+			while(index < tasks.size() && tasks.get(index).getEndTime().before(time))
 				str += String.format(" [%d]%s", index, tasks.get(index++).getTaskName());
 			str += "\n";
 		}
@@ -129,7 +129,7 @@ public class UI
 		String str = "(Weekly)\n";
 		Calendar time = Calendar.getInstance();
 		int index = 0;
-		if(tasks.get(0).getDeadline().before(time))
+		if(tasks.get(0).getEndTime().before(time))
 		{
 			str += "!!! Overdue !!!\n";
 			while(tasks.get(index).isOverdue())
@@ -142,7 +142,7 @@ public class UI
 			
 			str += String.format("|- %sh:", FORMAT_DATETIME.format(time.getTime()));
 			time.add(Calendar.HOUR_OF_DAY, 4);
-			while(index < tasks.size() && tasks.get(index).getDeadline().before(time))
+			while(index < tasks.size() && tasks.get(index).getEndTime().before(time))
 				str += String.format(" [%d]%s", index, tasks.get(index++).getTaskName());
 			str += "\n";
 		}
@@ -154,7 +154,7 @@ public class UI
 		String str = "(Monthly)\n";
 		Calendar time = Calendar.getInstance();
 		int index = 0;
-		if(tasks.get(0).getDeadline().before(time))
+		if(tasks.get(0).getEndTime().before(time))
 		{
 			str += "!!! Overdue !!!\n";
 			while(tasks.get(index).isOverdue())
@@ -167,7 +167,7 @@ public class UI
 		{
 			str += String.format("|- %s:",FORMAT_DATEMTH.format(time.getTime()));
 			time.add(Calendar.DATE, 1);
-			while(index < tasks.size() && tasks.get(index).getDeadline().before(time))
+			while(index < tasks.size() && tasks.get(index).getEndTime().before(time))
 				str += String.format(" [%d]%s", index, tasks.get(index++).getTaskName());
 			str += "\n";
 		}
@@ -179,7 +179,7 @@ public class UI
 		String str = "(Monthly)\n";
 		Calendar time = Calendar.getInstance();
 		int index = 0;
-		if(tasks.get(0).getDeadline().before(time))
+		if(tasks.get(0).getEndTime().before(time))
 		{
 			str += "!!! Overdue !!!\n";
 			while(tasks.get(index).isOverdue())
@@ -193,7 +193,7 @@ public class UI
 		{
 			str += String.format("|- Week %s:",FORMAT_WEEKNUM.format(time.getTime()));
 			time.add(Calendar.DATE, 7);
-			while(index < tasks.size() && tasks.get(index).getDeadline().before(time))
+			while(index < tasks.size() && tasks.get(index).getEndTime().before(time))
 				str += String.format(" [%d]%s", index, tasks.get(index++).getTaskName());
 			str += "\n";
 		}
