@@ -91,7 +91,8 @@ public class StorageAPI {
 		search(Calendar date, dates): 				ArrayList<Task> taskList(searched task)
 		search(Calendar date):						ArrayList<Task> taskList(searched task)
 */
-	public Task search(int taskID){
+	public Task search(int taskID) throws IOException{
+		readFileOnce();
 		Task searchTask= null;
 		
 		searchTask = convertJSONToTask((JSONObject)jsonTaskList.get(taskID));
@@ -101,7 +102,8 @@ public class StorageAPI {
 	
 	
 	
-	public ArrayList<Task> search(String keyword){
+	public ArrayList<Task> search(String keyword) throws IOException{
+		readFileOnce();
 		ArrayList<Task> searchTaskList= new ArrayList<Task>();
 		int index=0;
 		while(jsonTaskList.get(index)!=null){
@@ -116,7 +118,8 @@ public class StorageAPI {
 		}
 		return searchTaskList;
 	}
-	public ArrayList<Task> search(Calendar date1, Calendar date2){
+	public ArrayList<Task> search(Calendar date1, Calendar date2) throws IOException{
+		readFileOnce();
 		ArrayList<Task> searchTaskList = new ArrayList<Task> ();
 		Task temp;
 		for(int i=0;i<jsonTaskList.length();i++){
@@ -130,7 +133,8 @@ public class StorageAPI {
 		}
 		return searchTaskList;
 	}
-	public ArrayList<Task> search(Calendar date){
+	public ArrayList<Task> search(Calendar date) throws IOException{
+		readFileOnce();
 		return taskList;
 	}
 	
@@ -184,7 +188,8 @@ public class StorageAPI {
 /*
  * +displayAll(): ArrayList<Task>	
  */
-	public ArrayList <Task> displayAll(){
+	public ArrayList <Task> displayAll() throws IOException{
+		readFileOnce();
 		ArrayList <Task> displayTaskList = new ArrayList <Task>();
 		for(int i =0; i <jsonTaskList.length(); i++){
 			displayTaskList.add(convertJSONToTask((JSONObject)jsonTaskList.get(i)));
@@ -235,17 +240,20 @@ public class StorageAPI {
 		
 */		
 	public Task update(int taskID, Task newTask) throws IOException{
+		readFileOnce();
 		Task originalTask = search(taskID);
 		update(originalTask, newTask);
 		return originalTask;
 	}
 	
 	public Task update(Task originalTask, Task newTask) throws IOException{
+		readFileOnce();
 		delete(originalTask);
 		add(newTask);
 		return originalTask;
 	}
 	public ArrayList<Task> update(ArrayList<Task> originalTaskList,ArrayList<Task> newTaskList) throws IOException{
+		readFileOnce();
 		delete(originalTaskList);
 		add(newTaskList);
 		return originalTaskList;
