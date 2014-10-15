@@ -23,7 +23,7 @@ public class CommandSearchTime extends Command {
 	 */
 	public CommandSearchTime(Calendar newTimeStart, Calendar newTimeEnd, 
 			String userInput, boolean hasMissingArgs) {
-		super(Command.VIEW, userInput, hasMissingArgs);
+		super(Command.SEARCH_TIME, userInput, hasMissingArgs);
 		timeStart = newTimeStart;
 		timeEnd = newTimeEnd;
 	}

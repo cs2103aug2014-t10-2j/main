@@ -27,7 +27,7 @@ public class CommandAddTimed extends Command {
 	public CommandAddTimed(String newTaskName, Calendar newDateTimeStart,
 			Calendar newDateTimeEnd, ArrayList<String> newTags, 
 			String userInput, boolean hasMissingArgs) {
-		super(Command.ADD, userInput, hasMissingArgs);
+		super(Command.ADD_TIMED, userInput, hasMissingArgs);
 		taskName = newTaskName;
 		dateTimeStart = newDateTimeStart;
 		dateTimeEnd = newDateTimeEnd;

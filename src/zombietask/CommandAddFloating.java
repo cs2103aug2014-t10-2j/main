@@ -21,7 +21,7 @@ public class CommandAddFloating extends Command {
 	 */
 	public CommandAddFloating(String newTaskName, ArrayList<String> newTags, 
 			String userInput, boolean hasMissingArgs) {
-		super(Command.ADD, userInput, hasMissingArgs);
+		super(Command.ADD_FLOATING, userInput, hasMissingArgs);
 		taskName = newTaskName;
 		tags = newTags;
 	}

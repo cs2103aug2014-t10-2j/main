@@ -18,7 +18,7 @@ public class CommandSearchName extends Command {
 	 */
 	public CommandSearchName(String newSearchString, String userInput, 
 			boolean hasMissingArgs) {
-		super(Command.VIEW, userInput, hasMissingArgs);
+		super(Command.SEARCH_NAME, userInput, hasMissingArgs);
 		searchString = newSearchString;
 	}
 	
