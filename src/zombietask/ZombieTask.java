@@ -113,7 +113,7 @@ public class ZombieTask {
 		}
 	}
 
-	private static void execute() {
+	private static void execute() throws IOException {
 		currentCommandDescriptor = currentCommand.getCommandType();
 		switch(currentCommandDescriptor){
 		case COMMAND_ADD:
@@ -283,7 +283,7 @@ public class ZombieTask {
 	}
 
 
-	private static void updateCommand(Command command) {
+	private static void updateCommand(Command command) throws IOException {
 		// TODO Auto-generated method stub
 		
 		CommandUpdate currentUpdateCommand = (CommandUpdate) command;
