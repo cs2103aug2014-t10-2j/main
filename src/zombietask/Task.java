@@ -23,6 +23,7 @@ public class Task
 	//////////////////// DATA ATTRIBUTES ////////////////////
 	private String taskName = "";
 	private Calendar deadline = null;
+	private Calendar deadline2 = null;
 	private ArrayList<String> tags = new ArrayList<String>();
 	private ArrayList<Task> subtasks = new ArrayList<Task>();
 	//////////////////// CONSTRUCTORS ////////////////////
@@ -51,6 +52,21 @@ public class Task
 		return deadline.before(Calendar.getInstance());	}
 	public boolean isFloatingTask() {
 		return (deadline == null) ? true : false;	}
+	
+	//setter and getter for deadline2
+	public void setDeadline2(Calendar deadline2) {
+		this.deadline2 = deadline2;	}
+	public void setDeadline2(int year, int mth, int date, int hour, int min)
+	{
+		deadline2 = Calendar.getInstance();
+		deadline2.set(year, mth - 1, date, hour, min, 0);
+	}
+	public Calendar getDeadline2() {
+		return deadline2;	}
+	public boolean isOverdue2() {
+		return deadline2.before(Calendar.getInstance());	}
+	public boolean isFloatingTask2() {
+		return (deadline2 == null) ? true : false;	}
 	//////////////////// TAGS METHODS ////////////////////
 	public void addTag(String tag)
 	{
