@@ -1,4 +1,4 @@
-package zombietask;
+package tests;
 
 import static org.junit.Assert.*;
 
@@ -14,6 +14,9 @@ import java.util.GregorianCalendar;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import storage.StorageAPI;
+import zombietask.Task;
 
 public class StorageAPITest {
 	StorageAPI testStorage = new StorageAPI();

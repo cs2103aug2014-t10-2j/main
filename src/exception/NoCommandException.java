@@ -1,4 +1,4 @@
-package zombietask;
+package exception;
 
 /**
  * Exception for empty user input

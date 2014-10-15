@@ -1,9 +1,21 @@
 package zombietask;
+
+import interpreter.Command;
+import interpreter.CommandAdd;
+import interpreter.CommandDelete;
+import interpreter.CommandUpdate;
+import interpreter.CommandView;
+import interpreter.Interpreter;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 import java.util.Calendar;
+
+import storage.StorageAPI;
+import ui.FORMAT;
+import ui.UI;
 
 /**
  * 
@@ -274,7 +286,7 @@ public class ZombieTask {
 				break;
 			default:
 			case INVALID:
-				showToUser(String.format(COMMAND_INVALID, currentViewCommand.viewType));
+				showToUser(String.format(COMMAND_INVALID, currentViewCommand.getViewType()));
 				break;
 			}
 		} catch (Exception err){
@@ -413,7 +425,7 @@ public class ZombieTask {
 	 * @param args optional first element of args[] will be set as file accessed
 	 */
 	
-	static void initStorage(String[] args) {
+	public static void initStorage(String[] args) {
 		try {
 			if (args.length > 0){
 				storage.setFile(args[0]);

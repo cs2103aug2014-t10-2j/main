@@ -1,4 +1,7 @@
-package zombietask;
+package interpreter;
+
+import ui.FORMAT;
+
 /**
  * Class for View command, which contains a string to indicate type of view and
  * a boolean variable to indicate missing arguments. 

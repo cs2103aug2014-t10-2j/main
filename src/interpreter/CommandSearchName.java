@@ -1,4 +1,4 @@
-package zombietask;
+package interpreter;
 /**
  * Class for Search Name command, which contains a search string and a boolean
  * variable to indicate missing arguments. 

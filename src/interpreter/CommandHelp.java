@@ -1,4 +1,4 @@
-package zombietask;
+package interpreter;
 /**
  * Class for Help command, which contains a string to indicate type of view and
  * a boolean variable to indicate missing arguments. 

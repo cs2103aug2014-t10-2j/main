@@ -1,4 +1,4 @@
-package zombietask;
+package storage;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,6 +10,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import zombietask.Task;
 import json.JSONArray;
 import json.JSONObject;
 

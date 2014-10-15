@@ -1,12 +1,25 @@
-package zombietask;
+package tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import interpreter.Command;
+import interpreter.CommandAdd;
+import interpreter.CommandAddFloating;
+import interpreter.CommandAddTimed;
+import interpreter.CommandDelete;
+import interpreter.CommandHelp;
+import interpreter.CommandSearchName;
+import interpreter.CommandSearchTime;
+import interpreter.CommandUpdate;
+import interpreter.CommandView;
+import interpreter.Interpreter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.junit.Test;
+
+import ui.UI;
 
 /**
  * Automated test driver for Interpreter class.

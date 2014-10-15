@@ -1,4 +1,4 @@
-package zombietask;
+package interpreter;
 /**
  * Class for Update command, which contains line number to identify task to
  * update, and a boolean variable to indicate missing arguments. 

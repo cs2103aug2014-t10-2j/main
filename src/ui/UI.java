@@ -1,4 +1,4 @@
-package zombietask;
+package ui;
 //UI.java
 //Author: Lian Jie Nicholas
 /**
@@ -10,10 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-enum FORMAT
-{
-	AGENDA, DAILY, WEEKLY, MONTHLY, YEARLY, CALENDAR, INVALID;
-}
+import zombietask.Task;
+
 public class UI
 {
 	public static final FORMAT AGENDA = FORMAT.AGENDA;

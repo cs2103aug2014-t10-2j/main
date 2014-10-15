@@ -1,4 +1,4 @@
-package zombietask;
+package interpreter;
 /**
  * Class for Delete command, which contains line number to identify task to
  * delete, and a boolean variable to indicate missing arguments. 
