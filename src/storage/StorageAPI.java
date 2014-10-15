@@ -28,6 +28,8 @@ public class StorageAPI {
 	private static final String MESSAGE_TAGS ="tags";
 	private static final String MESSAGE_SUBTASKS ="subtasks";
 	
+	private static final String DEFAULT_FILE = "ZombieStorage.txt";
+	
 	/*
 	 * Instance variables
 	 */
@@ -47,7 +49,7 @@ public class StorageAPI {
 	 */
 	
 	public StorageAPI(){
-		filename = "ZombieStorage.txt";
+		filename = DEFAULT_FILE;
 		file = null;
 		br = null;
 		bw = null;
@@ -55,11 +57,17 @@ public class StorageAPI {
 		taskList = null;
 	}
 	
+	/**
+	 * Constructor for storage module
+	 * 
+	 * @param newFilename new file name
+	 */
+	
 	public StorageAPI(String newFilename){
 		if (newFilename != null) {
 			filename = newFilename;
 		}else{
-			filename = "ZombieStorage.txt";
+			filename = DEFAULT_FILE;
 		};
 		file = null;
 		br = null;
