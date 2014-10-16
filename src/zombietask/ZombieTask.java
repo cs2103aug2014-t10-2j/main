@@ -124,7 +124,7 @@ public class ZombieTask {
 		}
 	}
 
-	private static void execute() throws Exception {
+	public static void execute() throws Exception {
 		currentCommandDescriptor = currentCommand.getCommandType();
 		switch(currentCommandDescriptor){
 		case COMMAND_ADD:
@@ -543,13 +543,25 @@ public class ZombieTask {
 	 * Stubs for Storage
 	 */
 	
-	static StorageAPI getStorage(){
+	public static StorageAPI getStorage(){
 		return storage;
 	}
 	
 	static boolean setStorage(StorageAPI newStorage){
 		storage = newStorage;
 		return SUCCESS;
+	}
+	
+	/*
+	 * Stubs for currentCommand
+	 */
+	
+	public static Command getCurrentCommand() {
+		return currentCommand;
+	}
+
+	public static void setCurrentCommand(Command currentCommand) {
+		ZombieTask.currentCommand = currentCommand;
 	}
 	
 	/*

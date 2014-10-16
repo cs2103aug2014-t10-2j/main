@@ -1,6 +1,7 @@
 package tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import interpreter.Interpreter;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -28,6 +29,7 @@ public class ZombieTaskAtd {
 	 * Constants
 	 */
 	
+	private static final String DEFAULT_FILE = "ZombieStorage.txt";
 	private static final String EMPTY_STRING = "";
 	
 	/*
@@ -63,7 +65,7 @@ public class ZombieTaskAtd {
 		String[] testInput = new String[1];
 		testInput[0] = EMPTY_STRING;
 		ZombieTask.initStorage(testInput);
-		// assertArrayEquals("filename assignment test failed - empty string", ZombieTask.getStorage().getFileName(), ZombieTask.getStorage().getDefaultFileName());
+		assertEquals("filename assignment test failed - empty string", ZombieTask.getStorage().getFileName(), DEFAULT_FILE);
 	}
 	
 	@Test
@@ -71,7 +73,7 @@ public class ZombieTaskAtd {
 		String[] testInput = new String[1];
 		testInput[0] = "myDataBase.json";
 		ZombieTask.initStorage(testInput);
-		// assertArrayEquals("filename assignment test failed - correct input syntax", ZombieTask.getStorage().getFileName(), "myDataBase.json");
+		assertEquals("filename assignment test failed - correct input syntax", ZombieTask.getStorage().getFileName(), "myDataBase.json");
 	}
 	
 	@Test
@@ -79,7 +81,7 @@ public class ZombieTaskAtd {
 		String[] testInput = new String[1];
 		testInput[0] = "100";
 		ZombieTask.initStorage(testInput);
-		// assertArrayEquals("filename assignment test failed - numeric string input", ZombieTask.getStorage().getFileName(), ZombieTask.getStorage().getDefaultFileName());
+		assertEquals("filename assignment test failed - numeric string input", ZombieTask.getStorage().getFileName(), "100");
 	}
 	
 	@Test
@@ -87,7 +89,7 @@ public class ZombieTaskAtd {
 		String[] testInput = new String[1];
 		testInput[0] = "100/";
 		ZombieTask.initStorage(testInput);
-		// assertArrayEquals("filename assignment test failed - numeric and escape character input", ZombieTask.getStorage().getFileName(), ZombieTask.getStorage().getDefaultFileName());
+		assertEquals("filename assignment test failed - numeric and escape character input", ZombieTask.getStorage().getFileName(), "100");
 	}
 	
 	/*
@@ -95,7 +97,18 @@ public class ZombieTaskAtd {
 	 */
 	
 	@Test
-	public void addCommandTester() {
+	public void addCommandTester01() {
+		try{
+			ZombieTask.setCurrentCommand(Interpreter.getCommand("add noob 13 Sep"));
+			ZombieTask.execute();
+			ZombieTask.setCurrentCommand(Interpreter.getCommand("add noob 13 Sep"));
+			ZombieTask.execute()
+		}catch (Exception err){
+			fail("Good input - add 01 - Exception thrown");
+		}
+	}
+	
+	public void addCommandTester02() {
 		fail("Not yet implemented");
 	}
 	
