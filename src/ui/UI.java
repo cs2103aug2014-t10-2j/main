@@ -3,6 +3,7 @@ package ui;
 //Author: Lian Jie Nicholas
 /**
  * First updated: 26/09/2014
+ * First attempt at egit pushing!
  */
 
 import java.text.Format;
