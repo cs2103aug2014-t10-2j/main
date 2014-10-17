@@ -193,7 +193,6 @@ public class ZombieTask {
 	}
 
 	private static void deleteCommand(Command command) {
-		// TODO Auto-generated method stub
 		
 		try{
 			//Get details from Command Object
@@ -219,7 +218,6 @@ public class ZombieTask {
 	}
 
 	private static void viewCommand(Command command) {
-		// TODO Auto-generated method stub
 		try{
 			CommandView currentViewCommand = (CommandView) command;
 			FORMAT viewFormat = currentViewCommand.getViewType();
@@ -266,7 +264,7 @@ public class ZombieTask {
 				setMaximumCalendarField(endMonth, Calendar.SECOND);
 				UI.printPerspective(viewFormat, storage.search(startMonth, endMonth));
 				break;
-			case YEARLY:
+			case ANNUAL:
 				Calendar startYear = new GregorianCalendar();
 				setMinimumCalendarField(startYear, Calendar.DAY_OF_YEAR);
 				setMinimumCalendarField(startYear, Calendar.HOUR_OF_DAY);
@@ -297,7 +295,6 @@ public class ZombieTask {
 
 
 	private static void updateCommand(Command command) throws Exception {
-		// TODO Auto-generated method stub
 		
 		CommandUpdate currentUpdateCommand = (CommandUpdate) command;
 		

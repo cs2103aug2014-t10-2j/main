@@ -1,5 +1,7 @@
 package zombietask;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -30,6 +32,7 @@ public class Task
 	private String taskName = null;
 	private Calendar endTime = null;
 	private Calendar startTime = null;
+	private Calendar deadline = null;
 	private ArrayList<String> tags = new ArrayList<String>();
 	private ArrayList<Task> subtasks = new ArrayList<Task>();
 	
@@ -109,10 +112,19 @@ public class Task
 	
 	/**
 	 * Checks existence of startTime
-	 * @return Boolean value indicating presence of end startTime
+	 * @return Boolean value indicating presence of startTime
 	 */
 	
 	public boolean hasStartTime(){
+		return this.startTime != null;
+	}
+	
+	/**
+	 * Checks existence of deadline
+	 * @return Boolean value indicating presence of deadline
+	 */
+	
+	public boolean hasDeadline(){
 		return this.startTime != null;
 	}
 	
@@ -139,6 +151,15 @@ public class Task
 	}
 	
 	/**
+	 * Sets start time
+	 * @param deadline new deadline
+	 */
+	
+	public void setDeadline(Calendar deadline) throws Exception{
+		this.deadline = deadline;
+	}
+	
+	/**
 	 * Returns end time
 	 * @return end time
 	 */
@@ -156,6 +177,14 @@ public class Task
 		return this.startTime;
 	}
 	
+	/**
+	 * Returns deadline
+	 * @return deadline
+	 */
+	
+	public Calendar getDeadline() {
+		return this.deadline;
+	}
 	/**
 	 * Returns whether Task is overdue.
 	 * @return boolean value that indicates whether end time has passed
@@ -275,7 +304,11 @@ public class Task
 		}
 	}
 	
-	
+	public String toString()
+	{
+		Format FORMAT_DATETIME = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
+		return taskName + " [" + FORMAT_DATETIME.format(deadline.getTime()) + "]";
+	}
 	
 	
 	
