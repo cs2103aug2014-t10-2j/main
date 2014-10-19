@@ -11,7 +11,6 @@ import ui.UI;
 import com.joestelmach.natty.*;
 
 import exception.NoCommandException;
-import exception.NoDateException;
 import exception.NoTaskNameException;
 
 /**
@@ -28,8 +27,7 @@ public class Interpreter {
 	/**
 	 * Returns the command type based on the first word of the user input
 	 * 
-	 * @param firstWord
-	 *            the first word of the command from the user
+	 * @param firstWord the first word of the command from the user
 	 * @return the command type, which is the first word in the user input or
 	 *         ADD, if the first word is not a valid command
 	 */
@@ -45,14 +43,14 @@ public class Interpreter {
 	 * Parses the user input and returns a command object containing the command
 	 * type and its arguments
 	 * 
-	 * @param userInput
-	 *            the command from the user
+	 * @param userInput the command from the user
 	 * @return a command object with command type and arguments based on the
 	 *         command type
-	 * @throws NoCommandException
-	 *             for invalid user input, such as null or an empty string
+	 * @throws NoCommandException for invalid user input, such as null or an
+	 *             empty string
 	 */
-	public static Command getCommand(String userInput) throws Exception {
+	public static Command getCommand(String userInput)
+			throws NoCommandException {
 		if (userInput == null || userInput.trim() == "") {
 			throw new NoCommandException("No command entered");
 		} else {
@@ -89,8 +87,7 @@ public class Interpreter {
 					}
 				case Command.SEARCH_NAME:
 					if (userInputTokens.length > 1) {
-						return getCommandSearchName(userInputTokens[1],
-								userInput);
+						return getCommandSearchName(userInput);
 					} else {
 						return new CommandSearchName(null, userInput, true);
 					}
@@ -135,7 +132,7 @@ public class Interpreter {
 				try {
 					date2 = groups.get(1).getDates().get(0);
 					cal2.setTime(date2);
-				} catch (Exception e1) {
+				} catch (Exception e1) { // only 1 date
 					return new CommandSearchTime(null, null, userInput, true);
 				}
 			}
@@ -150,25 +147,22 @@ public class Interpreter {
 	/**
 	 * Creates a CommandSearch name object based on user input
 	 * 
-	 * @param searchString
-	 *            the string used to search for task
-	 * @param userInput
-	 *            the original user input
+	 * @param searchString the string used to search for task
+	 * @param userInput the original user input
 	 * @return a CommandSearch object with a search string, the original input
 	 *         and a boolean value to indicate missing arguments
 	 */
-	private static Command getCommandSearchName(String searchString,
-			String userInput) {
+	private static Command getCommandSearchName(String userInput) {
+		String searchString = userInput.replaceFirst(Command.SEARCH_NAME + " ",
+				"");
 		return new CommandSearchName(searchString, userInput, false);
 	}
 
 	/**
 	 * Creates a CommandView object based on user input
 	 * 
-	 * @param secondWord
-	 *            the second word from the user input
-	 * @param userInput
-	 *            the original user input
+	 * @param secondWord the second word from the user input
+	 * @param userInput the original user input
 	 * @return a CommandView object with the view format, the original input and
 	 *         a boolean value to indicate missing arguments
 	 */
@@ -183,10 +177,8 @@ public class Interpreter {
 	/**
 	 * Creates a CommandHelp object based on user input
 	 * 
-	 * @param secondWord
-	 *            the second word from the user input
-	 * @param userInput
-	 *            the original user input
+	 * @param secondWord the second word from the user input
+	 * @param userInput the original user input
 	 * @return a CommandHelp object with the command that the user needs help
 	 *         with, the original input and a boolean value to indicate missing
 	 *         arguments
@@ -200,42 +192,9 @@ public class Interpreter {
 	}
 
 	/**
-	 * Returns date based on somewhat natural language
-	 * 
-	 * @param userInput
-	 *            the command entered by user
-	 * @return a calendar date object indicating the date and time
-	 * @throws NoDateException
-	 *             for unspecified date and time
-	 */
-	private static Calendar getDate(String userInput) throws NoDateException {
-		Calendar cal = Calendar.getInstance();
-		Parser parser = new Parser();
-		List<DateGroup> groups = parser.parse(userInput);
-
-		if (groups.isEmpty()) {
-			throw new NoDateException("No date/time given.");
-		} else {
-			for (DateGroup group : groups) {
-				List<Date> dates = group.getDates();
-				if (dates.isEmpty()) {
-					throw new NoDateException("No date/time given.");
-				} else {
-					Date date = dates.get(0);
-					cal.setTime(date);
-
-					return cal;
-				}
-			}
-		}
-		return null;
-	}
-
-	/**
 	 * Returns tags from contained in the command entered by the user
 	 * 
-	 * @param userInputWords
-	 *            an array of words entered by the user
+	 * @param userInputWords an array of words entered by the user
 	 * @return an arraylist of the tags contained in the command
 	 */
 	private static ArrayList<String> getTags(String[] userInputWords) {
@@ -253,16 +212,13 @@ public class Interpreter {
 	 * Returns task name by removing time-related keywords and tags from the
 	 * user input
 	 * 
-	 * @param userInput
-	 *            the command entered by the user
-	 * @param tags
-	 *            a list of tags parsed from user input
+	 * @param userInput the command entered by the user
+	 * @param tags a list of tags parsed from user input
 	 * @return the task name, or a description of the task
-	 * @throws NoTaskNameException
-	 *             no task name specified
+	 * @throws NoTaskNameException no task name specified
 	 */
 	private static String getTaskName(String userInput, ArrayList<String> tags)
-			throws Exception {
+			throws NoTaskNameException {
 
 		// get and remove first time-related keyword
 		Parser parser = new Parser();
@@ -304,58 +260,67 @@ public class Interpreter {
 	 *         original input and a boolean variable to indicate missing
 	 *         arguments
 	 */
-	private static Command getCommandAdd(String userInput) throws Exception {
-		
+	private static Command getCommandAdd(String userInput) {
+
 		ArrayList<String> tags = new ArrayList<String>();
 		String taskName = null;
 		String[] userInputWords = userInput.trim().toLowerCase().split(" ");
-		
+
 		Parser parser = new Parser();
 		List<DateGroup> groups = parser.parse(userInput);
-		
+
 		tags = getTags(userInputWords);
-		
+
 		String userInputTemp = userInput.trim();
 		if (userInputWords[0].equals(Command.ADD)) {
 			userInputTemp = userInputTemp.substring(4);
 		}
 
-		if (groups.isEmpty()) { // floating task
-			taskName = getTaskName(userInputTemp, tags);
-			return new CommandAddFloating(taskName, tags, userInput, false);
-		} else {
-			
-			// get first date
-			Date date1 = groups.get(0).getDates().get(0);
-			Date date2 = null;
-			Calendar cal1 = Calendar.getInstance();
-			cal1.setTime(date1);
-			Calendar cal2 = Calendar.getInstance();
+		try {
 
-			// get second date
-			try {
-				date2 = groups.get(0).getDates().get(1);
-				cal2.setTime(date2);
-				 
-			} catch (Exception e) {
+			if (groups.isEmpty()) { // floating task
+				taskName = getTaskName(userInputTemp, tags);
+				return new CommandAdd(taskName, null, null, tags, userInput,
+						false);
+			} else {
+
+				// get first date
+				Date date1 = groups.get(0).getDates().get(0);
+				Date date2 = null;
+				Calendar cal1 = Calendar.getInstance();
+				cal1.setTime(date1);
+				Calendar cal2 = Calendar.getInstance();
+
+				// get second date
 				try {
-					date2 = groups.get(1).getDates().get(0);
+					date2 = groups.get(0).getDates().get(1);
 					cal2.setTime(date2);
-				} catch (Exception e1) { // only 1 date: deadline task
-					taskName = getTaskName(userInputTemp, tags); 
-					return new CommandAdd(taskName, cal1, tags, userInput, false);
+
+				} catch (Exception e) {
+					try {
+						date2 = groups.get(1).getDates().get(0);
+						cal2.setTime(date2);
+					} catch (Exception e1) { // only 1 date: deadline task
+						taskName = getTaskName(userInputTemp, tags);
+						return new CommandAdd(taskName, cal1, null, tags,
+								userInput, false);
+					}
 				}
+
+				// this removes the first 2 time-related keywords
+				taskName = getTaskName(userInputTemp, tags);
+				ArrayList<String> tagsTemp = new ArrayList<String>();
+				taskName = getTaskName(taskName, tagsTemp);
+
+				if (cal1.compareTo(cal2) < 0) { // date1 before date2
+					return new CommandAdd(taskName, cal1, cal2, tags,
+							userInput, false);
+				}
+				return new CommandAdd(taskName, cal2, cal1, tags, userInput,
+						false);
 			}
-			
-			// this removes the first 2 time-related keywords
-			taskName = getTaskName(userInputTemp, tags);
-			ArrayList<String> tagsTemp = new ArrayList<String>();
-			taskName = getTaskName(taskName, tagsTemp);
-			
-			if (cal1.compareTo(cal2) < 0) { // date1 before date2
-				return new CommandAddTimed(taskName, cal1, cal2, tags, userInput, false);
-			}
-			return new CommandAddTimed(taskName, cal2, cal1, tags, userInput, false);
+		} catch (NoTaskNameException e) {
+			return new CommandAdd(null, null, null, null, userInput, true);
 		}
 
 	}
@@ -363,15 +328,13 @@ public class Interpreter {
 	/**
 	 * Creates a CommandUpdate object from user input
 	 * 
-	 * @param secondWord
-	 *            the second word of the user input
+	 * @param secondWord the second word of the user input
 	 * @return a CommandUpdate object with integer value of line number, the
 	 *         original input and a boolean value to indicate missing arguments
-	 * @throws Exception
-	 *             for invalid line number or date
+	 * @throws Exception for invalid line number or date
 	 */
 	private static CommandUpdate getCommandUpdate(String secondWord,
-			String userInput) throws Exception {
+			String userInput) {
 		try {
 			int lineNo = Integer.parseInt(secondWord);
 
@@ -384,15 +347,14 @@ public class Interpreter {
 			CommandAdd updatedTask = (CommandAdd) getCommandAdd(userInputTemp);
 			return new CommandUpdate(lineNo, updatedTask, userInput, false);
 		} catch (Exception e) { // invalid number or date
-			throw e;
+			return new CommandUpdate(INVALID_NO, null, userInput, true);
 		}
 	}
 
 	/**
 	 * Creates a CommandDelete object from user input
 	 * 
-	 * @param secondWord
-	 *            the second word of the user input
+	 * @param secondWord the second word of the user input
 	 * @return a CommandDelete object with integer value of line number, the
 	 *         original input and a boolean value to indicate missing arguments
 	 */
