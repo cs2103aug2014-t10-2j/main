@@ -83,6 +83,28 @@ public class InterpreterAtd {
 		assertEquals("Lunch", add.getTaskName());
 		assertEquals("Lunch #impt #food", add.getUserInput());
 
+		// Test 4: escape character
+		command = Interpreter.getCommand("have *22 bananas #fruit #dessert");
+		assertEquals(Command.ADD, command.getCommandType());
+		add = (CommandAdd) command;
+
+		assertNull(add.getStartDate());
+		assertNull(add.getEndDate());
+
+		testTags(add.getTags(), "#fruit #dessert");
+		assertEquals("have 22 bananas", add.getTaskName());
+		assertEquals("have *22 bananas #fruit #dessert", add.getUserInput());
+
+		command = Interpreter.getCommand("read *today's papers");
+		assertEquals(Command.ADD, command.getCommandType());
+		add = (CommandAdd) command;
+
+		assertNull(add.getStartDate());
+		assertNull(add.getEndDate());
+
+		assertEquals("read today's papers", add.getTaskName());
+		assertEquals("read *today's papers", add.getUserInput());
+
 	}
 
 	@Test
@@ -128,6 +150,31 @@ public class InterpreterAtd {
 		assertEquals("Lunch", add.getTaskName());
 		assertEquals("30 Sep Lunch #impt #food", add.getUserInput());
 
+		// Test 4: escape character
+		command = Interpreter.getCommand("have *three bananas tomorrow #fruit");
+		assertEquals(Command.ADD, command.getCommandType());
+		add = (CommandAdd) command;
+
+		Calendar tomorrow = Calendar.getInstance();
+		tomorrow.add(Calendar.DATE, 1);
+		tomorrow.setTime(tomorrow.getTime());
+		testDate(add.getStartDate(), tomorrow);
+		assertNull(add.getEndDate());
+
+		testTags(add.getTags(), "#fruit");
+		assertEquals("have three bananas", add.getTaskName());
+		assertEquals("have *three bananas tomorrow #fruit", add.getUserInput());
+
+		command = Interpreter.getCommand("read *Friday's papers tomorrow");
+		assertEquals(Command.ADD, command.getCommandType());
+		add = (CommandAdd) command;
+
+		testDate(add.getStartDate(), tomorrow);
+		assertNull(add.getEndDate());
+
+		assertEquals("read Friday's papers", add.getTaskName());
+		assertEquals("read *Friday's papers tomorrow", add.getUserInput());
+
 	}
 
 	@Test
@@ -149,6 +196,68 @@ public class InterpreterAtd {
 		assertEquals("eat something", add.getTaskName());
 		assertEquals("add today 1pm #food eat something #impt 2pm",
 				add.getUserInput());
+
+		// Test 2: case-insensitivity and white space
+		command = Interpreter
+				.getCommand("   Add   30 Sep to 1 nov \n#food Eat");
+		assertEquals(Command.ADD, command.getCommandType());
+		add = (CommandAdd) command;
+		testDate(add.getStartDate(), today.get(Calendar.YEAR), 8, 30,
+				today.get(Calendar.HOUR_OF_DAY), today.get(Calendar.MINUTE),
+				today.get(Calendar.SECOND));
+		testDate(add.getEndDate(), today.get(Calendar.YEAR), 10, 1,
+				today.get(Calendar.HOUR_OF_DAY), today.get(Calendar.MINUTE),
+				today.get(Calendar.SECOND));
+
+		testTags(add.getTags(), "#food");
+		assertEquals("Eat", add.getTaskName());
+		assertEquals("   Add   30 Sep to 1 nov \n#food Eat", add.getUserInput());
+
+		// Test 3: unspecified command
+		command = Interpreter.getCommand("30 Sep 1:30 to 2 Lunch #impt #food");
+		assertEquals(Command.ADD, command.getCommandType());
+		add = (CommandAdd) command;
+		testDate(add.getStartDate(), 2014, 8, 30, 1, 30, 0);
+		testDate(add.getEndDate(), 2014, 8, 30, 2, 0, 0);
+		assertEquals("Lunch", add.getTaskName());
+
+		// Test 4: escape character
+		command = Interpreter
+				.getCommand("have *three bananas tomorrow 5pm to 6pm");
+		assertEquals(Command.ADD, command.getCommandType());
+		add = (CommandAdd) command;
+
+		Calendar tomorrow = Calendar.getInstance();
+		tomorrow.add(Calendar.DATE, 1);
+		tomorrow.setTime(tomorrow.getTime());
+		testDate(add.getStartDate(), tomorrow.get(Calendar.YEAR),
+				tomorrow.get(Calendar.MONTH), tomorrow.get(Calendar.DATE), 17,
+				0, 0);
+		testDate(add.getEndDate(), tomorrow.get(Calendar.YEAR),
+				tomorrow.get(Calendar.MONTH), tomorrow.get(Calendar.DATE), 18,
+				0, 0);
+
+		assertEquals("have three bananas", add.getTaskName());
+		assertEquals("have *three bananas tomorrow 5pm to 6pm",
+				add.getUserInput());
+
+		// Test 5: automatically order dates
+		command = Interpreter
+				.getCommand("drink *three glasses *8D tomorrow 6pm to 5pm");
+		assertEquals(Command.ADD, command.getCommandType());
+		add = (CommandAdd) command;
+
+		testDate(add.getStartDate(), tomorrow.get(Calendar.YEAR),
+				tomorrow.get(Calendar.MONTH), tomorrow.get(Calendar.DATE), 17,
+				0, 0);
+		testDate(add.getEndDate(), tomorrow.get(Calendar.YEAR),
+				tomorrow.get(Calendar.MONTH), tomorrow.get(Calendar.DATE), 18,
+				0, 0);
+
+		assertEquals("drink three glasses 8D", add.getTaskName());
+		assertEquals("drink *three glasses *8D tomorrow 6pm to 5pm",
+				add.getUserInput());
+
 	}
 
 	/**
@@ -263,7 +372,8 @@ public class InterpreterAtd {
 		testTags(updatedTask.getTags(), "#food");
 		testDate(updatedTask.getStartDate(), today.get(Calendar.YEAR), 8, 21,
 				today.get(Calendar.HOUR_OF_DAY), today.get(Calendar.MINUTE),
-				today.get(Calendar.SECOND));;
+				today.get(Calendar.SECOND));
+		;
 
 		// Test 3: invalid arguments
 		command = Interpreter.getCommand("update me");
@@ -344,7 +454,7 @@ public class InterpreterAtd {
 		assertEquals("hello", searchName.getSearchString());
 		assertEquals("search-name hello", searchName.getUserInput());
 		assertFalse(searchName.hasMissingArgs());
-		
+
 		// Test 2: Punctuation, case and spaces
 		command = Interpreter.getCommand("search-name hello World!");
 		assertEquals(Command.SEARCH_NAME, command.getCommandType());
@@ -375,7 +485,7 @@ public class InterpreterAtd {
 				today.get(Calendar.HOUR_OF_DAY), today.get(Calendar.MINUTE),
 				today.get(Calendar.SECOND));
 		assertFalse(searchTime.hasMissingArgs());
-		
+
 		// Test 2: Automatically order the time
 		command = Interpreter.getCommand("search-time dec 4 to aug 10");
 		assertEquals(Command.SEARCH_TIME, command.getCommandType());
@@ -387,7 +497,6 @@ public class InterpreterAtd {
 				today.get(Calendar.HOUR_OF_DAY), today.get(Calendar.MINUTE),
 				today.get(Calendar.SECOND));
 		assertFalse(searchTime.hasMissingArgs());
-		
 
 		// Test 3: invalid argument
 		command = Interpreter.getCommand("search-time hello");
@@ -395,7 +504,7 @@ public class InterpreterAtd {
 		searchTime = (CommandSearchTime) command;
 		assertEquals("search-time hello", searchTime.getUserInput());
 		assertTrue(searchTime.hasMissingArgs());
-		
+
 		command = Interpreter.getCommand("search-time aug 4");
 		assertEquals(Command.SEARCH_TIME, command.getCommandType());
 		searchTime = (CommandSearchTime) command;

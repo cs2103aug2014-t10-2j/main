@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import ui.FORMAT;
 import ui.UI;
@@ -23,6 +24,7 @@ import exception.NoTaskNameException;
 public class Interpreter {
 
 	public static final int INVALID_NO = -1;
+	public static final char ESCAPE_CHAR = '*';
 
 	/**
 	 * Returns the command type based on the first word of the user input
@@ -222,7 +224,12 @@ public class Interpreter {
 
 		// get and remove first time-related keyword
 		Parser parser = new Parser();
-		List<DateGroup> groups = parser.parse(userInput);
+		// remove escaped numbers and words
+		String escapePattern = "\\s\\" + ESCAPE_CHAR + "\\S+";
+		String userInputTemp = userInput;
+		userInputTemp = userInputTemp.replaceAll(escapePattern, "");
+
+		List<DateGroup> groups = parser.parse(userInputTemp);
 		String dateKeywords = null;
 
 		if (groups.isEmpty()) {
@@ -266,12 +273,21 @@ public class Interpreter {
 		String taskName = null;
 		String[] userInputWords = userInput.trim().toLowerCase().split(" ");
 
+		// remove escaped numbers or words
+		// remove escaped numbers and words
+		String escapePattern = "\\s\\" + ESCAPE_CHAR + "\\S+";
+		String userInputTemp = userInput;
+		while (userInputTemp.contains(" " + ESCAPE_CHAR)) {
+			userInputTemp = userInputTemp.replaceAll(escapePattern, "");
+		}
+
 		Parser parser = new Parser();
-		List<DateGroup> groups = parser.parse(userInput);
+		List<DateGroup> groups = parser.parse(userInputTemp);
 
 		tags = getTags(userInputWords);
 
-		String userInputTemp = userInput.trim();
+		// remove leading and trailing spaces
+		userInputTemp = userInput.trim();
 		if (userInputWords[0].equals(Command.ADD)) {
 			userInputTemp = userInputTemp.substring(4);
 		}
@@ -279,7 +295,9 @@ public class Interpreter {
 		try {
 
 			if (groups.isEmpty()) { // floating task
+
 				taskName = getTaskName(userInputTemp, tags);
+				taskName = taskName.replace(" " + ESCAPE_CHAR, " ");
 				return new CommandAdd(taskName, null, null, tags, userInput,
 						false);
 			} else {
@@ -302,6 +320,7 @@ public class Interpreter {
 						cal2.setTime(date2);
 					} catch (Exception e1) { // only 1 date: deadline task
 						taskName = getTaskName(userInputTemp, tags);
+						taskName = taskName.replace(" " + ESCAPE_CHAR, " ");
 						return new CommandAdd(taskName, cal1, null, tags,
 								userInput, false);
 					}
@@ -311,6 +330,7 @@ public class Interpreter {
 				taskName = getTaskName(userInputTemp, tags);
 				ArrayList<String> tagsTemp = new ArrayList<String>();
 				taskName = getTaskName(taskName, tagsTemp);
+				taskName = taskName.replace(" " + ESCAPE_CHAR, " ");
 
 				if (cal1.compareTo(cal2) < 0) { // date1 before date2
 					return new CommandAdd(taskName, cal1, cal2, tags,
