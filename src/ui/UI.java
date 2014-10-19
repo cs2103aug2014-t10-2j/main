@@ -3,7 +3,7 @@ package ui;
  * UI.java
  * Author: Lian Jie Nicholas
  * First Updated: 26/09/2014
- * Last Updated: 16/10/2014
+ * Last Updated: 19/10/2014
  * 
  * UPDATE 16/10/2014:
  * 1. Renamed all references to yearly into annual.
@@ -11,7 +11,9 @@ package ui;
  * 2. All times set at 0min are allocated beneath hourly increments rather than before it.
  * 	  thus, deadlines set on 16/10/2014 00:00h are found within 16/10/2014 as opposed to
  * 	  15/10/2014.
- * 3. Removed printCalendar() and getFormat(String) methods.
+ * 3. Removed printCalendar() method.
+ * UPDATE 19/10/2014:
+ * 1. Refactored hasOverdue() functionality
  */
 
 import java.io.InvalidClassException;
@@ -31,7 +33,7 @@ public class UI
 	public static final FORMAT YEARLY = FORMAT.ANNUAL;
 	public static final FORMAT INVALID = FORMAT.INVALID;
 	private static final Format FORMAT_DATEMTH = new SimpleDateFormat("dd/MM");
-	private static final Format FORMAT_DATETIME = new SimpleDateFormat("ddMMM HH:mm");
+	private static final Format FORMAT_DATETIME = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 	private static final Format FORMAT_DAYDATE = new SimpleDateFormat("EEEEE, dd MMMMM yyyy");
 	private static final Format FORMAT_TODAY = new SimpleDateFormat("dd MMMMM yyyy, HH:mm");
 	private static final Format FORMAT_WEEKNUM = new SimpleDateFormat("ww");
@@ -39,7 +41,9 @@ public class UI
 	private static final int WEEKLY_LIMIT = 28;
 	private static final int MONTHLY_LIMIT = 30;
 	private static final int ANNUAL_LIMIT = 52;
-	
+	private static String str;
+	private static int index;
+	// PRIMARY USE METHODS
 	public static void printResponse(String response)
 	{
 		System.out.println(response);
@@ -50,16 +54,21 @@ public class UI
 			throw new InvalidClassException("ArrayList error");
 		if(tasks.get(0) instanceof Task == false)
 			throw new InvalidClassException("Task error");
+		if(tasks.isEmpty())
+		{
+			System.out.println("No tasks within time period." + format);
+			return;
+		}
 		tasks = sortTasks(tasks);
-		String str = "";
-		System.out.println("in printPerspective");
+		str = "";
+		index = 0;
 		switch(format)
 		{
-			case AGENDA:	str = printAgenda(tasks);	break;
-			case DAILY:		str = printDaily(tasks);	break;
-			case WEEKLY:	str = printWeekly(tasks);	break;
-			case MONTHLY:	str = printMonthly(tasks);	break;
-			case ANNUAL:	str = printAnnual(tasks);	break;
+			case AGENDA:	printAgenda(tasks);	break;
+			case DAILY:		printDaily(tasks);	break;
+			case WEEKLY:	printWeekly(tasks);	break;
+			case MONTHLY:	printMonthly(tasks);	break;
+			case ANNUAL:	printAnnual(tasks);	break;
 			default:	return;
 		}
 		System.out.println(str);
@@ -67,37 +76,16 @@ public class UI
 	public static ArrayList<Task> sortTasks(ArrayList<Task> tasks)
 	{
 		for(int i = 1; i < tasks.size(); i++)
-		{
-			for(int j = 0; j < tasks.size(); j++)
-			{
-				if(tasks.get(i).getDeadline().before(tasks.get(j).getDeadline()))
-					tasks.add(j, tasks.remove(i));
-			}
-		}
+		for(int j = 0; j < tasks.size(); j++)
+		if(tasks.get(i).getDeadline().before(tasks.get(j).getDeadline()))
+			tasks.add(j, tasks.remove(i));
 		return tasks;
 	}
-	public static String taskToString(Task task)
+	// FORMAT METHODS
+	private static void printAgenda(ArrayList<Task> tasks)
 	{
-		return String.format("%s [%s]", task.getTaskName(), FORMAT_DATETIME.format(task.getDeadline()));
-	}
-	private static Calendar delimitTime(Calendar time)
-	{
-		time.set(Calendar.MINUTE, 0);
-		time.set(Calendar.SECOND, 0);
-		time.set(Calendar.MILLISECOND, 0);
-		return time;
-	}
-	private static String printAgenda(ArrayList<Task> tasks)
-	{
-		if(tasks.isEmpty())	return "No ongoing tasks.";
-		int index = 0;
-		String str = "(Agenda)\n";
-		if(tasks.get(0).isOverdue())
-		{
-			str += "!!! Overdue !!!\n";
-			while(tasks.get(index).isOverdue() && index < tasks.size())
-				str += String.format("[%d]: %s\n", index, tasks.get(index++).toString());
-		}
+		str = "(Agenda)\n";
+		hasOverdue(tasks);
 		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
 		Calendar time = delimitTime(Calendar.getInstance());
 		time.set(Calendar.HOUR_OF_DAY, 0);
@@ -112,19 +100,11 @@ public class UI
 			else
 			str += String.format("[%d]: %s\n", index, tasks.get(index++).toString());
 		}
-		return str;
 	}
-	private static String printDaily(ArrayList<Task> tasks)
+	private static void printDaily(ArrayList<Task> tasks)
 	{
-		if(tasks.isEmpty())	return	"No tasks within 24 hours.";
-		String str = "(Daily)\n";
-		int index = 0;
-		if(tasks.get(0).isOverdue())
-		{
-			str += "!!! Overdue !!!\n";
-			while(tasks.get(index).isOverdue() && index < tasks.size())
-				str += String.format("[%d]: %s\n", index, tasks.get(index++).toString());
-		}
+		str = "(Daily)\n";
+		hasOverdue(tasks);
 		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
 		Calendar time = delimitTime(Calendar.getInstance());
 		for(int i = 0; i < DAILY_LIMIT; i++)
@@ -135,19 +115,11 @@ public class UI
 				str += String.format(" [%d]%s", index, tasks.get(index++).getTaskName());
 			str += "\n";
 		}
-		return str;
 	}
-	private static String printWeekly(ArrayList<Task> tasks)
+	private static void printWeekly(ArrayList<Task> tasks)
 	{
-		if(tasks.isEmpty())	return	"No tasks within 7 days.";
-		String str = "(Weekly)\n";
-		int index = 0;
-		if(tasks.get(0).isOverdue())
-		{
-			str += "!!! Overdue !!!\n";
-			while(tasks.get(index).isOverdue() && index < tasks.size())
-				str += String.format("[%d]: %s\n", index, tasks.get(index++).toString());
-		}
+		str = "(Weekly)\n";
+		hasOverdue(tasks);
 		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
 		Calendar time = delimitTime(Calendar.getInstance());
 		for(int i = 0; i < WEEKLY_LIMIT; i++)
@@ -158,19 +130,11 @@ public class UI
 				str += String.format(" [%d]: %s", index, tasks.get(index++).getTaskName());
 			str += "\n";
 		}
-		return str;
 	}
-	private static String printMonthly(ArrayList<Task> tasks)
+	private static void printMonthly(ArrayList<Task> tasks)
 	{
-		if(tasks.isEmpty())	return	"No tasks within 30 days.";
-		String str = "(Monthly)\n";
-		int index = 0;
-		if(tasks.get(0).isOverdue())
-		{
-			str += "!!! Overdue !!!\n";
-			while(tasks.get(index).isOverdue() && index < tasks.size())
-				str += String.format("[%d]: %s\n", index, tasks.get(index++).toString());
-		}
+		str = "(Monthly)\n";
+		hasOverdue(tasks);
 		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
 		Calendar time = delimitTime(Calendar.getInstance());
 		time.set(Calendar.HOUR_OF_DAY, 0);
@@ -182,19 +146,11 @@ public class UI
 				str += String.format(" [%d]: %s", index, tasks.get(index++).getTaskName());
 			str += "\n";
 		}
-		return str;
 	}
-	private static String printAnnual(ArrayList<Task> tasks)
+	private static void printAnnual(ArrayList<Task> tasks)
 	{
-		if(tasks.isEmpty())	return	"No tasks within 30 days.";
-		String str = "(Annual)\n";
-		int index = 0;
-		if(tasks.get(0).isOverdue())
-		{
-			str += "!!! Overdue !!!\n";
-			while(tasks.get(index).isOverdue() && index < tasks.size())
-				str += String.format("[%d]: %s\n", index, tasks.get(index++).toString());
-		}
+		str = "(Annual)\n";
+		hasOverdue(tasks);
 		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
 		Calendar time = delimitTime(Calendar.getInstance());
 		time.set(Calendar.HOUR_OF_DAY, 0);
@@ -207,6 +163,28 @@ public class UI
 				str += String.format(" [%d]%s", index, tasks.get(index++).getTaskName());
 			str += "\n";
 		}
-		return str;
+	}
+	// MISCELLENEOUS METHODS
+	public static String taskToString(Task task)
+	{
+		return String.format("%s [%s]", task.getTaskName(), FORMAT_DATETIME.format(task.getDeadline().getTime()));
+	}
+	// Standardizes Calendar.getInstance() by zeroing smaller values
+	private static Calendar delimitTime(Calendar time)
+	{
+		time.set(Calendar.MINUTE, 0);
+		time.set(Calendar.SECOND, 0);
+		time.set(Calendar.MILLISECOND, 0);
+		return time;
+	}
+	// If any overdue tasks exists, prints them in overdue column 
+	private static void hasOverdue(ArrayList<Task> tasks)
+	{
+		if(tasks.get(0).isOverdue())
+		{
+			str += "!!! Overdue !!!\n";
+			while(tasks.get(index).isOverdue() && index < tasks.size())
+				str += String.format("[%d]: %s\n", index, tasks.get(index++).toString());
+		}
 	}
 }
