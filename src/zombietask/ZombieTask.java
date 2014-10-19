@@ -166,7 +166,7 @@ public class ZombieTask {
 			//Get Details from Command Object
 			CommandAdd currentAddCommand = (CommandAdd) command;
 			String taskName = currentAddCommand.getTaskName();
-			Calendar taskTime = currentAddCommand.getDateTime();
+			Calendar taskTime = currentAddCommand.getStartDate();
 			ArrayList<String> tags = currentAddCommand.getTags();
 			
 			//Create Task
@@ -305,7 +305,7 @@ public class ZombieTask {
 		
 		CommandAdd currentAddCommand = currentUpdateCommand.getUpdatedTask();
 		String taskName = currentAddCommand.getTaskName();
-		Calendar taskTime = currentAddCommand.getDateTime();
+		Calendar taskTime = currentAddCommand.getStartDate();
 		ArrayList<String> tags = currentAddCommand.getTags();
 		
 		currentTask = null;
