@@ -102,7 +102,7 @@ public class ZombieTaskAtd {
 			ZombieTask.setCurrentCommand(Interpreter.getCommand("add noob 13 Sep"));
 			ZombieTask.execute();
 			ZombieTask.setCurrentCommand(Interpreter.getCommand("add noob 13 Sep"));
-			ZombieTask.execute()
+			ZombieTask.execute();
 		}catch (Exception err){
 			fail("Good input - add 01 - Exception thrown");
 		}
