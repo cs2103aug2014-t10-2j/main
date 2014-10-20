@@ -214,6 +214,14 @@ public class StorageAPI {
 	
 	
 	
+	public Task searchName(String taskName) throws Exception{
+		return storage.searchName(taskName);
+	}
+	
+	public ArrayList<Task> searchTag(String tagName) throws Exception{
+		return storage.searchTag(tagName);
+	}
+	
 	/*
 	 * DEPRECIATED METHODS AND VARIABLES
 	 */
