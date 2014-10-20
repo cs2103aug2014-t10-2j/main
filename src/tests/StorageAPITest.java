@@ -102,6 +102,38 @@ public class StorageAPITest {
 		assertEquals(expectedTest.get(1).getTags(),tempTest.get(1).getTags());
 		assertEquals(expectedTest.get(1).getTaskName(),tempTest.get(1).getTaskName());
 	}
+	
+	@Test
+	public  void testSearchName() throws Exception {
+		testStorage.add(task1);
+		testStorage.add(task2);
+		Task testResult = testStorage.searchName(taskName);
+		Task testExpected = task1;
+		assertEquals(testExpected.getSubtask(),testResult.getSubtask());
+		assertEquals(testExpected.getEndTime(),testResult.getEndTime());
+		assertEquals(testExpected.getTags(),testResult.getTags());
+		assertEquals(testExpected.getTaskName(),testResult.getTaskName());
+		testStorage.delete(task1);
+		testStorage.delete(task2);
+	}
+	
+	@Test
+	public void testSearchTag() throws Exception {
+		testStorage.add(task1);
+		testStorage.add(task2);
+		task1.addTag("justForTest");
+		ArrayList<Task> testResultList = testStorage.searchTag("justForTest");
+		Task testResult = testResultList.get(0);
+		Task testExpected = task1;
+		assertEquals(testExpected.getSubtask(),testResult.getSubtask());
+		assertEquals(testExpected.getEndTime(),testResult.getEndTime());
+		assertEquals(testExpected.getTags(),testResult.getTags());
+		assertEquals(testExpected.getTaskName(),testResult.getTaskName());
+		testStorage.delete(task1);
+		testStorage.delete(task2);
+		testStorage.delete(task1);
+		testStorage.delete(task2);
+	}
 
 	@Test
 	public void testDeleteTask() throws IOException {
@@ -179,5 +211,5 @@ public class StorageAPITest {
 		testStorage.delete(updateTask);
 	}
 	
-
+	
 }
