@@ -66,12 +66,12 @@ public class Storage {
 				continue;
 			}
 			if (task.getStartTime() == null){
-				if (task.getEndTime().before(endTime) && task.getEndTime().after(startTime)){
+				if (task.getEndTime().compareTo(endTime)<=0 && task.getEndTime().compareTo(startTime)>=0){
 					searchTaskList.add(task);
 				}
 				continue;
 			}
-			if (task.getEndTime().before(endTime) && task.getStartTime().after(startTime)){
+			if (task.getEndTime().compareTo(endTime)<=0 && task.getStartTime().compareTo(endTime)<=0){
 				searchTaskList.add(task);
 			}
 		}
