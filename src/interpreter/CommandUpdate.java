@@ -1,26 +1,25 @@
 package interpreter;
 /**
- * Class for Update command, which contains line number to identify task to
+ * Class for Update command, which contains line code to identify task to
  * update, and a boolean variable to indicate missing arguments. 
  * @author SP
  *
  */
 public class CommandUpdate extends Command {
-	int INVALID_NO = -1;
-	int lineNo = INVALID_NO;
+	String lineCode = null;
 	CommandAdd updatedTask = null;
 	
 	/**
 	 * Constructor for the Update command object. It is initialised with a line
 	 * number and a boolean variable to indicate if there are missing arguments.
-	 * @param newLineNo the line number of the task to be updated
+	 * @param newLineCode the line code of the task to be updated
 	 * @param newUpdatedTask the new task to overwrite updated task
 	 * @param hasMissingArgs boolean variable to indicate missing arguments
 	 */
-	public CommandUpdate( int newLineNo, CommandAdd newUpdatedTask, 
+	public CommandUpdate(String newLineCode, CommandAdd newUpdatedTask, 
 			String userInput, boolean hasMissingArgs) {
 		super(Command.UPDATE, userInput, hasMissingArgs);
-		lineNo = newLineNo;
+		lineCode = newLineCode;
 		updatedTask = newUpdatedTask;
 	}
 	
@@ -33,11 +32,11 @@ public class CommandUpdate extends Command {
 	}
 	
 	/**
-	 * Accessor for line number
-	 * @return the line number of the task to be updated
+	 * Accessor for line code
+	 * @return the line code of the task to be updated
 	 */
-	public int getLineNo() {
-		return lineNo;
+	public String getLineCode() {
+		return lineCode;
 	}
 	
 }

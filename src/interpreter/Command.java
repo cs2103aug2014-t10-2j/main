@@ -38,12 +38,9 @@ public class Command {
 	 * Constructor for command object. It is initialised with a string
 	 * indicating the command type
 	 * 
-	 * @param newCommandType
-	 *            the type of command
-	 * @param newUserInput
-	 *            the original user input
-	 * @param newHasMissingArgs
-	 *            whether the user input has missing arguments
+	 * @param newCommandType the type of command
+	 * @param newUserInput the original user input
+	 * @param newHasMissingArgs whether the user input has missing arguments
 	 */
 	public Command(String newCommandType, String newUserInput,
 			boolean newHasMissingArgs) {
