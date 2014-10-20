@@ -11,8 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import zombietask.Task;
-import json.JSONArray;
-import json.JSONObject;
+
 
 
 
@@ -212,11 +211,23 @@ public class StorageAPI {
 		return storage.search(index);
 	}
 	
-	
+	/**
+	 * search task with a particular name
+	 * @param taskName
+	 * @return Task with particular name
+	 * @throws Exception
+	 */
 	
 	public Task searchName(String taskName) throws Exception{
 		return storage.searchName(taskName);
 	}
+	
+	/**
+	 * search task with particular tag
+	 * @param tagName
+	 * @return a Task ArrayList which contains all tasks that has the particular tag
+	 * @throws Exception
+	 */
 	
 	public ArrayList<Task> searchTag(String tagName) throws Exception{
 		return storage.searchTag(tagName);

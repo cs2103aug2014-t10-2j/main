@@ -93,6 +93,7 @@ public class Storage {
 		}
 		return null;
 	}
+	
 	public ArrayList<Task> searchTag(String tagName) throws Exception{
 		ArrayList<Task> searchTaskList = new ArrayList<Task> ();
 		for(Task task: taskList){
