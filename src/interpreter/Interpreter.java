@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import ui.FORMAT;
 import ui.UI;
+import zombietask.ZombieTask;
 
 import com.joestelmach.natty.*;
 
@@ -28,6 +32,8 @@ public class Interpreter {
 	public static final char UPDATE_F = 'f';
 	public static final char UPDATE_D = 'd';
 	public static final char UPDATE_T = 't';
+	
+	private static Logger logger = ZombieTask.getLogger();
 
 	/**
 	 * Returns the command type based on the first word of the user input
@@ -64,6 +70,7 @@ public class Interpreter {
 					.split(" ");
 
 			String commandType = getCommandType(userInputTokens[0]);
+			logger.log(Level.INFO, "Creating command of type " + commandType);
 			switch (commandType) {
 				case Command.DELETE:
 					if (userInputTokens.length > 1) {
@@ -119,6 +126,7 @@ public class Interpreter {
 		List<DateGroup> groups = parser.parse(userInput);
 
 		if (groups.isEmpty()) {
+			logger.log(Level.INFO, "No date found");
 			return new CommandSearchTime(null, null, userInput, true);
 		} else {
 			// get first date
@@ -127,15 +135,18 @@ public class Interpreter {
 			Calendar cal1 = Calendar.getInstance();
 			cal1.setTime(date1);
 			Calendar cal2 = Calendar.getInstance();
+			logger.log(Level.INFO, "First date: " + cal1);
 
 			// get second date
 			try {
 				date2 = groups.get(0).getDates().get(1);
 				cal2.setTime(date2);
+				logger.log(Level.INFO, "Second date: " + cal1);
 			} catch (Exception e) {
 				try {
 					date2 = groups.get(1).getDates().get(0);
 					cal2.setTime(date2);
+					logger.log(Level.INFO, "Second date: " + cal1);
 				} catch (Exception e1) { // only 1 date
 					return new CommandSearchTime(null, null, userInput, true);
 				}
@@ -208,6 +219,7 @@ public class Interpreter {
 			if (word.length() > 1 && word.charAt(0) == '#') {
 				tags.add(word);
 			}
+			logger.log(Level.INFO, "Tags: " + tags.toString());
 		}
 		return tags;
 	}
@@ -245,6 +257,8 @@ public class Interpreter {
 			userInput = userInput.replaceFirst(" " + dateKeywords, "");
 			userInput = userInput.replaceFirst(dateKeywords, "");
 		}
+		
+		logger.log(Level.INFO, "Task name: " + userInput);
 
 		// remove tags
 		for (String tag : tags) {
@@ -252,6 +266,8 @@ public class Interpreter {
 			userInput = userInput.replaceAll(" " + tag, "");
 			userInput = userInput.replaceAll(tag, "");
 		}
+		
+		logger.log(Level.INFO, "Task name: " + userInput);
 
 		if (userInput.trim() == "") {
 			throw new NoTaskNameException("No task name.");
@@ -275,13 +291,14 @@ public class Interpreter {
 		String taskName = null;
 		String[] userInputWords = userInput.trim().toLowerCase().split(" ");
 
-		// remove escaped numbers or words
 		// remove escaped numbers and words
 		String escapePattern = "\\s\\" + ESCAPE_CHAR + "\\S+";
 		String userInputTemp = userInput;
 		while (userInputTemp.contains(" " + ESCAPE_CHAR)) {
 			userInputTemp = userInputTemp.replaceAll(escapePattern, "");
 		}
+		
+		assert !userInputTemp.contains(" " + ESCAPE_CHAR);
 
 		Parser parser = new Parser();
 		List<DateGroup> groups = parser.parse(userInputTemp);
@@ -306,6 +323,8 @@ public class Interpreter {
 
 				// get first date
 				Date date1 = groups.get(0).getDates().get(0);
+				assert date1 != null;
+				
 				Date date2 = null;
 				Calendar cal1 = Calendar.getInstance();
 				cal1.setTime(date1);
@@ -323,6 +342,8 @@ public class Interpreter {
 					} catch (Exception e1) { // only 1 date: deadline task
 						taskName = getTaskName(userInputTemp, tags);
 						taskName = taskName.replace(" " + ESCAPE_CHAR, " ");
+						assert !taskName.contains(" " + ESCAPE_CHAR);
+						
 						return new CommandAdd(taskName, cal1, null, tags,
 								userInput, false);
 					}
@@ -394,6 +415,8 @@ public class Interpreter {
 			String userInput) {
 		try {
 			int lineNo = Integer.parseInt(secondWord);
+			assert lineNo == (int) lineNo;
+			
 			return new CommandDelete(lineNo, userInput, false);
 		} catch (Exception e) { // invalid number
 			return new CommandDelete(INVALID_NO, userInput, true);
