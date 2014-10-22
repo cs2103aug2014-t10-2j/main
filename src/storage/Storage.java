@@ -87,7 +87,7 @@ public class Storage {
 	
 	public Task searchName(String taskName) throws Exception{
 		for(Task task : taskList){
-			if(task.getTaskName()==taskName){
+			if(task.getTaskName().equals(taskName)){
 				return task;
 			}
 		}
@@ -99,7 +99,7 @@ public class Storage {
 		for(Task task: taskList){
 			ArrayList<String> tagList= task.getTags();
 			for(String tagContent : tagList){
-				if(tagContent == tagName){
+				if(tagContent.equals(tagName)){
 					searchTaskList.add(task);
 					break;
 				}
