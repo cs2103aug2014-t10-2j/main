@@ -173,6 +173,14 @@ public class Task implements Comparable<Task> {
 		return this.endTime == null;
 	}
 	
+	public boolean isDeadline() {
+		return (this.startTime == null && this.endTime != null);
+	}
+	
+	public boolean isTimedTask() {
+		return (this.startTime != null && this.endTime != null);
+	}
+	
 	/*
 	 * TAG MUTATORS
 	 */
