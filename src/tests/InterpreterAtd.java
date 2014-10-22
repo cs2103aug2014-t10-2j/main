@@ -345,12 +345,12 @@ public class InterpreterAtd {
 	@Test
 	public void testGetCommandUpdate() throws Exception {
 		// Test 1: Basic function
-		Command command = Interpreter.getCommand("update 2 go lunch sep 21"
+		Command command = Interpreter.getCommand("update d2 go lunch sep 21"
 				+ " #food");
 		assertEquals(Command.UPDATE, command.getCommandType());
 		CommandUpdate update = (CommandUpdate) command;
-		assertEquals(2, update.getLineNo());
-		assertEquals("update 2 go lunch sep 21 #food", update.getUserInput());
+		assertEquals("d2", update.getLineCode());
+		assertEquals("update d2 go lunch sep 21 #food", update.getUserInput());
 
 		CommandAdd updatedTask = update.getUpdatedTask();
 		testTags(updatedTask.getTags(), "#food");
@@ -361,11 +361,26 @@ public class InterpreterAtd {
 				today.get(Calendar.SECOND));
 
 		// Test 2: case-insensitivity
-		command = Interpreter.getCommand("uPdATe 2 go lunch sep 21" + " #food");
+		
+		// floating task
+		command = Interpreter.getCommand("uPdATe D2 go dinner #food");
 		assertEquals(Command.UPDATE, command.getCommandType());
 		update = (CommandUpdate) command;
-		assertEquals(2, update.getLineNo());
-		assertEquals("uPdATe 2 go lunch sep 21 #food", update.getUserInput());
+		assertEquals("d2", update.getLineCode());
+		assertEquals("uPdATe D2 go dinner #food", update.getUserInput());
+
+		updatedTask = update.getUpdatedTask();
+		assertEquals("go dinner", updatedTask.getTaskName());
+		testTags(updatedTask.getTags(), "#food");
+		assertNull(updatedTask.getStartDate());
+		assertNull(updatedTask.getEndDate());
+
+		// deadline task
+		command = Interpreter.getCommand("uPdATe F5 go lunch sep 21 #food");
+		assertEquals(Command.UPDATE, command.getCommandType());
+		update = (CommandUpdate) command;
+		assertEquals("f5", update.getLineCode());
+		assertEquals("uPdATe F5 go lunch sep 21 #food", update.getUserInput());
 
 		updatedTask = update.getUpdatedTask();
 		assertEquals("go lunch", updatedTask.getTaskName());
@@ -373,27 +388,42 @@ public class InterpreterAtd {
 		testDate(updatedTask.getStartDate(), today.get(Calendar.YEAR), 8, 21,
 				today.get(Calendar.HOUR_OF_DAY), today.get(Calendar.MINUTE),
 				today.get(Calendar.SECOND));
-		;
-
-		// Test 3: invalid arguments
-		command = Interpreter.getCommand("update me");
+		
+		// timed task
+		command = Interpreter.getCommand("uPdATe T20 go dinner 9pm to 10:30pm");
 		assertEquals(Command.UPDATE, command.getCommandType());
 		update = (CommandUpdate) command;
-		assertEquals(Interpreter.INVALID_NO, update.getLineNo());
+		assertEquals("t20", update.getLineCode());
+		assertEquals("uPdATe T20 go dinner 9pm to 10:30pm",
+				update.getUserInput());
+
+		updatedTask = update.getUpdatedTask();
+		assertEquals("go dinner", updatedTask.getTaskName());
+		testDate(updatedTask.getStartDate(), today.get(Calendar.YEAR),
+				today.get(Calendar.MONTH), today.get(Calendar.DATE), 21, 0, 0);
+		testDate(updatedTask.getEndDate(), today.get(Calendar.YEAR),
+				today.get(Calendar.MONTH), today.get(Calendar.DATE), 22, 30, 0);
+
+
+		// Test 3: invalid arguments
+		command = Interpreter.getCommand("update E3");
+		assertEquals(Command.UPDATE, command.getCommandType());
+		update = (CommandUpdate) command;
+		assertNull(update.getLineCode());
 		assertTrue(update.hasMissingArgs());
-		assertEquals("update me", update.getUserInput());
+		assertEquals("update E3", update.getUserInput());
 
 		command = Interpreter.getCommand("update");
 		assertEquals(Command.UPDATE, command.getCommandType());
 		update = (CommandUpdate) command;
-		assertEquals(Interpreter.INVALID_NO, update.getLineNo());
+		assertNull(update.getLineCode());
 		assertTrue(update.hasMissingArgs());
 		assertEquals("update", update.getUserInput());
 
 		command = Interpreter.getCommand("update 3");
 		assertEquals(Command.UPDATE, command.getCommandType());
 		update = (CommandUpdate) command;
-		assertEquals(Interpreter.INVALID_NO, update.getLineNo());
+		assertNull(update.getLineCode());
 		assertTrue(update.hasMissingArgs());
 		assertEquals("update 3", update.getUserInput());
 

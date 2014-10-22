@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Pattern;
-
 import ui.FORMAT;
 import ui.UI;
 
@@ -25,6 +23,11 @@ public class Interpreter {
 
 	public static final int INVALID_NO = -1;
 	public static final char ESCAPE_CHAR = '*';
+
+	// valid constants for updating floating, deadline and timed task
+	public static final char UPDATE_F = 'f';
+	public static final char UPDATE_D = 'd';
+	public static final char UPDATE_T = 't';
 
 	/**
 	 * Returns the command type based on the first word of the user input
@@ -72,8 +75,7 @@ public class Interpreter {
 					if (userInputTokens.length > 2) {
 						return getCommandUpdate(userInputTokens[1], userInput);
 					} else {
-						return new CommandUpdate(INVALID_NO, null, userInput,
-								true);
+						return new CommandUpdate(null, null, userInput, true);
 					}
 				case Command.VIEW:
 					if (userInputTokens.length > 1) {
@@ -356,18 +358,28 @@ public class Interpreter {
 	private static CommandUpdate getCommandUpdate(String secondWord,
 			String userInput) {
 		try {
-			int lineNo = Integer.parseInt(secondWord);
+			String lineCode = null;
+			secondWord = secondWord.toLowerCase();
+			boolean validSecondWord = secondWord.matches("[" + UPDATE_F
+					+ UPDATE_D + UPDATE_T + "][0-9]+");
 
-			// get third word onwards to parse as an add command
-			int spaceIndex = userInput.indexOf(" ");
-			String userInputTemp = userInput.substring(spaceIndex + 1);
-			spaceIndex = userInputTemp.indexOf(" ");
-			userInputTemp = userInputTemp.substring(spaceIndex + 1);
+			if (validSecondWord) {
+				lineCode = secondWord;
+				// get third word onwards to parse as an add command
+				int spaceIndex = userInput.indexOf(" ");
+				String userInputTemp = userInput.substring(spaceIndex + 1);
+				spaceIndex = userInputTemp.indexOf(" ");
+				userInputTemp = userInputTemp.substring(spaceIndex + 1);
 
-			CommandAdd updatedTask = (CommandAdd) getCommandAdd(userInputTemp);
-			return new CommandUpdate(lineNo, updatedTask, userInput, false);
-		} catch (Exception e) { // invalid number or date
-			return new CommandUpdate(INVALID_NO, null, userInput, true);
+				CommandAdd updatedTask = (CommandAdd) getCommandAdd(userInputTemp);
+				return new CommandUpdate(lineCode, updatedTask, userInput,
+						false);
+			} else {
+				return new CommandUpdate(null, null, userInput, true);
+			}
+
+		} catch (Exception e) { // invalid date
+			return new CommandUpdate(null, null, userInput, true);
 		}
 	}
 
