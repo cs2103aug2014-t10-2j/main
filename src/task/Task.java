@@ -1,4 +1,4 @@
-package zombietask;
+package task;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,8 +14,7 @@ import java.util.Calendar;
  *
  */
 
-public class Task
-{	
+public class Task implements Comparable<Task> {	
 	/*
 	 * CLASS ATTRIBUTES
 	 */
@@ -275,14 +274,18 @@ public class Task
 		}
 	}
 	
+	/**
+	 * Compares time values between tasks based on endtime.
+	 * 
+	 * Default Comparator - End Time
+	 * 
+	 * @param task
+	 * @return 
+	 */
 	
-	
-	
-	
-	
-	
-	
-	
+	public int compareTo(Task task){
+		return this.getEndTime().compareTo(task.getEndTime());
+	}
 	
 	/*
 	 * REDUNDANT METHODS
