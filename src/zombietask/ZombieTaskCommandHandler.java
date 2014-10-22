@@ -154,6 +154,7 @@ public class ZombieTaskCommandHandler {
 			showToUser(String.format(MESSAGE_ADD, currentTask.getTaskName()));
 			
 		} catch (Exception err){
+			err.printStackTrace();
 			showToUser(err.getMessage());
 		}
 	}

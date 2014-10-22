@@ -92,7 +92,7 @@ public class ZombieTask {
 					logger.log(Level.INFO, String.format(MESSAGE_MISSING_ARGUMENTS, currentCommandString));
 					continue;
 				}
-				logger.log(Level.INFO, currentCommandString);
+				logger.log(Level.FINER, currentCommandString);
 				ZombieTaskCommandHandler.execute(currentCommand, currentCommandString);
 			} catch (Exception err){
 				err.printStackTrace();
@@ -122,6 +122,7 @@ public class ZombieTask {
 		} catch (Exception err){
 			showToUser(String.format(MESSAGE_INVALID_FILENAME, args[0]));
 		} finally {
+			ZombieTaskCommandHandler.setStorage(storage);
 			showToUser(String.format(MESSAGE_FILE_OPENED, storage.getFileName()));
 		}	
 	}
