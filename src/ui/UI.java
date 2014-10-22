@@ -14,7 +14,9 @@ package ui;
  * 3. Removed printCalendar() method.
  * UPDATE 19/10/2014:
  * 1. Refactored hasOverdue() functionality
- * UPDATE 22/10/2014: Adapted to handle prefixes and getEndTime()
+ * UPDATE 22/10/2014:
+ * 1. Adapted to handle prefixes and getEndTime()
+ * 2. Implemented ANSI Console color output
  */
 
 import java.text.Format;
@@ -33,7 +35,6 @@ public class UI
 	public static final FORMAT MONTHLY = FORMAT.MONTHLY;
 	public static final FORMAT ANNUAL = FORMAT.ANNUAL;
 	public static final FORMAT INVALID = FORMAT.INVALID;
-	//private static final Format FORMAT_DATEMTH = new SimpleDateFormat("dd/MM");
 	private static final Format FORMAT_DATETIME = new SimpleDateFormat("dd/MM/yy HH:mm");
 	private static final Format FORMAT_DATEONLY = new SimpleDateFormat("dd/MM/yy");
 	private static final Format FORMAT_DAYDATE = new SimpleDateFormat("EEEEE, dd MMMMM yyyy");
@@ -43,6 +44,15 @@ public class UI
 	private static final int WEEKLY_LIMIT = 28;
 	private static final int MONTHLY_LIMIT = 30;
 	private static final int ANNUAL_LIMIT = 52;
+	public static final String RESET = "\u001B[0m";
+	public static final String BLACK = "\u001B[30m";
+	public static final String RED = "\u001B[31m";
+	public static final String GREEN = "\u001B[32m";
+	public static final String YELLOW = "\u001B[33m";
+	public static final String BLUE = "\u001B[34m";
+	public static final String PURPLE = "\u001B[35m";
+	public static final String CYAN = "\u001B[36m";
+	public static final String WHITE = "\u001B[37m";
 	
 	// PRIMARY USE METHODS
 	public static void printResponse(String response) {
@@ -205,14 +215,23 @@ public class UI
 	public static String taskToString(String name, int index, char check, Date date)
 	{
 		char prefix = (check == 'S' || check == 'E') ? 'T' : check;
-		String str = "(" + prefix + index + "): ";
-		str += name;
+		String color = "";
+		switch(index % 6) {
+			case 0:	color = RED;	break;
+			case 1:	color = GREEN;	break;
+			case 2:	color = YELLOW;	break;
+			case 3:	color = BLUE;	break;
+			case 4:	color = PURPLE;	break;
+			case 5:	color = CYAN;	break;
+			default:	break;
+		}
+		String str = color + "(" + prefix + index + "): " + name;
 		switch(check)
 		{
-			case 'S': return str + " [" + FORMAT_DATETIME.format(date) + "][Start]";
-			case 'E': return str + " [" + FORMAT_DATETIME.format(date) + "][End]";
-			case 'D': return str + " [" + FORMAT_DATETIME.format(date) + "]";
-			case 'F': return str;
+			case 'S':	return str + " [" + FORMAT_DATETIME.format(date) + "][Start]" + RESET;
+			case 'E':	return str +" [" + FORMAT_DATETIME.format(date) + "][End]" + RESET;
+			case 'D':	return str + " [" + FORMAT_DATETIME.format(date) + "]" + RESET;
+			case 'F':	return str + RESET;
 			default:  return "!!!!!";
 		}
 	}
