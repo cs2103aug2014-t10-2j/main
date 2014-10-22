@@ -24,26 +24,30 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Logger;
 
+import logger.ZombieLogger;
 import task.Task;
+import task.TaskUIFormat;
 
 public class UI
 {
-	public static final FORMAT AGENDA = FORMAT.AGENDA;
-	public static final FORMAT DAILY = FORMAT.DAILY;
-	public static final FORMAT WEEKLY = FORMAT.WEEKLY;
-	public static final FORMAT MONTHLY = FORMAT.MONTHLY;
-	public static final FORMAT ANNUAL = FORMAT.ANNUAL;
-	public static final FORMAT INVALID = FORMAT.INVALID;
-	private static final Format FORMAT_DATETIME = new SimpleDateFormat("dd/MM/yy HH:mm");
-	private static final Format FORMAT_DATEONLY = new SimpleDateFormat("dd/MM/yy");
-	private static final Format FORMAT_DAYDATE = new SimpleDateFormat("EEEEE, dd MMMMM yyyy");
-	private static final Format FORMAT_TODAY = new SimpleDateFormat("dd MMMMM yyyy, HH:mm");
-	private static final Format FORMAT_WEEKNUM = new SimpleDateFormat("ww");
+	
+	/*
+	 * WTF NO HARD CODED LIMITS HERE
+	 */
+	
+	/*
 	private static final int DAILY_LIMIT = 24;
 	private static final int WEEKLY_LIMIT = 28;
 	private static final int MONTHLY_LIMIT = 30;
 	private static final int ANNUAL_LIMIT = 52;
+	*/
+	
+	/*
+	 * Class Constants
+	 */
+	
 	public static final String RESET = "\u001B[0m";
 	public static final String BLACK = "\u001B[30m";
 	public static final String RED = "\u001B[31m";
@@ -54,10 +58,41 @@ public class UI
 	public static final String CYAN = "\u001B[36m";
 	public static final String WHITE = "\u001B[37m";
 	
-	// PRIMARY USE METHODS
+	public static final String HEADER_AGENDA = "(Agenda)\n";
+	public static final String HEADER_DAILY = "(Daily)\n";
+	public static final String HEADER_WEEKLY = "(Weekly)\n";
+	public static final String HEADER_MONTHLY = "(Monthly)\n";
+	public static final String HEADER_ANNUAL = "(Annual)\n";
+	
+	public static final FORMAT AGENDA = FORMAT.AGENDA;
+	public static final FORMAT DAILY = FORMAT.DAILY;
+	public static final FORMAT WEEKLY = FORMAT.WEEKLY;
+	public static final FORMAT MONTHLY = FORMAT.MONTHLY;
+	public static final FORMAT ANNUAL = FORMAT.ANNUAL;
+	public static final FORMAT INVALID = FORMAT.INVALID;
+	
+	private static final Format FORMAT_DATETIME = new SimpleDateFormat("dd/MM/yy HH:mm");
+	private static final Format FORMAT_DATEONLY = new SimpleDateFormat("dd/MM/yy");
+	private static final Format FORMAT_DAYDATE = new SimpleDateFormat("EEEEE, dd MMMMM yyyy");
+	private static final Format FORMAT_TODAY = new SimpleDateFormat("dd MMMMM yyyy, HH:mm");
+	private static final Format FORMAT_WEEKNUM = new SimpleDateFormat("ww");
+	
+	/*
+	 * Class variables
+	 */
+	
+	private static Logger logger = ZombieLogger.getLogger();
+	
+	/*
+	 *  PRIMARY METHODS
+	 */
+	
 	public static void printResponse(String response) {
 		System.out.println(response);
 	}
+	
+	
+	/*
 	public static void printPerspective(FORMAT format, ArrayList<Task> tasks)
 		throws Exception {
 		if(tasks.isEmpty()) {
@@ -65,7 +100,7 @@ public class UI
 			return;
 		}
 		tasks = sortTasks(tasks);
-		String str = "";
+		String str;
 		switch(format) {
 			case AGENDA:	str = printAgenda(tasks);	break;
 			case DAILY:		str = printDaily(tasks);	break;
@@ -76,7 +111,95 @@ public class UI
 		}
 		System.out.println(str);
 	}
-	// FORMAT METHODS
+	*/
+	
+	public static void printPerspective(FORMAT format, TaskUIFormat tasks)
+			throws Exception {
+			if(tasks.isEmpty()) {
+				System.out.println("No tasks within time period." + format);
+				return;
+			}
+			String str;
+			switch(format) {
+				case AGENDA:	str = printAgenda(tasks);	break;
+				case DAILY:		str = printDaily(tasks);	break;
+				case WEEKLY:	str = printWeekly(tasks);	break;
+				case MONTHLY:	str = printMonthly(tasks);	break;
+				case ANNUAL:	str = printAnnual(tasks);	break;
+				default:	return;
+			}
+			System.out.println(str);
+		}
+	
+	/*
+	 * FORMAT METHODS
+	 */
+	
+	/**
+	 * 
+	 * Prints an agenda, a list of tasks according to type of task.
+	 * 
+	 * @param tasks
+	 * @return String to be printed
+	 * @throws Exception
+	 */
+	
+	private static String printAgenda(TaskUIFormat tasks) throws Exception {
+		
+		String str = "(Agenda)\n";
+		
+		TaskUIFormat overdueTasks = getOverdueTasks(tasks);
+		for (Task task : overdueTasks.getDeadlineTasks()){
+			str += task.getTaskName() + "\n";
+		}
+		for (Task task : overdueTasks.getTimedTasks()){
+			str += task.getTaskName() + "\n";
+		}
+		
+		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
+		Calendar begin = delimitTime(Calendar.getInstance());
+		begin.set(Calendar.HOUR_OF_DAY, 0);
+		Calendar end = delimitTime(Calendar.getInstance());
+		end.set(Calendar.HOUR_OF_DAY, 0);
+		end.add(Calendar.DATE, 1);
+		ArrayList<String> floatingStrings = new ArrayList<String>();
+		for(Task task : processedTasks) {
+			if(task.isDeadline() && task.isOverdue() == false) {
+				while(withinTimePeriod(task.getEndTime(), begin, end) == false) {
+					begin.add(Calendar.DATE, 1);
+					end.add(Calendar.DATE, 1);
+					str += FORMAT_DAYDATE.format(begin.getTime()) + "\n";
+				}
+				str += task.getTaskName() + "\n";
+			}
+			if(task.isFloatingTask())	floatingStrings.add(task.getTaskName());
+		}
+		if(floatingStrings.isEmpty() == false)
+		{
+			str += "<<<<< Floating Tasks >>>>>\n";
+			for(String string : floatingStrings)	str += string + "\n";
+		}
+		return str;
+	}
+	
+	private static TaskUIFormat getOverdueTasks(TaskUIFormat tasks){
+		ArrayList<Task> searchDeadlineList = new ArrayList<Task>();
+		ArrayList<Task> searchTimedList = new ArrayList<Task>();
+		for (Task task : tasks.getDeadlineTasks()){
+			if (task.isOverdue()){
+				searchDeadlineList.add(task);
+			}
+		}
+		for (Task task : tasks.getTimedTasks()){
+			if (task.isOverdue()){
+				searchTimedList.add(task);
+			}
+		}
+		return new TaskUIFormat(null, searchDeadlineList, searchTimedList);
+	}
+	
+	/*
+	
 	private static String printAgenda(ArrayList<Task> tasks) throws Exception {
 		String str;
 		str = "(Agenda)\n";
@@ -109,6 +232,7 @@ public class UI
 		}
 		return str;
 	}
+	
 	private static String printDaily(ArrayList<Task> tasks) throws Exception {
 		String str;
 		str = "(Daily)\n";
@@ -211,7 +335,13 @@ public class UI
 		for(String string : daily)	str += string + "\n";
 		return str;
 	}
-	// MISCELLENEOUS METHODS
+	
+	*/
+	
+	/*
+	 *  MISCELLENEOUS METHODS
+	 */
+	
 	public static String taskToString(String name, int index, char check, Date date)
 	{
 		char prefix = (check == 'S' || check == 'E') ? 'T' : check;
@@ -243,6 +373,26 @@ public class UI
 		time.set(Calendar.MILLISECOND, 0);
 		return time;
 	}
+	
+	public static FORMAT getFormat(String formatString)
+	{
+		switch(formatString.toLowerCase())
+		{
+			case "agenda":		return FORMAT.AGENDA;
+			case "daily":		return FORMAT.DAILY;
+			case "weekly":		return FORMAT.WEEKLY;
+			case "monthly":		return FORMAT.MONTHLY;
+			case "annual":		return FORMAT.ANNUAL;
+			case "calendar":	return FORMAT.CALENDAR;
+			default:			return FORMAT.INVALID;
+		}
+	}
+	
+	/*
+	 * DEPRECIATED
+	 */
+	
+	/*
 	private static ArrayList<Task> processTasks(ArrayList<Task> tasks) throws Exception
 	{
 		ArrayList<Task> pTasks = new ArrayList<Task>();
@@ -267,6 +417,7 @@ public class UI
 		}
 		return pTasks;
 	}
+	
 	public static ArrayList<Task> sortTasks(ArrayList<Task> tasks) {
 		ArrayList<Task> floatingTasks = new ArrayList<Task>();
 		for(int i = 1; i < tasks.size(); i++) {
@@ -279,23 +430,14 @@ public class UI
 		tasks.addAll(floatingTasks);
 		return tasks;
 	}
+	
+	
 	public static boolean withinTimePeriod(Calendar time, Calendar begin, Calendar end)
 	{
 		if(time == null)	return false;
 		return (time.compareTo(begin) >= 0 && time.compareTo(end) < 0) ? true : false;
 	}
 	
-	public static FORMAT getFormat(String formatString)
-	{
-		switch(formatString.toLowerCase())
-		{
-			case "agenda":		return FORMAT.AGENDA;
-			case "daily":		return FORMAT.DAILY;
-			case "weekly":		return FORMAT.WEEKLY;
-			case "monthly":		return FORMAT.MONTHLY;
-			case "annual":		return FORMAT.ANNUAL;
-			case "calendar":	return FORMAT.CALENDAR;
-			default:			return FORMAT.INVALID;
-		}
-	}
+	*/
+	
 }

@@ -71,6 +71,8 @@ public class ZombieTask {
 	private final static boolean SUCCESS = true;
 	private final static boolean FAILURE = false;
 	
+	private static boolean setExit = false;
+	
 	/**
 	 * Method that will be invoked when ZombieTask is called.
 	 * 
@@ -83,12 +85,12 @@ public class ZombieTask {
 		showToUser(MESSAGE_WELCOME);
 		initStorage(args);
 		
-		while(sc.hasNext()){
+		while(sc.hasNext() && !setExit){
 			try {
 				reinitializeCurrentVariables();
 				currentCommandString = sc.nextLine();
 				currentCommand = Interpreter.getCommand(currentCommandString);
-				if(currentCommand.hasMissingArgs()){
+				if (currentCommand.hasMissingArgs()){
 					logger.log(Level.INFO, String.format(MESSAGE_MISSING_ARGUMENTS, currentCommandString));
 					continue;
 				}
@@ -96,8 +98,8 @@ public class ZombieTask {
 				ZombieTaskCommandHandler.execute(currentCommand, currentCommandString);
 			} catch (Exception err){
 				err.printStackTrace();
+				showToUser(err.toString());
 			}
-
 		}
 	}
 
@@ -197,6 +199,10 @@ public class ZombieTask {
 	
 	private static void showToUser(String displayString) {
 		UI.printResponse(displayString);
+	}
+	
+	public static void exitProgram(){
+		System.exit(0);
 	}
 
 }

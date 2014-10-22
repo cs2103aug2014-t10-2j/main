@@ -17,15 +17,20 @@ public class TaskUIFormat {
 	 * Class Constants
 	 */
 	
+	/*
 	private static final Pattern VALID_PATTERN = Pattern.compile("[A-Z]+|[0-9]+");
+	
 	private static final String DEBUG_INVALID_IO = "INVALID IO STRING: %s";
 	private static final String DEBUG_HASNT_SORTED = "HAS NOT SORTED - HAS TO OPERATE FROM INSTANCE";
 	
 	private static final String FLOATING_ID = "f";
 	private static final String DEADLINE_ID = "d";
 	private static final String TIMED_ID = "t";
+	
 	private static final Comparator<Task> startTimeComparator = new TaskStartTimeComparator();
 	private static final Comparator<Task> endTimeComparator = new TaskEndTimeComparator();
+	
+	*/
 	
 	/*
 	 * Class Variables
@@ -40,9 +45,12 @@ public class TaskUIFormat {
 	private ArrayList<Task> floatingTasks;
 	private ArrayList<Task> deadlineTasks;
 	private ArrayList<Task> timedTasks;
+	
+	/*
+	 * 
 	private boolean hasSorted = false;
 	
-	private TaskUIFormat(ArrayList<Task> taskList){
+	public TaskUIFormat(ArrayList<Task> taskList){
 		
 		for (Task task : taskList){
 			if (task.isFloatingTask()){
@@ -64,6 +72,68 @@ public class TaskUIFormat {
 		sortTimedTasks();
 		sortDeadlineTasks();
 	}
+	
+	*/
+	
+	public TaskUIFormat(ArrayList<Task> newFloatingTasks, ArrayList<Task> newDeadlineTasks, ArrayList<Task> newTimedTasks){
+		
+		floatingTasks = newFloatingTasks;
+		deadlineTasks = newDeadlineTasks;
+		timedTasks = newTimedTasks;
+	}
+	
+	public boolean isEmpty(){
+		return floatingTasks.isEmpty() && deadlineTasks.isEmpty() && timedTasks.isEmpty();
+	}
+
+	public ArrayList<Task> getFloatingTasks() {
+		return floatingTasks;
+	}
+
+	public void setFloatingTasks(ArrayList<Task> floatingTasks) {
+		this.floatingTasks = floatingTasks;
+	}
+
+	public ArrayList<Task> getDeadlineTasks() {
+		return deadlineTasks;
+	}
+
+	public void setDeadlineTasks(ArrayList<Task> deadlineTasks) {
+		this.deadlineTasks = deadlineTasks;
+	}
+
+	public ArrayList<Task> getTimedTasks() {
+		return timedTasks;
+	}
+
+	public void setTimedTasks(ArrayList<Task> timedTasks) {
+		this.timedTasks = timedTasks;
+	}
+	
+	public void removeTask(Task deletedTask){
+		floatingTasks.remove(deletedTask);
+		deadlineTasks.remove(deletedTask);
+		timedTasks.remove(deletedTask);
+	}
+	
+	/**
+	 * Passes the next Task for printing.
+	 * Passes floating tasks first, followed by mixture of
+	 * deadline and timed tasks in order of their endtime.
+	 * 
+	 * @return Task
+	 */
+	
+	public Task nextTask(){
+		if (floatingTasks == null || floatingTasks.isEmpty() && deadlineTasks.isEmpty() && )
+		else if (floatingTasks != null && !floatingTasks.isEmpty()){
+			floatingTasks.remove(0);
+		}else if (deadlineTasks.isEmpty()){
+			
+		}
+	}
+	
+	/*
 	
 	private void sortTimedTasks(){
 		Collections.sort(timedTasks, startTimeComparator);
@@ -102,9 +172,9 @@ public class TaskUIFormat {
 		}catch (Exception e){
 			logger.log(Level.SEVERE, e.getMessage());
 		}
-		
 		return null;
-		
 	}
+	
+	*/
 
 }

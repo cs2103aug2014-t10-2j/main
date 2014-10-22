@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import storage.StorageAPI;
 import task.Task;
+import task.TaskUIFormat;
 
 public class StorageAPITest {
 	
@@ -107,21 +108,21 @@ public class StorageAPITest {
 		
 		testStorage.add(task4);
 		testStorage.add(task3);
-		ArrayList <Task> tempTest = new ArrayList <Task> ();
 		ArrayList <Task> expectedTest = new ArrayList <Task> ();
-		tempTest = testStorage.getAllTasks();
+		ArrayList<Task> floatingTasks = testStorage.getAllTasks().getFloatingTasks();
+		ArrayList<Task> deadlineTasks = testStorage.getAllTasks().getDeadlineTasks();
 		
 		expectedTest.add(task4);
 		expectedTest.add(task3);
 		
-		assertEquals(expectedTest.get(0).getSubtask(),tempTest.get(0).getSubtask());
-		assertEquals(expectedTest.get(0).getEndTime(),tempTest.get(0).getEndTime());
-		assertEquals(expectedTest.get(0).getTags(),tempTest.get(0).getTags());
-		assertEquals(expectedTest.get(0).getTaskName(),tempTest.get(0).getTaskName());
-		assertEquals(expectedTest.get(1).getSubtask(),tempTest.get(1).getSubtask());
-		assertEquals(expectedTest.get(1).getEndTime(),tempTest.get(1).getEndTime());
-		assertEquals(expectedTest.get(1).getTags(),tempTest.get(1).getTags());
-		assertEquals(expectedTest.get(1).getTaskName(),tempTest.get(1).getTaskName());
+		assertEquals(expectedTest.get(0).getSubtask(), floatingTasks.get(0).getSubtask());
+		assertEquals(expectedTest.get(0).getEndTime(), floatingTasks.get(0).getEndTime());
+		assertEquals(expectedTest.get(0).getTags(), floatingTasks.get(0).getTags());
+		assertEquals(expectedTest.get(0).getTaskName(), floatingTasks.get(0).getTaskName());
+		assertEquals(expectedTest.get(1).getSubtask(), deadlineTasks.get(0).getSubtask());
+		assertEquals(expectedTest.get(1).getEndTime(), deadlineTasks.get(0).getEndTime());
+		assertEquals(expectedTest.get(1).getTags(), deadlineTasks.get(0).getTags());
+		assertEquals(expectedTest.get(1).getTaskName(), deadlineTasks.get(0).getTaskName());
 		testStorage.delete(task4);
 		testStorage.delete(task3);
 	}
@@ -134,7 +135,7 @@ public class StorageAPITest {
 	
 	public void testSearchIntArray() throws Exception {
 		testStorage.add(task4);
-		Task testResult = testStorage.search(testID);
+		Task testResult = testStorage.search("f".concat(String.valueOf(testID)));
 		Task testExpected = task4;
 		
 		assertEquals(testExpected.getSubtask(),testResult.getSubtask());
@@ -155,21 +156,21 @@ public class StorageAPITest {
 		
 		testStorage.add(task1);
 		testStorage.add(task2);
-		ArrayList<Task> tempTest = new ArrayList<Task> ();
-		tempTest = testStorage.search(date1, date2);
+		TaskUIFormat tempTest = testStorage.search(date1, date2);
+		ArrayList<Task> deadlineTasks = testStorage.getAllTasks().getDeadlineTasks();
 		ArrayList<Task> expectedTest= new ArrayList<Task>();
 		expectedTest.add(task1);
 		expectedTest.add(task2);
 		testStorage.delete(task2);
 		testStorage.delete(task1);
-		assertEquals(expectedTest.get(0).getSubtask(),tempTest.get(0).getSubtask());
-		assertEquals(expectedTest.get(0).getEndTime(),tempTest.get(0).getEndTime());
-		assertEquals(expectedTest.get(0).getTags(),tempTest.get(0).getTags());
-		assertEquals(expectedTest.get(0).getTaskName(),tempTest.get(0).getTaskName());
-		assertEquals(expectedTest.get(1).getSubtask(),tempTest.get(1).getSubtask());
-		assertEquals(expectedTest.get(1).getEndTime(),tempTest.get(1).getEndTime());
-		assertEquals(expectedTest.get(1).getTags(),tempTest.get(1).getTags());
-		assertEquals(expectedTest.get(1).getTaskName(),tempTest.get(1).getTaskName());
+		assertEquals(expectedTest.get(0).getSubtask(),deadlineTasks.get(0).getSubtask());
+		assertEquals(expectedTest.get(0).getEndTime(),deadlineTasks.get(0).getEndTime());
+		assertEquals(expectedTest.get(0).getTags(),deadlineTasks.get(0).getTags());
+		assertEquals(expectedTest.get(0).getTaskName(),deadlineTasks.get(0).getTaskName());
+		assertEquals(expectedTest.get(1).getSubtask(),deadlineTasks.get(1).getSubtask());
+		assertEquals(expectedTest.get(1).getEndTime(),deadlineTasks.get(1).getEndTime());
+		assertEquals(expectedTest.get(1).getTags(),deadlineTasks.get(1).getTags());
+		assertEquals(expectedTest.get(1).getTaskName(),deadlineTasks.get(1).getTaskName());
 	}
 	
 	/**
@@ -181,12 +182,13 @@ public class StorageAPITest {
 	public  void testSearchName() throws Exception {
 		testStorage.add(task1);
 		testStorage.add(task2);
-		Task testResult = testStorage.searchName(taskName);
+		TaskUIFormat testResult = testStorage.searchName(taskName);
+		Task testTask = testResult.getDeadlineTasks().get(0);
 		Task testExpected = task1;
-		assertEquals(testExpected.getSubtask(),testResult.getSubtask());
-		assertEquals(testExpected.getEndTime(),testResult.getEndTime());
-		assertEquals(testExpected.getTags(),testResult.getTags());
-		assertEquals(testExpected.getTaskName(),testResult.getTaskName());
+		assertEquals(testExpected.getSubtask(),testTask.getSubtask());
+		assertEquals(testExpected.getEndTime(),testTask.getEndTime());
+		assertEquals(testExpected.getTags(),testTask.getTags());
+		assertEquals(testExpected.getTaskName(),testTask.getTaskName());
 		testStorage.delete(task1);
 		testStorage.delete(task2);
 	}
@@ -201,8 +203,8 @@ public class StorageAPITest {
 		testStorage.add(task1);
 		testStorage.add(task2);
 		task1.addTag("justForTest");
-		ArrayList<Task> testResultList = testStorage.searchTag("justForTest");
-		Task testResult = testResultList.get(0);
+		TaskUIFormat testResultList = testStorage.searchTag("justForTest");
+		Task testResult = testResultList.getDeadlineTasks().get(0);
 		Task testExpected = task1;
 		assertEquals(testExpected.getSubtask(),testResult.getSubtask());
 		assertEquals(testExpected.getEndTime(),testResult.getEndTime());

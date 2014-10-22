@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import task.Task;
+import task.TaskUIFormat;
 
 
 
@@ -182,8 +183,8 @@ public class StorageAPI {
 	 * @return
 	 */
 	
-	public ArrayList<Task> getAllTasks(){
-		return storage.getTaskList();
+	public TaskUIFormat getAllTasks(){
+		return storage.getAllTasks();
 	}
 	
 	/**
@@ -195,7 +196,7 @@ public class StorageAPI {
 	 * @throws Exception
 	 */
 	
-	public ArrayList<Task> search(Calendar startTime, Calendar endTime) throws Exception{
+	public TaskUIFormat search(Calendar startTime, Calendar endTime) throws Exception{
 		return storage.searchTask(startTime, endTime);
 	}
 	
@@ -207,8 +208,8 @@ public class StorageAPI {
 	 * @throws Exception
 	 */
 	
-	public Task search(int index) throws Exception{
-		return storage.search(index);
+	public Task search(String searchString) throws Exception{
+		return storage.search(searchString);
 	}
 	
 	/**
@@ -218,7 +219,7 @@ public class StorageAPI {
 	 * @throws Exception
 	 */
 	
-	public Task searchName(String taskName) throws Exception{
+	public TaskUIFormat searchName(String taskName) throws Exception{
 		return storage.searchName(taskName);
 	}
 	
@@ -229,7 +230,7 @@ public class StorageAPI {
 	 * @throws Exception
 	 */
 	
-	public ArrayList<Task> searchTag(String tagName) throws Exception{
+	public TaskUIFormat searchTag(String tagName) throws Exception{
 		return storage.searchTag(tagName);
 	}
 	

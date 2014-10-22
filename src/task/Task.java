@@ -161,6 +161,9 @@ public class Task implements Comparable<Task> {
 	 */
 	
 	public boolean isOverdue() {
+		if (isFloatingTask()){
+			return false;
+		}
 		return this.endTime.before(Calendar.getInstance());
 	}
 	
@@ -293,6 +296,20 @@ public class Task implements Comparable<Task> {
 	
 	public int compareTo(Task task){
 		return this.getEndTime().compareTo(task.getEndTime());
+	}
+	
+	/**
+	 * 
+	 * Checks whether Task is supposed to be carried out at the time of invocation.
+	 * 
+	 * @return true if current time is within timeframe of task
+	 */
+	
+	public boolean currentTimedTask(){
+		if (!isTimedTask()){
+			return false;
+		}
+		return this.endTime.after(Calendar.getInstance()) && this.startTime.before(Calendar.getInstance());
 	}
 	
 	/*

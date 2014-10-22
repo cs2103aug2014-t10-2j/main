@@ -8,11 +8,14 @@ import java.util.logging.Logger;
 import storage.Storage;
 import storage.StorageAPI;
 import task.Task;
+import task.TaskUIFormat;
 import ui.FORMAT;
 import ui.UI;
 import interpreter.Command;
 import interpreter.CommandAdd;
 import interpreter.CommandDelete;
+import interpreter.CommandSearchName;
+import interpreter.CommandSearchTime;
 import interpreter.CommandUpdate;
 import interpreter.CommandView;
 
@@ -59,16 +62,19 @@ public class ZombieTaskCommandHandler {
 	 */
 	
 	private static Logger logger = ZombieTask.getLogger();
+	
 	private static String currentCommandDescriptor = null;
 	private static String currentCommandString = null;
 	private static Command currentCommand = null;
 	private static Task currentTask = null;
+	
 	private static ArrayList<String> futureCommandDescriptorList = new ArrayList<String>();
 	private static ArrayList<Command> futureCommandList = new ArrayList<Command>();
 	private static ArrayList<Task> futureTaskList = new ArrayList<Task>();
 	private static ArrayList<String> pastCommandDescriptorList = new ArrayList<String>();
 	private static ArrayList<Command> pastCommandList = new ArrayList<Command>();
 	private static ArrayList<Task> pastTaskList = new ArrayList<Task>();
+	
 	private static StorageAPI storage;
 	
 	/*
@@ -111,6 +117,14 @@ public class ZombieTaskCommandHandler {
 			break;
 		case COMMAND_HELP:
 			help();
+			break;
+		case COMMAND_SEARCH_NAME:
+			searchName(currentCommand);
+			break;
+		case COMMAND_SEARCH_TIME:
+			searchTime(currentCommand);
+		case COMMAND_EXIT:
+			exit();
 			break;
 		default:
 		case COMMAND_INVALID:
@@ -190,7 +204,7 @@ public class ZombieTaskCommandHandler {
 		try{
 			CommandView currentViewCommand = (CommandView) command;
 			FORMAT viewFormat = currentViewCommand.getViewType();
-			ArrayList<Task> allTasks = storage.getAllTasks();
+			TaskUIFormat allTasks = storage.getAllTasks();
 			
 			switch (viewFormat){
 			case AGENDA:
@@ -387,6 +401,20 @@ public class ZombieTaskCommandHandler {
 	
 	protected static void help() {
 		showToUser(MESSAGE_HELP);
+	}
+	
+	protected static void searchName(Command command) throws Exception{
+		CommandSearchName searchCommand = (CommandSearchName) command;
+		storage.searchName(searchCommand.getSearchString());
+	}
+	
+	protected static void searchTime(Command command) throws Exception{
+		CommandSearchTime searchCommand = (CommandSearchTime) command;
+		storage.search(searchCommand.getTimeStart(), searchCommand.getTimeEnd());
+	}
+	
+	protected static void exit(){
+		ZombieTask.exitProgram();
 	}
 	
 	/*
