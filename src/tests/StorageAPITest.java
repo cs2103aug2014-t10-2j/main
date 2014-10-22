@@ -19,53 +19,123 @@ import storage.StorageAPI;
 import task.Task;
 
 public class StorageAPITest {
+	
 	StorageAPI testStorage = new StorageAPI();
 	String filename = "ZombieStorage.txt";
 	String filenameTest = "Text.txt";
 	File file = null;
+	
 	String expected = null;
 	String result = null;
 	String taskName = "tempTask";
 	String updateName = "updateName";
+	
 	int  testID = 0;
-	Calendar deadline; //= Calendar.getInstance();
+	
+	Calendar deadline; 
 	Calendar date1 = new GregorianCalendar(2000,1,1) ;
 	Calendar date2 = new GregorianCalendar(2000,1,2) ;
 	
-	Task tempTask = null; // new Task(taskName, deadline);
-	Task updateTask = null; //new Task(updateName, deadline);
-	Task task1 = null; //new Task(taskName, date1);
-	Task task2 = null; //new Task(updateName, date2);
 	
+	Task task1 = null;
+	Task task2 = null; 
+	Task task3 = null; 
+	Task task4 = null; 
+	Task deletedTask;
+	/**
+	 *  clear the file and set 4 Tasks which will be used later
+	 * @throws Exception
+	 */
 	@Before
+	
 	public void setUp() throws Exception {
-		testStorage.createFile();
+		StorageAPI.createFile();
 		file = testStorage.getFile();
 		
 	    	FileWriter fw = new FileWriter(file,false);
 			fw.write("");
 			fw.flush();
 			fw.close();
-	
+			task1 = new Task(taskName, date1);
+			task2 = new Task(updateName, date2);
+			task3 = new Task(updateName, deadline);
+			task4 = new Task(taskName);
 	}
-
+	
+	/**
+	 * testing for addTask(Task)
+	 * @throws IOException
+	 */
 	@Test
+	
 	public void testAddTask() throws IOException {
 		
-		testStorage.add(tempTask);
+		testStorage.add(task4);
 		BufferedReader br = new BufferedReader(new FileReader(file));
-		result = br.readLine();
+		result = br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine();
 		br.close();
-		expected = "[{\"tags\":[],\"subtasks\":[],\"taskName\":\"tempTask\"}]";
-		assertEquals(expected, result);
+		expected = "{  \"taskList\": [    {      \"taskName\": \"tempTask\",      \"endTime\": null,      \"startTime\": null,      \"tags\": [],      \"subtasks\": []    }  ]}";
+		testStorage.delete(task4);
+		assertEquals("problems:",expected, result);
+		
 		//fail("Not yet implemented");
 	}
 
+	/**
+	 * testing for deleteTask(Task)
+	 * @throws IOException
+	 */
 	@Test
+	
+	public void testDeleteTask() throws IOException {
+		testStorage.add(deletedTask);
+		testStorage.delete(deletedTask);
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		result = br.readLine()+ br.readLine()+ br.readLine();
+		br.close();
+		expected = "{  \"taskList\": []}";
+		assertEquals("problems:",expected, result);
+		//fail("Not yet implemented");
+	}
+	
+	/**
+	 * testing for getAllTasks()
+	 * @throws Exception
+	 */
+	@Test
+	public void testDisplayAll() throws Exception{
+		
+		testStorage.add(task4);
+		testStorage.add(task3);
+		ArrayList <Task> tempTest = new ArrayList <Task> ();
+		ArrayList <Task> expectedTest = new ArrayList <Task> ();
+		tempTest = testStorage.getAllTasks();
+		
+		expectedTest.add(task4);
+		expectedTest.add(task3);
+		
+		assertEquals(expectedTest.get(0).getSubtask(),tempTest.get(0).getSubtask());
+		assertEquals(expectedTest.get(0).getEndTime(),tempTest.get(0).getEndTime());
+		assertEquals(expectedTest.get(0).getTags(),tempTest.get(0).getTags());
+		assertEquals(expectedTest.get(0).getTaskName(),tempTest.get(0).getTaskName());
+		assertEquals(expectedTest.get(1).getSubtask(),tempTest.get(1).getSubtask());
+		assertEquals(expectedTest.get(1).getEndTime(),tempTest.get(1).getEndTime());
+		assertEquals(expectedTest.get(1).getTags(),tempTest.get(1).getTags());
+		assertEquals(expectedTest.get(1).getTaskName(),tempTest.get(1).getTaskName());
+		testStorage.delete(task4);
+		testStorage.delete(task3);
+	}
+	
+	/**
+	 * testing for search(int)
+	 * @throws Exception
+	 */
+	@Test
+	
 	public void testSearchIntArray() throws Exception {
-		testStorage.add(tempTask);
+		testStorage.add(task4);
 		Task testResult = testStorage.search(testID);
-		Task testExpected = tempTask;
+		Task testExpected = task4;
 		
 		assertEquals(testExpected.getSubtask(),testResult.getSubtask());
 		assertEquals(testExpected.getEndTime(),testResult.getEndTime());
@@ -75,8 +145,14 @@ public class StorageAPITest {
 		//fail("Not yet implemented");
 	}
 	
+	/**
+	 * testing for searchTwoDate(Calendar,Calendar)
+	 * @throws Exception
+	 */
 	@Test
+	
 	public void testSearchTwoDate() throws Exception {
+		
 		testStorage.add(task1);
 		testStorage.add(task2);
 		ArrayList<Task> tempTest = new ArrayList<Task> ();
@@ -95,60 +171,71 @@ public class StorageAPITest {
 		assertEquals(expectedTest.get(1).getTags(),tempTest.get(1).getTags());
 		assertEquals(expectedTest.get(1).getTaskName(),tempTest.get(1).getTaskName());
 	}
-
-	@Test
-	public void testDeleteTask() throws IOException {
-		//testStorage.add(tempTask);
-		testStorage.delete(updateTask);
-		BufferedReader br = new BufferedReader(new FileReader(file));
-		result = br.readLine();
-		br.close();
-		expected = null;
-		assertEquals(expected, result);
-		//fail("Not yet implemented");
+	
+	/**
+	 *  testing for searchName(String)
+	 * @throws Exception
+	 */
+	@Test 
+	
+	public  void testSearchName() throws Exception {
+		testStorage.add(task1);
+		testStorage.add(task2);
+		Task testResult = testStorage.searchName(taskName);
+		Task testExpected = task1;
+		assertEquals(testExpected.getSubtask(),testResult.getSubtask());
+		assertEquals(testExpected.getEndTime(),testResult.getEndTime());
+		assertEquals(testExpected.getTags(),testResult.getTags());
+		assertEquals(testExpected.getTaskName(),testResult.getTaskName());
+		testStorage.delete(task1);
+		testStorage.delete(task2);
 	}
+	
+	/**
+	 *  testing for searchTag(String)
+	 * @throws Exception
+	 */
+	@Test
+	
+	public void testSearchTag() throws Exception {
+		testStorage.add(task1);
+		testStorage.add(task2);
+		task1.addTag("justForTest");
+		ArrayList<Task> testResultList = testStorage.searchTag("justForTest");
+		Task testResult = testResultList.get(0);
+		Task testExpected = task1;
+		assertEquals(testExpected.getSubtask(),testResult.getSubtask());
+		assertEquals(testExpected.getEndTime(),testResult.getEndTime());
+		assertEquals(testExpected.getTags(),testResult.getTags());
+		assertEquals(testExpected.getTaskName(),testResult.getTaskName());
+		testStorage.delete(task1);
+		testStorage.delete(task2);
+	}
+
+	
 
 	/*
 	
 	@Test
-	public void testUpdateTaskTask() throws Exception {
+	public void testtask3Task() throws Exception {
 		
-		testStorage.update(tempTask, updateTask);
+		testStorage.update(tempTask, task3);
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		result = br.readLine();
 		br.close();
 		expected = "[{\"tags\":[],\"subtasks\":[],\"taskName\":\"updateName\"}]";
-		assertEquals(expected, result);
+		assertEquals("problems:",expected, result);
 		//fail("Not yet implemented");
 	}
 	
 	*/
 
-	@Test
-	public void testDisplayAll() throws Exception{
-		testStorage.add(tempTask);
-		testStorage.add(updateTask);
-		ArrayList <Task> tempTest = new ArrayList <Task> ();
-		ArrayList <Task> expectedTest = new ArrayList <Task> ();
-		tempTest = testStorage.getAllTasks();
-		expectedTest.add(tempTask);
-		expectedTest.add(updateTask);
-		testStorage.delete(tempTask);
-		testStorage.delete(updateTask);
-		assertEquals(expectedTest.get(0).getSubtask(),tempTest.get(0).getSubtask());
-		assertEquals(expectedTest.get(0).getEndTime(),tempTest.get(0).getEndTime());
-		assertEquals(expectedTest.get(0).getTags(),tempTest.get(0).getTags());
-		assertEquals(expectedTest.get(0).getTaskName(),tempTest.get(0).getTaskName());
-		assertEquals(expectedTest.get(1).getSubtask(),tempTest.get(1).getSubtask());
-		assertEquals(expectedTest.get(1).getEndTime(),tempTest.get(1).getEndTime());
-		assertEquals(expectedTest.get(1).getTags(),tempTest.get(1).getTags());
-		assertEquals(expectedTest.get(1).getTaskName(),tempTest.get(1).getTaskName());
-	}
+	
 
 	@Test
 	public void testSetFile() throws IOException {
 		testStorage.setFile(filenameTest);
-		testStorage.createFile();
+		StorageAPI.createFile();
 		file = testStorage.getFile();
 		
 		assertEquals(file.getName(),filenameTest);
@@ -157,7 +244,7 @@ public class StorageAPITest {
 
 	@Test
 	public void testCreateFile() throws IOException {
-		testStorage.createFile();
+		StorageAPI.createFile();
 		file = testStorage.getFile();
 		assertEquals(file.getName(),filename);
 		//fail("Not yet implemented");
@@ -165,5 +252,5 @@ public class StorageAPITest {
 	
 	
 	
-
+	
 }

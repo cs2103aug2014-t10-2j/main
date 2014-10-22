@@ -66,12 +66,12 @@ public class Storage {
 				continue;
 			}
 			if (task.getStartTime() == null){
-				if (task.getEndTime().before(endTime) && task.getEndTime().after(startTime)){
+				if (task.getEndTime().compareTo(endTime)<=0 && task.getEndTime().compareTo(startTime)>=0){
 					searchTaskList.add(task);
 				}
 				continue;
 			}
-			if (task.getEndTime().before(endTime) && task.getStartTime().after(startTime)){
+			if (task.getEndTime().compareTo(endTime)<=0 && task.getStartTime().compareTo(endTime)<=0){
 				searchTaskList.add(task);
 			}
 		}
@@ -85,6 +85,31 @@ public class Storage {
 		return taskList.get(index);
 	}
 	
+	public Task searchName(String taskName) throws Exception{
+		for(Task task : taskList){
+			if(task.getTaskName()==taskName){
+				return task;
+			}
+		}
+		return null;
+	}
 	
+	public ArrayList<Task> searchTag(String tagName) throws Exception{
+		ArrayList<Task> searchTaskList = new ArrayList<Task> ();
+		for(Task task: taskList){
+			ArrayList<String> tagList= task.getTags();
+			for(String tagContent : tagList){
+				if(tagContent == tagName){
+					searchTaskList.add(task);
+					break;
+				}
+			}
+		}
+		if(searchTaskList.size()!=0){
+			return searchTaskList;
+		}else{
+			return null;
+		}
+	}
 
 }

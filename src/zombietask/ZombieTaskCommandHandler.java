@@ -287,7 +287,10 @@ public class ZombieTaskCommandHandler {
 		}
 		
 		//Get old task
-		Task oldTask = storage.search(currentUpdateCommand.getLineNo());
+		/*
+		 * Note old method depriciated.
+		 */
+		//Task oldTask = storage.search(currentUpdateCommand.getLineCode());
 		
 		//delete old task
 		try {
