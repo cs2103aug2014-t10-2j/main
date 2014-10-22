@@ -39,6 +39,7 @@ public class ZombieLogger {
 	private static Logger logger;
 	private static String FILENAME = DEFAULT_FILENAME;
 	private static Level level = DEFAULT_LEVEL;
+	private static boolean initialized = false;
 	
 	/**
 	 * Initializes logger
@@ -48,6 +49,13 @@ public class ZombieLogger {
 		logger = Logger.getGlobal();
 		setLevel(level);
 		setFileHandler();
+	}
+	
+	public static void initOnce(){
+		if (!initialized) {
+			initLogger();
+			initialized = true;
+		}
 	}
 	
 	/**
@@ -60,6 +68,7 @@ public class ZombieLogger {
 	 */
 
 	public static Logger getLogger(){
+		initOnce();
 		return logger;
 	}
 	

@@ -92,9 +92,10 @@ public class ZombieTask {
 					logger.log(Level.INFO, String.format(MESSAGE_MISSING_ARGUMENTS, currentCommandString));
 					continue;
 				}
+				logger.log(Level.INFO, currentCommandString);
 				ZombieTaskCommandHandler.execute(currentCommand, currentCommandString);
 			} catch (Exception err){
-				showToUser(err.getMessage());
+				err.printStackTrace();
 			}
 
 		}

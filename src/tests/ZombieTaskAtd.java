@@ -49,6 +49,7 @@ public class ZombieTaskAtd {
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
+		
 		/*
 		 * Delete all used files
 		 */
