@@ -3,7 +3,7 @@ package storage;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import zombietask.Task;
+import task.Task;
 
 /**
  * Storage module for ZombieTask
