@@ -3,7 +3,7 @@ package ui;
  * UI.java
  * Author: Lian Jie Nicholas
  * First Updated: 26/09/2014
- * Last Updated: 19/10/2014
+ * Last Updated: 22/10/2014
  * 
  * UPDATE 16/10/2014:
  * 1. Renamed all references to yearly into annual.
@@ -14,13 +14,14 @@ package ui;
  * 3. Removed printCalendar() method.
  * UPDATE 19/10/2014:
  * 1. Refactored hasOverdue() functionality
+ * UPDATE 22/10/2014: Adapted to handle prefixes and getEndTime()
  */
 
-import java.io.InvalidClassException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import zombietask.Task;
 
@@ -30,10 +31,11 @@ public class UI
 	public static final FORMAT DAILY = FORMAT.DAILY;
 	public static final FORMAT WEEKLY = FORMAT.WEEKLY;
 	public static final FORMAT MONTHLY = FORMAT.MONTHLY;
-	public static final FORMAT YEARLY = FORMAT.ANNUAL;
+	public static final FORMAT ANNUAL = FORMAT.ANNUAL;
 	public static final FORMAT INVALID = FORMAT.INVALID;
-	private static final Format FORMAT_DATEMTH = new SimpleDateFormat("dd/MM");
-	private static final Format FORMAT_DATETIME = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+	//private static final Format FORMAT_DATEMTH = new SimpleDateFormat("dd/MM");
+	private static final Format FORMAT_DATETIME = new SimpleDateFormat("dd/MM/yy HH:mm");
+	private static final Format FORMAT_DATEONLY = new SimpleDateFormat("dd/MM/yy");
 	private static final Format FORMAT_DAYDATE = new SimpleDateFormat("EEEEE, dd MMMMM yyyy");
 	private static final Format FORMAT_TODAY = new SimpleDateFormat("dd MMMMM yyyy, HH:mm");
 	private static final Format FORMAT_WEEKNUM = new SimpleDateFormat("ww");
@@ -41,133 +43,178 @@ public class UI
 	private static final int WEEKLY_LIMIT = 28;
 	private static final int MONTHLY_LIMIT = 30;
 	private static final int ANNUAL_LIMIT = 52;
-	private static String str;
-	private static int index;
+	
 	// PRIMARY USE METHODS
-	public static void printResponse(String response)
-	{
+	public static void printResponse(String response) {
 		System.out.println(response);
 	}
-	public static void printPerspective(FORMAT format, ArrayList<Task> tasks) throws InvalidClassException
-	{
-		if(tasks instanceof ArrayList<?> == false)
-			throw new InvalidClassException("ArrayList error");
-		if(tasks.get(0) instanceof Task == false)
-			throw new InvalidClassException("Task error");
-		if(tasks.isEmpty())
-		{
+	public static void printPerspective(FORMAT format, ArrayList<Task> tasks)
+		throws Exception {
+		if(tasks.isEmpty()) {
 			System.out.println("No tasks within time period." + format);
 			return;
 		}
 		tasks = sortTasks(tasks);
-		str = "";
-		index = 0;
-		switch(format)
-		{
-			case AGENDA:	printAgenda(tasks);	break;
-			case DAILY:		printDaily(tasks);	break;
-			case WEEKLY:	printWeekly(tasks);	break;
-			case MONTHLY:	printMonthly(tasks);	break;
-			case ANNUAL:	printAnnual(tasks);	break;
+		String str = "";
+		switch(format) {
+			case AGENDA:	str = printAgenda(tasks);	break;
+			case DAILY:		str = printDaily(tasks);	break;
+			case WEEKLY:	str = printWeekly(tasks);	break;
+			case MONTHLY:	str = printMonthly(tasks);	break;
+			case ANNUAL:	str = printAnnual(tasks);	break;
 			default:	return;
 		}
 		System.out.println(str);
 	}
-	public static ArrayList<Task> sortTasks(ArrayList<Task> tasks)
-	{
-		for(int i = 1; i < tasks.size(); i++)
-		for(int j = 0; j < tasks.size(); j++)
-		if(tasks.get(i).getDeadline().before(tasks.get(j).getDeadline()))
-			tasks.add(j, tasks.remove(i));
-		return tasks;
-	}
 	// FORMAT METHODS
-	private static void printAgenda(ArrayList<Task> tasks)
-	{
+	private static String printAgenda(ArrayList<Task> tasks) throws Exception {
+		String str;
 		str = "(Agenda)\n";
-		hasOverdue(tasks);
+		ArrayList<Task> processedTasks = processTasks(tasks);
+		for(Task task : processedTasks) {
+			if(task.isOverdue())	str += task.getTaskName() + "\n";
+		}
 		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
-		Calendar time = delimitTime(Calendar.getInstance());
-		time.set(Calendar.HOUR_OF_DAY, 0);
-		time.add(Calendar.DATE, 1);
-		while(index < tasks.size())
-		{
-			if(time.before(tasks.get(index).getDeadline()))
-			{
-				str += FORMAT_DAYDATE.format(time.getTime()) + "\n";
-				time.add(Calendar.DATE, 1);
+		Calendar begin = delimitTime(Calendar.getInstance());
+		begin.set(Calendar.HOUR_OF_DAY, 0);
+		Calendar end = delimitTime(Calendar.getInstance());
+		end.set(Calendar.HOUR_OF_DAY, 0);
+		end.add(Calendar.DATE, 1);
+		ArrayList<String> floatingStrings = new ArrayList<String>();
+		for(Task task : processedTasks) {
+			if(task.isDeadline() && task.isOverdue() == false) {
+				while(withinTimePeriod(task.getEndTime(), begin, end) == false) {
+					begin.add(Calendar.DATE, 1);
+					end.add(Calendar.DATE, 1);
+					str += FORMAT_DAYDATE.format(begin.getTime()) + "\n";
+				}
+				str += task.getTaskName() + "\n";
 			}
-			else
-			str += String.format("[%d]: %s\n", index, tasks.get(index++).toString());
+			if(task.isFloatingTask())	floatingStrings.add(task.getTaskName());
 		}
+		if(floatingStrings.isEmpty() == false)
+		{
+			str += "<<<<< Floating Tasks >>>>>\n";
+			for(String string : floatingStrings)	str += string + "\n";
+		}
+		return str;
 	}
-	private static void printDaily(ArrayList<Task> tasks)
-	{
+	private static String printDaily(ArrayList<Task> tasks) throws Exception {
+		String str;
 		str = "(Daily)\n";
-		hasOverdue(tasks);
-		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
-		Calendar time = delimitTime(Calendar.getInstance());
-		for(int i = 0; i < DAILY_LIMIT; i++)
-		{
-			str += String.format("|- %sh:", FORMAT_DATETIME.format(time.getTime()));
-			time.add(Calendar.HOUR_OF_DAY, 1);
-			while(index < tasks.size() && tasks.get(index).getDeadline().before(time))
-				str += String.format(" [%d]%s", index, tasks.get(index++).getTaskName());
-			str += "\n";
+		ArrayList<Task> processedTasks = processTasks(tasks);
+		for(Task task : processedTasks) {
+			if(task.isOverdue())	str += task.getTaskName() + "\n";
 		}
+		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
+		Calendar begin = delimitTime(Calendar.getInstance());
+		Calendar end = delimitTime(Calendar.getInstance());
+		end.add(Calendar.HOUR_OF_DAY, 1);
+		ArrayList<String> daily = new ArrayList<String>();
+		for(int i = 0; i < DAILY_LIMIT; i++) {
+			daily.add(String.format("|- %sh:", FORMAT_DATETIME.format(begin.getTime())));
+			for(Task task : processedTasks) {
+				if(withinTimePeriod(task.getEndTime(), begin, end))
+					daily.set(daily.size() - 1, daily.get(daily.size() - 1) + " " + task.getTaskName());
+			}
+			begin.add(Calendar.HOUR_OF_DAY, 1);
+			end.add(Calendar.HOUR_OF_DAY, 1);
+		}
+		for(String string : daily)	str += string + "\n";
+		return str;
 	}
-	private static void printWeekly(ArrayList<Task> tasks)
-	{
+	private static String printWeekly(ArrayList<Task> tasks) throws Exception {
+		String str;
 		str = "(Weekly)\n";
-		hasOverdue(tasks);
-		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
-		Calendar time = delimitTime(Calendar.getInstance());
-		for(int i = 0; i < WEEKLY_LIMIT; i++)
-		{
-			str += String.format("|- %sh:", FORMAT_DATETIME.format(time.getTime()));
-			time.add(Calendar.HOUR_OF_DAY, 4);
-			while(index < tasks.size() && tasks.get(index).getDeadline().before(time))
-				str += String.format(" [%d]: %s", index, tasks.get(index++).getTaskName());
-			str += "\n";
+		ArrayList<Task> processedTasks = processTasks(tasks);
+		for(Task task : processedTasks) {
+			if(task.isOverdue())	str += task.getTaskName() + "\n";
 		}
+		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
+		Calendar begin = delimitTime(Calendar.getInstance());
+		Calendar end = delimitTime(Calendar.getInstance());
+		end.add(Calendar.HOUR_OF_DAY, 6);
+		ArrayList<String> daily = new ArrayList<String>();
+		for(int i = 0; i < WEEKLY_LIMIT; i++) {
+			daily.add(String.format("|- %sh:", FORMAT_DATETIME.format(begin.getTime())));
+			for(Task task : processedTasks) {
+				if(withinTimePeriod(task.getEndTime(), begin, end))
+					daily.set(daily.size() - 1, daily.get(daily.size() - 1) + " " + task.getTaskName());
+			}
+			begin.add(Calendar.HOUR_OF_DAY, 6);
+			end.add(Calendar.HOUR_OF_DAY, 6);
+		}
+		for(String string : daily)	str += string + "\n";
+		return str;
 	}
-	private static void printMonthly(ArrayList<Task> tasks)
-	{
+	private static String printMonthly(ArrayList<Task> tasks) throws Exception {
+		String str;
 		str = "(Monthly)\n";
-		hasOverdue(tasks);
-		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
-		Calendar time = delimitTime(Calendar.getInstance());
-		time.set(Calendar.HOUR_OF_DAY, 0);
-		for(int i = 0; i < MONTHLY_LIMIT; i++)
-		{
-			str += String.format("|- %s:",FORMAT_DATEMTH.format(time.getTime()));
-			time.add(Calendar.DATE, 1);
-			while(index < tasks.size() && tasks.get(index).getDeadline().before(time))
-				str += String.format(" [%d]: %s", index, tasks.get(index++).getTaskName());
-			str += "\n";
+		ArrayList<Task> processedTasks = processTasks(tasks);
+		for(Task task : processedTasks) {
+			if(task.isOverdue())	str += task.getTaskName() + "\n";
 		}
+		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
+		Calendar begin = delimitTime(Calendar.getInstance());
+		Calendar end = delimitTime(Calendar.getInstance());
+		begin.set(Calendar.HOUR_OF_DAY, 0);
+		end.set(Calendar.HOUR_OF_DAY, 0);
+		end.add(Calendar.DATE, 1);
+		ArrayList<String> daily = new ArrayList<String>();
+		for(int i = 0; i < MONTHLY_LIMIT; i++) {
+			daily.add(String.format("|- %s:", FORMAT_DATEONLY.format(begin.getTime())));
+			for(Task task : processedTasks) {
+				if(withinTimePeriod(task.getEndTime(), begin, end))
+					daily.set(daily.size() - 1, daily.get(daily.size() - 1) + " " + task.getTaskName());
+			}
+			begin.add(Calendar.DATE, 1);
+			end.add(Calendar.DATE, 1);
+		}
+		for(String string : daily)	str += string + "\n";
+		return str;
 	}
-	private static void printAnnual(ArrayList<Task> tasks)
+	private static String printAnnual(ArrayList<Task> tasks) throws Exception
 	{
+		String str;
 		str = "(Annual)\n";
-		hasOverdue(tasks);
-		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
-		Calendar time = delimitTime(Calendar.getInstance());
-		time.set(Calendar.HOUR_OF_DAY, 0);
-		time.add(Calendar.DATE, 1 - time.get(Calendar.DAY_OF_WEEK));
-		for(int i = 0; i < ANNUAL_LIMIT; i++)
-		{
-			str += String.format("|- Week %s:",FORMAT_WEEKNUM.format(time.getTime()));
-			time.add(Calendar.DATE, 7);
-			while(index < tasks.size() && tasks.get(index).getDeadline().before(time))
-				str += String.format(" [%d]%s", index, tasks.get(index++).getTaskName());
-			str += "\n";
+		ArrayList<Task> processedTasks = processTasks(tasks);
+		for(Task task : processedTasks) {
+			if(task.isOverdue())	str += task.getTaskName() + "\n";
 		}
+		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
+		Calendar begin = delimitTime(Calendar.getInstance());
+		Calendar end = delimitTime(Calendar.getInstance());
+		begin.set(Calendar.HOUR_OF_DAY, 0);
+		end.set(Calendar.HOUR_OF_DAY, 0);
+		begin.add(Calendar.DATE, 1 - begin.get(Calendar.DAY_OF_WEEK));
+		end.add(Calendar.DATE, 8 - begin.get(Calendar.DAY_OF_WEEK));
+		ArrayList<String> daily = new ArrayList<String>();
+		for(int i = 0; i < ANNUAL_LIMIT; i++) {
+			daily.add(String.format("|- Week %s:", FORMAT_WEEKNUM.format(begin.getTime())));
+			for(Task task : processedTasks) {
+				if(withinTimePeriod(task.getEndTime(), begin, end))
+					daily.set(daily.size() - 1, daily.get(daily.size() - 1) + " " + task.getTaskName());
+			}
+			begin.add(Calendar.DATE, 7);
+			end.add(Calendar.DATE, 7);
+		}
+		for(String string : daily)	str += string + "\n";
+		return str;
 	}
 	// MISCELLENEOUS METHODS
-	public static String taskToString(Task task)
+	public static String taskToString(String name, int index, char check, Date date)
 	{
-		return String.format("%s [%s]", task.getTaskName(), FORMAT_DATETIME.format(task.getDeadline().getTime()));
+		char prefix = (check == 'S' || check == 'E') ? 'T' : check;
+		String str = "(" + prefix + index + "): ";
+		str += name;
+		switch(check)
+		{
+			case 'S': return str + " [" + FORMAT_DATETIME.format(date) + "][Start]";
+			case 'E': return str + " [" + FORMAT_DATETIME.format(date) + "][End]";
+			case 'D': return str + " [" + FORMAT_DATETIME.format(date) + "]";
+			case 'F': return str;
+			default:  return "!!!!!";
+		}
 	}
 	// Standardizes Calendar.getInstance() by zeroing smaller values
 	private static Calendar delimitTime(Calendar time)
@@ -177,14 +224,45 @@ public class UI
 		time.set(Calendar.MILLISECOND, 0);
 		return time;
 	}
-	// If any overdue tasks exists, prints them in overdue column 
-	private static void hasOverdue(ArrayList<Task> tasks)
+	private static ArrayList<Task> processTasks(ArrayList<Task> tasks) throws Exception
 	{
-		if(tasks.get(0).isOverdue())
-		{
-			str += "!!! Overdue !!!\n";
-			while(tasks.get(index).isOverdue() && index < tasks.size())
-				str += String.format("[%d]: %s\n", index, tasks.get(index++).toString());
+		ArrayList<Task> pTasks = new ArrayList<Task>();
+		int index = 0;
+		String str;
+		for(Task task : tasks) {
+			if(task.isTimedTask()) {
+				str = taskToString(task.getTaskName(), index, 'S', task.getStartTime().getTime());
+				pTasks.add(new Task(str, task.getStartTime()));
+				str = taskToString(task.getTaskName(), index++, 'E', task.getEndTime().getTime());
+				pTasks.add(new Task(str, task.getEndTime()));
+			}
+			else if(task.isDeadline()) {
+				str = taskToString(task.getTaskName(), index++, 'D', task.getEndTime().getTime());
+				pTasks.add(new Task(str, task.getEndTime()));
+			}
+			else if(task.isFloatingTask()) {
+				str = taskToString(task.getTaskName(), index++, 'F', null);
+				pTasks.add(new Task(str));
+			}
+			
 		}
+		return pTasks;
+	}
+	public static ArrayList<Task> sortTasks(ArrayList<Task> tasks) {
+		ArrayList<Task> floatingTasks = new ArrayList<Task>();
+		for(int i = 1; i < tasks.size(); i++) {
+			if(tasks.get(i).isFloatingTask())	floatingTasks.add(tasks.remove(i));
+		}
+		for(int j = 1; j < tasks.size(); j++)
+		for(int k = 0; k < tasks.size(); k++)
+		if(tasks.get(j).getEndTime().before(tasks.get(k).getEndTime()))
+			tasks.add(k, tasks.remove(j));
+		tasks.addAll(floatingTasks);
+		return tasks;
+	}
+	public static boolean withinTimePeriod(Calendar time, Calendar begin, Calendar end)
+	{
+		if(time == null)	return false;
+		return (time.compareTo(begin) >= 0 && time.compareTo(end) < 0) ? true : false;
 	}
 }
