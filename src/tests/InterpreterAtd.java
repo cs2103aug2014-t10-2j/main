@@ -431,6 +431,12 @@ public class InterpreterAtd {
 
 	@Test
 	public void testGetCommandView() throws Exception {
+		
+		/*
+		 * Calendar now decpreciated
+		 */
+		
+		/*
 		// Test 1: Basic function
 		Command command = Interpreter.getCommand("view calendar");
 		assertEquals(Command.VIEW, command.getCommandType());
@@ -438,11 +444,12 @@ public class InterpreterAtd {
 		assertEquals(UI.CALENDAR, view.getViewType());
 		assertEquals("view calendar", view.getUserInput());
 		assertFalse(view.hasMissingArgs());
+		*/
 
 		// Test 2: invalid argument
-		command = Interpreter.getCommand("view cal");
+		Command command = Interpreter.getCommand("view cal");
 		assertEquals(Command.VIEW, command.getCommandType());
-		view = (CommandView) command;
+		CommandView view = (CommandView) command;
 		assertEquals(UI.INVALID, view.getViewType());
 		assertEquals("view cal", view.getUserInput());
 		assertTrue(view.hasMissingArgs());

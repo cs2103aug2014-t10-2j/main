@@ -284,4 +284,18 @@ public class UI
 		if(time == null)	return false;
 		return (time.compareTo(begin) >= 0 && time.compareTo(end) < 0) ? true : false;
 	}
+	
+	public static FORMAT getFormat(String formatString)
+	{
+		switch(formatString.toLowerCase())
+		{
+			case "agenda":		return FORMAT.AGENDA;
+			case "daily":		return FORMAT.DAILY;
+			case "weekly":		return FORMAT.WEEKLY;
+			case "monthly":		return FORMAT.MONTHLY;
+			case "annual":		return FORMAT.ANNUAL;
+			case "calendar":	return FORMAT.CALENDAR;
+			default:			return FORMAT.INVALID;
+		}
+	}
 }

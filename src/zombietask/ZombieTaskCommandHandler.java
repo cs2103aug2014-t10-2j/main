@@ -232,7 +232,7 @@ public class ZombieTaskCommandHandler {
 				setMaximumCalendarField(endMonth, Calendar.SECOND);
 				UI.printPerspective(viewFormat, storage.search(startMonth, endMonth));
 				break;
-			case YEARLY:
+			case ANNUAL:
 				Calendar startYear = new GregorianCalendar();
 				setMinimumCalendarField(startYear, Calendar.DAY_OF_YEAR);
 				setMinimumCalendarField(startYear, Calendar.HOUR_OF_DAY);
