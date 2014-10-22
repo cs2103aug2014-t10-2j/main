@@ -165,7 +165,7 @@ public class ZombieTaskCommandHandler {
 		try{
 			//Get details from Command Object
 			CommandDelete currentDeleteCommand = (CommandDelete) command;
-			int lineNumber = currentDeleteCommand.getLineNo();
+			int lineNumber = currentDeleteCommand.getLineCode();
 			ArrayList<Task> allTasks = storage.getAllTasks();
 			
 			if (lineNumber < allTasks.size() && lineNumber >= 0){

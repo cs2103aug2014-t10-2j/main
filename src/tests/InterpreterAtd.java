@@ -313,31 +313,37 @@ public class InterpreterAtd {
 	@Test
 	public void testGetCommandDelete() throws Exception {
 		// Test 1: Basic function
-		Command command = Interpreter.getCommand("delete 5");
+		Command command = Interpreter.getCommand("delete d5");
 		assertEquals(Command.DELETE, command.getCommandType());
 		CommandDelete delete = (CommandDelete) command;
-		assertEquals(5, delete.getLineNo());
-		assertEquals("delete 5", delete.getUserInput());
-
-		// Test 2: case-insensitivity
-		command = Interpreter.getCommand("DELETE 5");
+		assertEquals("d5", delete.getLineCode());
+		assertEquals("delete d5", delete.getUserInput());
+		
+		command = Interpreter.getCommand("delete t5");
 		assertEquals(Command.DELETE, command.getCommandType());
 		delete = (CommandDelete) command;
-		assertEquals(5, delete.getLineNo());
-		assertEquals("DELETE 5", delete.getUserInput());
+		assertEquals("t5", delete.getLineCode());
+		assertEquals("delete t5", delete.getUserInput());
+
+		// Test 2: case-insensitivity
+		command = Interpreter.getCommand("DELETE F5");
+		assertEquals(Command.DELETE, command.getCommandType());
+		delete = (CommandDelete) command;
+		assertEquals("f5", delete.getLineCode());
+		assertEquals("DELETE F5", delete.getUserInput());
 
 		// Test 3: invalid arguments
 		command = Interpreter.getCommand("delete me");
 		assertEquals(Command.DELETE, command.getCommandType());
 		delete = (CommandDelete) command;
-		assertEquals(Interpreter.INVALID_NO, delete.getLineNo());
+		assertNull(delete.getLineCode());
 		assertTrue(delete.hasMissingArgs());
 		assertEquals("delete me", delete.getUserInput());
 
 		command = Interpreter.getCommand("delete");
 		assertEquals(Command.DELETE, command.getCommandType());
 		delete = (CommandDelete) command;
-		assertEquals(Interpreter.INVALID_NO, delete.getLineNo());
+		assertNull(delete.getLineCode());
 		assertTrue(delete.hasMissingArgs());
 		assertEquals("delete", delete.getUserInput());
 	}
