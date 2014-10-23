@@ -81,7 +81,6 @@ public class ZombieTask {
 	 */
 	
 	public static void main(String[] args) throws Exception {
-		
 		showToUser(MESSAGE_WELCOME);
 		initStorage(args);
 		

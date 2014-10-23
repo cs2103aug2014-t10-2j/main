@@ -234,6 +234,18 @@ public class StorageAPI {
 		return storage.searchTag(tagName);
 	}
 	
+	/**
+	 * Returns index of task with respect to the data inside
+	 * storage
+	 * 
+	 * @param task
+	 * @return
+	 */
+	
+	public String indexOf(Task task){
+		return storage.indexOf(task);
+	}
+	
 	/*
 	 * DEPRECIATED METHODS AND VARIABLES
 	 */

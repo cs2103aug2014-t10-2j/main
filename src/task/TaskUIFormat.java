@@ -45,9 +45,12 @@ public class TaskUIFormat {
 	private ArrayList<Task> floatingTasks;
 	private ArrayList<Task> deadlineTasks;
 	private ArrayList<Task> timedTasks;
+	private int floatingIndex = 0;
+	private int deadlineIndex = 0;
+	private int timedIndex = 0;
 	
 	/*
-	 * 
+	 
 	private boolean hasSorted = false;
 	
 	public TaskUIFormat(ArrayList<Task> taskList){
@@ -76,7 +79,6 @@ public class TaskUIFormat {
 	*/
 	
 	public TaskUIFormat(ArrayList<Task> newFloatingTasks, ArrayList<Task> newDeadlineTasks, ArrayList<Task> newTimedTasks){
-		
 		floatingTasks = newFloatingTasks;
 		deadlineTasks = newDeadlineTasks;
 		timedTasks = newTimedTasks;
@@ -125,22 +127,27 @@ public class TaskUIFormat {
 	 */
 	
 	public Task nextTask(){
-		if (floatingTasks == null || floatingTasks.isEmpty() && deadlineTasks.isEmpty() && timedTasks.isEmpty()){
-			return null;
+		Task tempTask = null;
+		if (floatingTasks == null || floatingTasks.size() == floatingIndex &&
+				deadlineTasks.size() == deadlineIndex && timedTasks.size() == timedIndex){
+			;
+		}else if (floatingTasks != null && !(floatingTasks.size() == floatingIndex)){
+			tempTask = floatingTasks.get(floatingIndex);
+			floatingIndex++;
+		}else if (deadlineTasks.size() == deadlineIndex){
+			tempTask = timedTasks.get(timedIndex);
+			timedIndex++;
+		}else if (timedTasks.size() == timedIndex){
+			tempTask = deadlineTasks.get(deadlineIndex);
+			deadlineIndex++;
+		}else if (deadlineTasks.get(deadlineIndex).getEndTime().before(timedTasks.get(timedIndex).getEndTime())){
+			tempTask = deadlineTasks.get(deadlineIndex);
+			deadlineIndex++;
+		}else {
+			tempTask = timedTasks.get(timedIndex);
+			timedIndex++;
 		}
-		if (floatingTasks != null && !floatingTasks.isEmpty()){
-			return floatingTasks.remove(0);
-		}
-		if (deadlineTasks.isEmpty()){
-			return timedTasks.remove(0);
-		}
-		if (timedTasks.isEmpty()){
-			return deadlineTasks.remove(0);
-		}
-		if (deadlineTasks.get(0).getEndTime().before(floatingTasks.get(0).getEndTime())){
-			return deadlineTasks.remove(0);
-		}
-		return floatingTasks.remove(0);
+			return tempTask;
 	}
 	
 	/*

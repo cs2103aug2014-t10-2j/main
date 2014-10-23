@@ -27,8 +27,11 @@ import java.util.Date;
 import java.util.logging.Logger;
 
 import logger.ZombieLogger;
+import storage.Storage;
+import storage.StorageAPI;
 import task.Task;
 import task.TaskUIFormat;
+import zombietask.ZombieTask;
 
 public class UI
 {
@@ -46,6 +49,24 @@ public class UI
 	
 	/*
 	 * Class Constants
+	 * 
+	 * Color Standardization
+	 * 
+	 * Names
+	 * 
+	 * Red - Overdue
+	 * Green - Floating Tasks
+	 * Yellow - Dateline Tasks
+	 * Cyan - Timed Tasks
+	 * 
+	 * Tags
+	 * 
+	 * White - all
+	 * 
+	 * SubTasks
+	 * 
+	 * Purple - all
+	 * 
 	 */
 	
 	public static final String RESET = "\u001B[0m";
@@ -67,7 +88,13 @@ public class UI
 	public static final String HEADER_LINE_DOUBLE = "\n\n";
 	public static final String HEADER_LINE_SINGLE = "\n";
 	
-	public static final String PRINTOUT_STYLE = ""
+	public static final String STYLE_VERBOSITY_0 = "%s%s%s%s"; // Tabs | Color | TaskName | Color
+	public static final String STYLE_VERBOSITY_1_TAGS = "%s%s%s%s"; // Tabs | Color | Tags | Color
+	public static final String STYLE_VERBOSITY_1_DATE = "%s%s%s%s"; // Tabs | Color | Date | Color
+	
+	public static final int VERBOSITY_NAME_ONLY = 0;
+	public static final int VERBOSITY_TAG_INCLUSIVE = 1;
+	public static final int VERBOSITY_SUBTASK_INCLUSIVE = 2;
 	
 	public static final FORMAT AGENDA = FORMAT.AGENDA;
 	public static final FORMAT DAILY = FORMAT.DAILY;
@@ -87,6 +114,7 @@ public class UI
 	 */
 	
 	private static Logger logger = ZombieLogger.getLogger();
+	private static StorageAPI storage = ZombieTask.getStorage();
 	
 	/*
 	 *  PRIMARY METHODS
@@ -127,10 +155,14 @@ public class UI
 			String str;
 			switch(format) {
 				case AGENDA:	str = printAgenda(tasks);	break;
+				/*
+				 * Temporary
+				 * 
 				case DAILY:		str = printDaily(tasks);	break;
 				case WEEKLY:	str = printWeekly(tasks);	break;
 				case MONTHLY:	str = printMonthly(tasks);	break;
 				case ANNUAL:	str = printAnnual(tasks);	break;
+				*/
 				default:	return;
 			}
 			System.out.println(str);
@@ -151,15 +183,16 @@ public class UI
 	
 	private static String printAgenda(TaskUIFormat tasks) throws Exception {
 		
-		String str = "(Agenda)\n";
+		String str = HEADER_AGENDA;
 		
 		TaskUIFormat overdueTasks = getOverdueTasks(tasks);
-		if overdueTasks.
-		for (Task task : overdueTasks.getDeadlineTasks()){
-			str += task.getTaskName() + "\n";
-		}
-		for (Task task : overdueTasks.getTimedTasks()){
-			str += task.getTaskName() + "\n";
+		if (!overdueTasks.isEmpty()){
+			for (Task task : overdueTasks.getDeadlineTasks()){
+				str += printTask(task, 0, 0);
+			}
+			for (Task task : overdueTasks.getTimedTasks()){
+				str += printTask(task, 0, 0);
+			}
 		}
 		
 		str += HEADER_TODAY + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
@@ -171,7 +204,7 @@ public class UI
 		end.add(Calendar.DATE, 1);
 		ArrayList<String> floatingStrings = new ArrayList<String>();
 		for(Task task : processedTasks) {
-			if(task.isDeadline() && task.isOverdue() == false) {
+			if(task.isDeadlineTask() && task.isOverdue() == false) {
 				while(withinTimePeriod(task.getEndTime(), begin, end) == false) {
 					begin.add(Calendar.DATE, 1);
 					end.add(Calendar.DATE, 1);
@@ -190,6 +223,43 @@ public class UI
 			}
 		}
 		return str;
+	}
+	
+	/**
+	 * Returns a pretty printing version of Task for printing.
+	 * 
+	 * Verbosity increases the amount of information printed out.
+	 * 	0 for name only
+	 * 	1 for name + tags
+	 *  2 for name + tags + Subtasks
+	 * 
+	 * Tab is used for subTask pretty printing.
+	 * 
+	 * @param task
+	 * @param verbosity integer
+	 * @param tab integer
+	 * @return String
+	 */
+	
+	private static String printTask(Task task, int verbosity, int tab){
+		String response = "";
+		if (task == null || verbosity < 0){
+			return response;
+		}
+		if (verbosity == 0){
+			return response.concat(String.format(STYLE_VERBOSITY_0, "", getTaskColor(),
+					task.getTaskName(),getTaskColour()));
+		}
+		if (verbosity == 1){
+			response = response.concat(String.format(STYLE_VERBOSITY_0, "", getTaskColor(),
+					task.getTaskName(),getTaskColour()));
+			return ;
+		}
+		/*
+		while()
+		*/
+		assert(response != null);
+		return response;
 	}
 	
 	private static TaskUIFormat getOverdueTasks(TaskUIFormat tasks){

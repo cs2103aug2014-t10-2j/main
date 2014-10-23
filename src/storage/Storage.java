@@ -101,7 +101,7 @@ public class Storage {
 	}
 
 	public void addTask(Task newTask){
-		if(newTask.isDeadline()){
+		if(newTask.isDeadlineTask()){
 			this.deadlineTasks.add(newTask);
 		}else if (newTask.isFloatingTask()){
 			this.floatingTasks.add(newTask);
@@ -125,7 +125,7 @@ public class Storage {
 	
 	public void removeTask(Task searchTask){
 		
-		if(searchTask.isDeadline()){
+		if(searchTask.isDeadlineTask()){
 			this.deadlineTasks.remove(searchTask);
 		}else if (searchTask.isFloatingTask()){
 			this.floatingTasks.remove(searchTask);
@@ -253,6 +253,27 @@ public Task search(String lineCode){
 	
 	public TaskUIFormat getAllTasks(){
 		return new TaskUIFormat(floatingTasks, deadlineTasks, timedTasks);
+	}
+	
+	/**
+	 * Returns index of task with respect to the data inside
+	 * storage
+	 * 
+	 * @param task
+	 * @return
+	 */
+	
+	public String indexOf(Task task){
+		if (task.isFloatingTask()){
+			return "f".concat(String.valueOf(floatingTasks.indexOf(task)));
+		}
+		if (task.isDeadlineTask()){
+			return "d".concat(String.valueOf(deadlineTasks.indexOf(task)));
+		}
+		if (task.isTimedTask()){
+			return "t".concat(String.valueOf(timedTasks.indexOf(task)));
+		}
+		return null;
 	}
 
 }

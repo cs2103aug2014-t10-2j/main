@@ -176,7 +176,7 @@ public class Task implements Comparable<Task> {
 		return this.endTime == null;
 	}
 	
-	public boolean isDeadline() {
+	public boolean isDeadlineTask() {
 		return (this.startTime == null && this.endTime != null);
 	}
 	
