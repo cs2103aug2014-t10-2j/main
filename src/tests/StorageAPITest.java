@@ -134,7 +134,7 @@ public class StorageAPITest {
 	
 	public void testSearchIntArray() throws Exception {
 		testStorage.add(task4);
-		Task testResult = testStorage.search(testID);
+		Task testResult = testStorage.search(""+testID);
 		Task testExpected = task4;
 		
 		assertEquals(testExpected.getSubtask(),testResult.getSubtask());

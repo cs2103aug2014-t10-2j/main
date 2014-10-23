@@ -112,6 +112,9 @@ public class ZombieTaskCommandHandler {
 		case COMMAND_HELP:
 			help();
 			break;
+		case COMMAND_EXIT:
+			System.exit(0);
+			break;
 		default:
 		case COMMAND_INVALID:
 			invalidCommand(currentCommandString);
@@ -291,8 +294,8 @@ public class ZombieTaskCommandHandler {
 		/*
 		 * Note old method depriciated.
 		 */
-		//Task oldTask = storage.search(currentUpdateCommand.getLineCode());
-		Task oldTask = null;
+		Task oldTask = storage.search(currentUpdateCommand.getLineCode());
+		//Task oldTask = null;
 		
 		//delete old task
 		try {

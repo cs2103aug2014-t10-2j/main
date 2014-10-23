@@ -207,8 +207,10 @@ public class StorageAPI {
 	 * @throws Exception
 	 */
 	
-	public Task search(int index) throws Exception{
-		return storage.search(index);
+	public Task search(String index) throws Exception{
+		System.out.println(index);
+		int noIndex = Integer.parseInt(index.substring(1,2));
+		return storage.search(noIndex);
 	}
 	
 	/**
