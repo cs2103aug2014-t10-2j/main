@@ -63,6 +63,11 @@ public class UI
 	public static final String HEADER_WEEKLY = "(Weekly)\n";
 	public static final String HEADER_MONTHLY = "(Monthly)\n";
 	public static final String HEADER_ANNUAL = "(Annual)\n";
+	public static final String HEADER_TODAY = "Current Time: "; //"Today, "
+	public static final String HEADER_LINE_DOUBLE = "\n\n";
+	public static final String HEADER_LINE_SINGLE = "\n";
+	
+	public static final String PRINTOUT_STYLE = ""
 	
 	public static final FORMAT AGENDA = FORMAT.AGENDA;
 	public static final FORMAT DAILY = FORMAT.DAILY;
@@ -149,6 +154,7 @@ public class UI
 		String str = "(Agenda)\n";
 		
 		TaskUIFormat overdueTasks = getOverdueTasks(tasks);
+		if overdueTasks.
 		for (Task task : overdueTasks.getDeadlineTasks()){
 			str += task.getTaskName() + "\n";
 		}
@@ -156,7 +162,8 @@ public class UI
 			str += task.getTaskName() + "\n";
 		}
 		
-		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
+		str += HEADER_TODAY + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
+		
 		Calendar begin = delimitTime(Calendar.getInstance());
 		begin.set(Calendar.HOUR_OF_DAY, 0);
 		Calendar end = delimitTime(Calendar.getInstance());
@@ -174,10 +181,13 @@ public class UI
 			}
 			if(task.isFloatingTask())	floatingStrings.add(task.getTaskName());
 		}
-		if(floatingStrings.isEmpty() == false)
+		
+		if(!tasks.getFloatingTasks().isEmpty())
 		{
 			str += "<<<<< Floating Tasks >>>>>\n";
-			for(String string : floatingStrings)	str += string + "\n";
+			for(Task floatingTask : tasks.getFloatingTasks()){
+				str += floatingTask.getTaskName() + "\n";
+			}
 		}
 		return str;
 	}

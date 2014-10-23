@@ -1,0 +1,56 @@
+{
+  "floatingTasks": [
+    {
+      "taskName": "noob",
+      "endTime": null,
+      "startTime": null,
+      "tags": [],
+      "subtasks": []
+    }
+  ],
+  "deadlineTasks": [
+    {
+      "taskName": "nooy",
+      "endTime": {
+        "year": 2014,
+        "month": 7,
+        "dayOfMonth": 1,
+        "hourOfDay": 8,
+        "minute": 29,
+        "second": 57
+      },
+      "startTime": null,
+      "tags": [],
+      "subtasks": []
+    },
+    {
+      "taskName": "nasd aug",
+      "endTime": {
+        "year": 2014,
+        "month": 7,
+        "dayOfMonth": 2,
+        "hourOfDay": 3,
+        "minute": 0,
+        "second": 0
+      },
+      "startTime": null,
+      "tags": [],
+      "subtasks": []
+    },
+    {
+      "taskName": "asdasd aug",
+      "endTime": {
+        "year": 2014,
+        "month": 7,
+        "dayOfMonth": 3,
+        "hourOfDay": 2,
+        "minute": 0,
+        "second": 0
+      },
+      "startTime": null,
+      "tags": [],
+      "subtasks": []
+    }
+  ],
+  "timedTasks": []
+}

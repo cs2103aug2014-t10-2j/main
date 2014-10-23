@@ -168,13 +168,13 @@ public class Storage {
 		return new TaskUIFormat(null , searchDeadlineList, searchTimedList);
 	}
 	
-public Task search(String searchString){
+public Task search(String lineCode){
 		
-		logger.log(Level.FINER, searchString);
+		logger.log(Level.FINER, lineCode);
 		
-		Matcher matcher = VALID_PATTERN.matcher(searchString);
+		Matcher matcher = VALID_PATTERN.matcher(lineCode);
 		if (matcher.groupCount() < 2) {
-			logger.log(Level.SEVERE, String.format(DEBUG_INVALID_IO, searchString),
+			logger.log(Level.SEVERE, String.format(DEBUG_INVALID_IO, lineCode),
 					new IOException());
 		}
 		

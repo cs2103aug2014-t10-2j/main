@@ -125,12 +125,22 @@ public class TaskUIFormat {
 	 */
 	
 	public Task nextTask(){
-		if (floatingTasks == null || floatingTasks.isEmpty() && deadlineTasks.isEmpty() && )
-		else if (floatingTasks != null && !floatingTasks.isEmpty()){
-			floatingTasks.remove(0);
-		}else if (deadlineTasks.isEmpty()){
-			
+		if (floatingTasks == null || floatingTasks.isEmpty() && deadlineTasks.isEmpty() && timedTasks.isEmpty()){
+			return null;
 		}
+		if (floatingTasks != null && !floatingTasks.isEmpty()){
+			return floatingTasks.remove(0);
+		}
+		if (deadlineTasks.isEmpty()){
+			return timedTasks.remove(0);
+		}
+		if (timedTasks.isEmpty()){
+			return deadlineTasks.remove(0);
+		}
+		if (deadlineTasks.get(0).getEndTime().before(floatingTasks.get(0).getEndTime())){
+			return deadlineTasks.remove(0);
+		}
+		return floatingTasks.remove(0);
 	}
 	
 	/*

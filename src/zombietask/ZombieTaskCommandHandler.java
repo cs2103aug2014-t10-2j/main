@@ -146,15 +146,18 @@ public class ZombieTaskCommandHandler {
 			//Get Details from Command Object
 			CommandAdd currentAddCommand = (CommandAdd) command;
 			String taskName = currentAddCommand.getTaskName();
-			Calendar taskTime = currentAddCommand.getStartDate();
+			Calendar startTime = currentAddCommand.getStartDate();
+			Calendar endTime = currentAddCommand.getEndDate();
 			ArrayList<String> tags = currentAddCommand.getTags();
 			
 			//Create Task
 			currentTask = null;
-			if (taskTime != null){
-				currentTask = new Task(taskName, taskTime);
-			}else{
+			if (startTime == null && endTime == null){
 				currentTask = new Task(taskName);
+			}else if(startTime == null){
+				currentTask = new Task(taskName, endTime);
+			}else{
+				currentTask = new Task(taskName, endTime, startTime);
 			}
 			
 			//Add Tags
@@ -179,9 +182,14 @@ public class ZombieTaskCommandHandler {
 		try{
 			//Get details from Command Object
 			CommandDelete currentDeleteCommand = (CommandDelete) command;
-			int lineNumber = currentDeleteCommand.getLineNo();
-			ArrayList<Task> allTasks = storage.getAllTasks();
-			
+			String lineCode = currentDeleteCommand.getLineCode();
+			currentTask = storage.search(lineCode);
+			storage.delete(currentTask);
+			recordCommand();
+			showToUser(String.format(MESSAGE_DELETE, currentTask.getTaskName()));
+			/*
+			 * ArrayList<Task> allTasks = storage.getAllTasks();
+			 * 
 			if (lineNumber < allTasks.size() && lineNumber >= 0){
 				currentTask = allTasks.remove(lineNumber);
 				storage.delete(currentTask);
@@ -191,6 +199,7 @@ public class ZombieTaskCommandHandler {
 				showToUser(String.format(MESSAGE_OUTOFBOUNDS, lineNumber));
 				throw new IndexOutOfBoundsException("Index is too large or small : " + lineNumber);
 			}
+			*/
 			
 		} catch (Exception err){
 			showToUser(err.getMessage());
@@ -531,7 +540,8 @@ public class ZombieTaskCommandHandler {
 	}
 	
 	private static void showToUser(String displayString) {
-		UI.printResponse(displayString);
+		System.out.println(displayString);
+		//UI.printResponse(displayString);
 	}
 
 }

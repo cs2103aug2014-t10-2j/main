@@ -198,7 +198,8 @@ public class ZombieTask {
 	 */
 	
 	private static void showToUser(String displayString) {
-		UI.printResponse(displayString);
+		System.out.println(displayString);
+		//UI.printResponse(displayString);
 	}
 	
 	public static void exitProgram(){

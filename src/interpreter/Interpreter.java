@@ -76,7 +76,7 @@ public class Interpreter {
 					if (userInputTokens.length > 1) {
 						return getCommandDelete(userInputTokens[1], userInput);
 					} else {
-						return new CommandDelete(INVALID_NO, userInput, true);
+						return new CommandDelete(null, userInput, true);
 					}
 				case Command.UPDATE:
 					if (userInputTokens.length > 2) {
@@ -414,12 +414,26 @@ public class Interpreter {
 	private static CommandDelete getCommandDelete(String secondWord,
 			String userInput) {
 		try {
+			/*
 			int lineNo = Integer.parseInt(secondWord);
 			assert lineNo == (int) lineNo;
-			
 			return new CommandDelete(lineNo, userInput, false);
+			*/
+			
+			secondWord = secondWord.toLowerCase();
+			boolean validSecondWord = secondWord.matches("[" + UPDATE_F + UPDATE_D
+					+ UPDATE_T + "][0-9]+");
+			
+			if (validSecondWord) {
+				return new CommandDelete(secondWord, userInput, false);
+			} else {
+				return new CommandDelete(null, userInput, true);
+			}
+			
 		} catch (Exception e) { // invalid number
-			return new CommandDelete(INVALID_NO, userInput, true);
+			return new CommandDelete(null, userInput, true);
+			//return new CommandDelete(INVALID_NO, userInput, true);
 		}
+		
 	}
 }
