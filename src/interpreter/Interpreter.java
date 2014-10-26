@@ -32,7 +32,7 @@ public class Interpreter {
 	public static final char UPDATE_F = 'f';
 	public static final char UPDATE_D = 'd';
 	public static final char UPDATE_T = 't';
-	
+
 	private static Logger logger = ZombieTask.getLogger();
 
 	/**
@@ -182,6 +182,7 @@ public class Interpreter {
 	 *         a boolean value to indicate missing arguments
 	 */
 	private static Command getCommandView(String secondWord, String userInput) {
+		secondWord = secondWord.toLowerCase().trim();
 		FORMAT viewType = UI.getFormat(secondWord);
 		if (viewType == UI.INVALID) {
 			return new CommandView(viewType, userInput, true);
@@ -224,6 +225,18 @@ public class Interpreter {
 		return tags;
 	}
 
+	private static String getLocation(String[] userInputWords) {
+
+		for (String word : userInputWords) {
+			word = word.trim();
+			if (word.length() > 1 && word.charAt(0) == '>') {
+				return word;
+			}
+		}
+
+		return null;
+	}
+
 	/**
 	 * Returns task name by removing time-related keywords and tags from the
 	 * user input
@@ -233,8 +246,13 @@ public class Interpreter {
 	 * @return the task name, or a description of the task
 	 * @throws NoTaskNameException no task name specified
 	 */
-	private static String getTaskName(String userInput, ArrayList<String> tags)
-			throws NoTaskNameException {
+	private static String getTaskName(String userInput, ArrayList<String> tags,
+			String location) throws NoTaskNameException {
+
+		// remove location
+		if (location != null) {
+			userInput = userInput.replace(location, "");
+		}
 
 		// get and remove first time-related keyword
 		Parser parser = new Parser();
@@ -257,7 +275,7 @@ public class Interpreter {
 			userInput = userInput.replaceFirst(" " + dateKeywords, "");
 			userInput = userInput.replaceFirst(dateKeywords, "");
 		}
-		
+
 		logger.log(Level.INFO, "Task name: " + userInput);
 
 		// remove tags
@@ -266,7 +284,7 @@ public class Interpreter {
 			userInput = userInput.replaceAll(" " + tag, "");
 			userInput = userInput.replaceAll(tag, "");
 		}
-		
+
 		logger.log(Level.INFO, "Task name: " + userInput);
 
 		if (userInput.trim() == "") {
@@ -288,8 +306,9 @@ public class Interpreter {
 	private static Command getCommandAdd(String userInput) {
 
 		ArrayList<String> tags = new ArrayList<String>();
+		String location = null;
 		String taskName = null;
-		String[] userInputWords = userInput.trim().toLowerCase().split(" ");
+		String[] userInputWords = userInput.trim().split(" ");
 
 		// remove escaped numbers and words
 		String escapePattern = "\\s\\" + ESCAPE_CHAR + "\\S+";
@@ -297,17 +316,18 @@ public class Interpreter {
 		while (userInputTemp.contains(" " + ESCAPE_CHAR)) {
 			userInputTemp = userInputTemp.replaceAll(escapePattern, "");
 		}
-		
+
 		assert !userInputTemp.contains(" " + ESCAPE_CHAR);
 
 		Parser parser = new Parser();
 		List<DateGroup> groups = parser.parse(userInputTemp);
 
 		tags = getTags(userInputWords);
+		location = getLocation(userInputWords);
 
 		// remove leading and trailing spaces
 		userInputTemp = userInput.trim();
-		if (userInputWords[0].equals(Command.ADD)) {
+		if (userInputWords[0].toLowerCase().equals(Command.ADD)) {
 			userInputTemp = userInputTemp.substring(4);
 		}
 
@@ -315,16 +335,16 @@ public class Interpreter {
 
 			if (groups.isEmpty()) { // floating task
 
-				taskName = getTaskName(userInputTemp, tags);
+				taskName = getTaskName(userInputTemp, tags, location);
 				taskName = taskName.replace(" " + ESCAPE_CHAR, " ");
-				return new CommandAdd(taskName, null, null, tags, userInput,
-						false);
+				return new CommandAdd(taskName, null, null, tags, location,
+						userInput, false);
 			} else {
 
 				// get first date
 				Date date1 = groups.get(0).getDates().get(0);
 				assert date1 != null;
-				
+
 				Date date2 = null;
 				Calendar cal1 = Calendar.getInstance();
 				cal1.setTime(date1);
@@ -340,30 +360,30 @@ public class Interpreter {
 						date2 = groups.get(1).getDates().get(0);
 						cal2.setTime(date2);
 					} catch (Exception e1) { // only 1 date: deadline task
-						taskName = getTaskName(userInputTemp, tags);
+						taskName = getTaskName(userInputTemp, tags, location);
 						taskName = taskName.replace(" " + ESCAPE_CHAR, " ");
 						assert !taskName.contains(" " + ESCAPE_CHAR);
-						
+
 						return new CommandAdd(taskName, cal1, null, tags,
-								userInput, false);
+								location, userInput, false);
 					}
 				}
 
 				// this removes the first 2 time-related keywords
-				taskName = getTaskName(userInputTemp, tags);
+				taskName = getTaskName(userInputTemp, tags, location);
 				ArrayList<String> tagsTemp = new ArrayList<String>();
-				taskName = getTaskName(taskName, tagsTemp);
+				taskName = getTaskName(taskName, tagsTemp, location);
 				taskName = taskName.replace(" " + ESCAPE_CHAR, " ");
 
 				if (cal1.compareTo(cal2) < 0) { // date1 before date2
-					return new CommandAdd(taskName, cal1, cal2, tags,
+					return new CommandAdd(taskName, cal1, cal2, tags, location,
 							userInput, false);
 				}
-				return new CommandAdd(taskName, cal2, cal1, tags, userInput,
-						false);
+				return new CommandAdd(taskName, cal2, cal1, tags, location,
+						userInput, false);
 			}
 		} catch (NoTaskNameException e) {
-			return new CommandAdd(null, null, null, null, userInput, true);
+			return new CommandAdd(null, null, null, null, null, userInput, true);
 		}
 
 	}
@@ -414,26 +434,19 @@ public class Interpreter {
 	private static CommandDelete getCommandDelete(String secondWord,
 			String userInput) {
 		try {
-			/*
-			int lineNo = Integer.parseInt(secondWord);
-			assert lineNo == (int) lineNo;
-			return new CommandDelete(lineNo, userInput, false);
-			*/
-			
 			secondWord = secondWord.toLowerCase();
-			boolean validSecondWord = secondWord.matches("[" + UPDATE_F + UPDATE_D
-					+ UPDATE_T + "][0-9]+");
-			
+			boolean validSecondWord = secondWord.matches("[" + UPDATE_F
+					+ UPDATE_D + UPDATE_T + "][0-9]+");
+
 			if (validSecondWord) {
 				return new CommandDelete(secondWord, userInput, false);
 			} else {
 				return new CommandDelete(null, userInput, true);
 			}
-			
+
 		} catch (Exception e) { // invalid number
 			return new CommandDelete(null, userInput, true);
-			//return new CommandDelete(INVALID_NO, userInput, true);
 		}
-		
+
 	}
 }

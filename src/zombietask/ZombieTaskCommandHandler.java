@@ -334,8 +334,6 @@ public class ZombieTaskCommandHandler {
 		showToUser(String.format(MESSAGE_INVALID_COMMAND, commandString));
 	}
 	
-	Integer.parseInt("1");
-
 	protected static void undo() {
 		try{
 			// Pop items from pastLists

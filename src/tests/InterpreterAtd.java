@@ -49,28 +49,35 @@ public class InterpreterAtd {
 
 		// Test 1: Basic test
 		Command command = Interpreter.getCommand("add #food eat "
-				+ "something #impt");
+				+ "something #impt >restaurant");
 		assertEquals(Command.ADD, command.getCommandType());
 		CommandAdd add = (CommandAdd) command;
+
 		testTags(add.getTags(), "#food #impt");
+		assertEquals(">restaurant", add.getLocation());
 
 		assertNull(add.getStartDate());
 		assertNull(add.getEndDate());
 
 		assertEquals("eat something", add.getTaskName());
-		assertEquals("add #food eat something #impt", add.getUserInput());
+		assertEquals("add #food eat something #impt >restaurant",
+				add.getUserInput());
 
-		// Test 2: case-insensitivity and white space
-		command = Interpreter.getCommand("   Add    \n#food Eat #impt");
+		// Test 2: case-insensitivity (of command) and white space
+		// case sensitivity of task name, tags and location
+		command = Interpreter
+				.getCommand("   Add    \n#Food >Canteen Eat #impt");
 		assertEquals(Command.ADD, command.getCommandType());
 		add = (CommandAdd) command;
 
 		assertNull(add.getStartDate());
 		assertNull(add.getEndDate());
 
-		testTags(add.getTags(), "#food #impt");
+		testTags(add.getTags(), "#Food #impt");
+		assertEquals(">Canteen", add.getLocation());
+
 		assertEquals("Eat", add.getTaskName());
-		assertEquals("   Add    \n#food Eat #impt", add.getUserInput());
+		assertEquals("   Add    \n#Food >Canteen Eat #impt", add.getUserInput());
 
 		// Test 3: unspecified command
 		command = Interpreter.getCommand("Lunch #impt #food");
@@ -113,7 +120,7 @@ public class InterpreterAtd {
 
 		// Test 1: Basic test
 		Command command = Interpreter.getCommand("add today #food eat "
-				+ "something #impt");
+				+ "something #impt >home");
 		assertEquals(Command.ADD, command.getCommandType());
 		CommandAdd add = (CommandAdd) command;
 
@@ -122,8 +129,11 @@ public class InterpreterAtd {
 		assertNull(add.getEndDate());
 
 		testTags(add.getTags(), "#food #impt");
+		assertEquals(">home", add.getLocation());
+
 		assertEquals("eat something", add.getTaskName());
-		assertEquals("add today #food eat something #impt", add.getUserInput());
+		assertEquals("add today #food eat something #impt >home",
+				add.getUserInput());
 
 		// Test 2: case-insensitivity and white space
 		command = Interpreter.getCommand("   Add   30 Sep \n#food Eat #impt");
@@ -140,18 +150,21 @@ public class InterpreterAtd {
 		assertEquals("   Add   30 Sep \n#food Eat #impt", add.getUserInput());
 
 		// Test 3: unspecified command
-		command = Interpreter.getCommand("30 Sep Lunch #impt #food");
+		command = Interpreter.getCommand("30 Sep Lunch >home #impt #food");
 		assertEquals(Command.ADD, command.getCommandType());
 		add = (CommandAdd) command;
 		testDate(add.getStartDate(), 2014, 8, 30,
 				today.get(Calendar.HOUR_OF_DAY), today.get(Calendar.MINUTE),
 				today.get(Calendar.SECOND));
 		assertNull(add.getEndDate());
+		testTags(add.getTags(), "#impt #food");
+		assertEquals(">home", add.getLocation());
 		assertEquals("Lunch", add.getTaskName());
-		assertEquals("30 Sep Lunch #impt #food", add.getUserInput());
+		assertEquals("30 Sep Lunch >home #impt #food", add.getUserInput());
 
 		// Test 4: escape character
-		command = Interpreter.getCommand("have *three bananas tomorrow #fruit");
+		command = Interpreter
+				.getCommand("have *three bananas >sch tomorrow #fruit");
 		assertEquals(Command.ADD, command.getCommandType());
 		add = (CommandAdd) command;
 
@@ -162,8 +175,11 @@ public class InterpreterAtd {
 		assertNull(add.getEndDate());
 
 		testTags(add.getTags(), "#fruit");
+		assertEquals(">sch", add.getLocation());
+
 		assertEquals("have three bananas", add.getTaskName());
-		assertEquals("have *three bananas tomorrow #fruit", add.getUserInput());
+		assertEquals("have *three bananas >sch tomorrow #fruit",
+				add.getUserInput());
 
 		command = Interpreter.getCommand("read *Friday's papers tomorrow");
 		assertEquals(Command.ADD, command.getCommandType());
@@ -183,7 +199,7 @@ public class InterpreterAtd {
 
 		// Test 1: Basic test
 		Command command = Interpreter.getCommand("add today 1pm #food eat "
-				+ "something #impt 2pm");
+				+ "something #impt 2pm >sch");
 		assertEquals(Command.ADD, command.getCommandType());
 		CommandAdd add = (CommandAdd) command;
 		Calendar today = Calendar.getInstance();
@@ -194,12 +210,13 @@ public class InterpreterAtd {
 
 		testTags(add.getTags(), "#food #impt");
 		assertEquals("eat something", add.getTaskName());
-		assertEquals("add today 1pm #food eat something #impt 2pm",
+		assertEquals(">sch", add.getLocation());
+		assertEquals("add today 1pm #food eat something #impt 2pm >sch",
 				add.getUserInput());
 
 		// Test 2: case-insensitivity and white space
 		command = Interpreter
-				.getCommand("   Add   30 Sep to 1 nov \n#food Eat");
+				.getCommand("   Add   30 Sep >indoors to 1 nov \n#food Eat");
 		assertEquals(Command.ADD, command.getCommandType());
 		add = (CommandAdd) command;
 		testDate(add.getStartDate(), today.get(Calendar.YEAR), 8, 30,
@@ -210,15 +227,20 @@ public class InterpreterAtd {
 				today.get(Calendar.SECOND));
 
 		testTags(add.getTags(), "#food");
+		assertEquals(">indoors", add.getLocation());
 		assertEquals("Eat", add.getTaskName());
-		assertEquals("   Add   30 Sep to 1 nov \n#food Eat", add.getUserInput());
+		assertEquals("   Add   30 Sep >indoors to 1 nov \n#food Eat",
+				add.getUserInput());
 
 		// Test 3: unspecified command
-		command = Interpreter.getCommand("30 Sep 1:30 to 2 Lunch #impt #food");
+		command = Interpreter
+				.getCommand("30 Sep 1:30 to 2 >home Lunch #impt #food");
 		assertEquals(Command.ADD, command.getCommandType());
 		add = (CommandAdd) command;
 		testDate(add.getStartDate(), 2014, 8, 30, 1, 30, 0);
 		testDate(add.getEndDate(), 2014, 8, 30, 2, 0, 0);
+		testTags(add.getTags(), "#impt #food");
+		assertEquals(">home", add.getLocation());
 		assertEquals("Lunch", add.getTaskName());
 
 		// Test 4: escape character
@@ -318,7 +340,7 @@ public class InterpreterAtd {
 		CommandDelete delete = (CommandDelete) command;
 		assertEquals("d5", delete.getLineCode());
 		assertEquals("delete d5", delete.getUserInput());
-		
+
 		command = Interpreter.getCommand("delete t5");
 		assertEquals(Command.DELETE, command.getCommandType());
 		delete = (CommandDelete) command;
@@ -351,15 +373,16 @@ public class InterpreterAtd {
 	@Test
 	public void testGetCommandUpdate() throws Exception {
 		// Test 1: Basic function
-		Command command = Interpreter.getCommand("update d2 go lunch sep 21"
-				+ " #food");
+		Command command = Interpreter
+				.getCommand("update d2 >sch go lunch sep 21" + " #food");
 		assertEquals(Command.UPDATE, command.getCommandType());
 		CommandUpdate update = (CommandUpdate) command;
 		assertEquals("d2", update.getLineCode());
-		assertEquals("update d2 go lunch sep 21 #food", update.getUserInput());
+		assertEquals("update d2 >sch go lunch sep 21 #food", update.getUserInput());
 
 		CommandAdd updatedTask = update.getUpdatedTask();
 		testTags(updatedTask.getTags(), "#food");
+		assertEquals(">sch", updatedTask.getLocation());
 		assertEquals("go lunch", updatedTask.getTaskName());
 		Calendar today = Calendar.getInstance();
 		testDate(updatedTask.getStartDate(), today.get(Calendar.YEAR), 8, 21,
@@ -367,49 +390,51 @@ public class InterpreterAtd {
 				today.get(Calendar.SECOND));
 
 		// Test 2: case-insensitivity
-		
+
 		// floating task
-		command = Interpreter.getCommand("uPdATe D2 go dinner #food");
+		command = Interpreter.getCommand("uPdATe D2 >sch go dinner #food");
 		assertEquals(Command.UPDATE, command.getCommandType());
 		update = (CommandUpdate) command;
 		assertEquals("d2", update.getLineCode());
-		assertEquals("uPdATe D2 go dinner #food", update.getUserInput());
+		assertEquals("uPdATe D2 >sch go dinner #food", update.getUserInput());
 
 		updatedTask = update.getUpdatedTask();
 		assertEquals("go dinner", updatedTask.getTaskName());
 		testTags(updatedTask.getTags(), "#food");
+		assertEquals(">sch", updatedTask.getLocation());
 		assertNull(updatedTask.getStartDate());
 		assertNull(updatedTask.getEndDate());
 
 		// deadline task
-		command = Interpreter.getCommand("uPdATe F5 go lunch sep 21 #food");
+		command = Interpreter.getCommand("uPdATe F5 >sch go lunch sep 21 #food");
 		assertEquals(Command.UPDATE, command.getCommandType());
 		update = (CommandUpdate) command;
 		assertEquals("f5", update.getLineCode());
-		assertEquals("uPdATe F5 go lunch sep 21 #food", update.getUserInput());
+		assertEquals("uPdATe F5 >sch go lunch sep 21 #food", update.getUserInput());
 
 		updatedTask = update.getUpdatedTask();
 		assertEquals("go lunch", updatedTask.getTaskName());
 		testTags(updatedTask.getTags(), "#food");
+		assertEquals(">sch", updatedTask.getLocation());
 		testDate(updatedTask.getStartDate(), today.get(Calendar.YEAR), 8, 21,
 				today.get(Calendar.HOUR_OF_DAY), today.get(Calendar.MINUTE),
 				today.get(Calendar.SECOND));
-		
+
 		// timed task
-		command = Interpreter.getCommand("uPdATe T20 go dinner 9pm to 10:30pm");
+		command = Interpreter.getCommand("uPdATe T20 >sch go dinner 9pm to 10:30pm");
 		assertEquals(Command.UPDATE, command.getCommandType());
 		update = (CommandUpdate) command;
 		assertEquals("t20", update.getLineCode());
-		assertEquals("uPdATe T20 go dinner 9pm to 10:30pm",
+		assertEquals("uPdATe T20 >sch go dinner 9pm to 10:30pm",
 				update.getUserInput());
 
 		updatedTask = update.getUpdatedTask();
 		assertEquals("go dinner", updatedTask.getTaskName());
+		assertEquals(">sch", updatedTask.getLocation());
 		testDate(updatedTask.getStartDate(), today.get(Calendar.YEAR),
 				today.get(Calendar.MONTH), today.get(Calendar.DATE), 21, 0, 0);
 		testDate(updatedTask.getEndDate(), today.get(Calendar.YEAR),
 				today.get(Calendar.MONTH), today.get(Calendar.DATE), 22, 30, 0);
-
 
 		// Test 3: invalid arguments
 		command = Interpreter.getCommand("update E3");
@@ -437,27 +462,29 @@ public class InterpreterAtd {
 
 	@Test
 	public void testGetCommandView() throws Exception {
-		
-		/*
-		 * Calendar now decpreciated
-		 */
-		
-		/*
-		// Test 1: Basic function
-		Command command = Interpreter.getCommand("view calendar");
-		assertEquals(Command.VIEW, command.getCommandType());
-		CommandView view = (CommandView) command;
-		assertEquals(UI.CALENDAR, view.getViewType());
-		assertEquals("view calendar", view.getUserInput());
-		assertFalse(view.hasMissingArgs());
-		*/
 
-		// Test 2: invalid argument
-		Command command = Interpreter.getCommand("view cal");
+		// Test 1: Basic function
+		Command command = Interpreter.getCommand("view agenda");
 		assertEquals(Command.VIEW, command.getCommandType());
 		CommandView view = (CommandView) command;
+		assertEquals(UI.AGENDA, view.getViewType());
+		assertEquals("view agenda", view.getUserInput());
+		assertFalse(view.hasMissingArgs());
+
+		// Test 2: Case insensitivity
+		command = Interpreter.getCommand("VIEW Agenda");
+		assertEquals(Command.VIEW, command.getCommandType());
+		view = (CommandView) command;
+		assertEquals(UI.AGENDA, view.getViewType());
+		assertEquals("VIEW Agenda", view.getUserInput());
+		assertFalse(view.hasMissingArgs());
+
+		// Test 3: invalid argument
+		command = Interpreter.getCommand("view agen");
+		assertEquals(Command.VIEW, command.getCommandType());
+		view = (CommandView) command;
 		assertEquals(UI.INVALID, view.getViewType());
-		assertEquals("view cal", view.getUserInput());
+		assertEquals("view agen", view.getUserInput());
 		assertTrue(view.hasMissingArgs());
 
 		command = Interpreter.getCommand("view");
