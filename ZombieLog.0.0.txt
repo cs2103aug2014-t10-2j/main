@@ -1,0 +1,32 @@
+Oct 28, 2014 11:13:59 AM interpreter.Interpreter getCommand
+INFO: Creating command of type view
+Oct 28, 2014 11:13:59 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 28, 2014 11:14:24 AM interpreter.Interpreter getCommand
+INFO: Creating command of type add
+Oct 28, 2014 11:14:24 AM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 11:14:24 AM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 11:14:24 AM interpreter.Interpreter getTaskName
+INFO: Task name: firstTask
+Oct 28, 2014 11:14:24 AM interpreter.Interpreter getTaskName
+INFO: Task name: firstTask
+Oct 28, 2014 11:14:24 AM zombietask.ZombieTask main
+FINER: add firstTask 
+Oct 28, 2014 11:14:24 AM ui.UI printTask
+FINE: task.Task@75de997c
+Oct 28, 2014 11:14:41 AM interpreter.Interpreter getCommand
+INFO: Creating command of type view
+Oct 28, 2014 11:14:41 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 28, 2014 11:14:41 AM ui.UI printTask
+FINE: task.Task@75de997c
+Oct 28, 2014 11:15:14 AM interpreter.Interpreter getCommand
+INFO: Creating command of type undo
+Oct 28, 2014 11:15:14 AM zombietask.ZombieTask main
+FINER: undo
+Oct 28, 2014 11:15:22 AM interpreter.Interpreter getCommand
+INFO: Creating command of type view
+Oct 28, 2014 11:15:22 AM zombietask.ZombieTask main
+FINER: view agenda
