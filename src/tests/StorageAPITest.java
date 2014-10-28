@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,7 +24,7 @@ public class StorageAPITest {
 	
 	StorageAPI testStorage = new StorageAPI();
 	String filename = "ZombieStorage.txt";
-	String filenameTest = "Text.txt";
+	static String filenameTest = "Text.txt";
 	File file = null;
 	
 	String expected = null;
@@ -61,6 +62,16 @@ public class StorageAPITest {
 			task2 = new Task(updateName, date2);
 			task3 = new Task(updateName, deadline);
 			task4 = new Task(taskName);
+	}
+	
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+		
+		/*
+		 * Delete all used files
+		 */
+		
+		ZombieTaskAtd.deleteFile(filenameTest);
 	}
 	
 	/**
@@ -135,7 +146,7 @@ public class StorageAPITest {
 	
 	public void testSearchIntArray() throws Exception {
 		testStorage.add(task4);
-		Task testResult = testStorage.search("f".concat(String.valueOf(testID)));
+		Task testResult = testStorage.search("f"+testID);
 		Task testExpected = task4;
 		
 		assertEquals(testExpected.getSubtask(),testResult.getSubtask());
