@@ -150,8 +150,34 @@ public class ZombieTaskCommandHandler {
 			Calendar endTime = currentAddCommand.getEndDate();
 			ArrayList<String> tags = currentAddCommand.getTags();
 			
+			/* 
+			 * Temp fix
+			 * Start time and end time has issues. At interpreter end.
+			 * 
+			 * Case 1: starttime is not null
+			 * 
+			 * Case 2: starttime is before endtime
+			 */
+			
+			if (startTime != null && endTime == null){
+				Calendar tempTime = startTime;
+				startTime = endTime;
+				endTime = tempTime;
+			} else if (startTime != null && endTime != null){
+				if (startTime.after(endTime)){
+					Calendar tempTime = startTime;
+					startTime = endTime;
+					endTime = tempTime;
+				}
+			}
+			
+			/*
+			 * End of fix
+			 */
+			
 			//Create Task
 			currentTask = null;
+			
 			if (startTime == null && endTime == null){
 				currentTask = new Task(taskName);
 			}else if(startTime == null){
@@ -164,6 +190,8 @@ public class ZombieTaskCommandHandler {
 			for (String tag : tags){
 				currentTask.addTag(tag);
 			}
+			
+			showToUser(UI.printTask(currentTask, 1, 0));
 			
 			//Store Task
 			storage.add(currentTask);
@@ -540,8 +568,8 @@ public class ZombieTaskCommandHandler {
 	}
 	
 	private static void showToUser(String displayString) {
-		System.out.println(displayString);
-		//UI.printResponse(displayString);
+		//System.out.println(displayString);
+		UI.printResponse(displayString);
 	}
 
 }

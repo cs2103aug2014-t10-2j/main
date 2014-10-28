@@ -14,6 +14,7 @@ import task.Task;
 import task.TaskEndTimeComparator;
 import task.TaskStartTimeComparator;
 import task.TaskUIFormat;
+import ui.UI;
 import zombietask.ZombieTask;
 
 /**
@@ -34,7 +35,7 @@ public class Storage {
 	private static final String DEBUG_INVALID_IO = "INVALID IO STRING: %s";
 	private static final String DEBUG_HASNT_SORTED = "HAS NOT SORTED - HAS TO OPERATE FROM INSTANCE";
 	
-	private static final Pattern VALID_PATTERN = Pattern.compile("[A-Z]+|[0-9]+");
+	private static final Pattern VALID_PATTERN = Pattern.compile("([a-zA-Z])([0-9]+)");
 	
 	private static final String FLOATING_ID = "f";
 	private static final String DEADLINE_ID = "d";
@@ -168,18 +169,28 @@ public class Storage {
 		return new TaskUIFormat(null , searchDeadlineList, searchTimedList);
 	}
 	
-public Task search(String lineCode){
-		
-		logger.log(Level.FINER, lineCode);
+	public Task search(String lineCode){
+	
 		
 		Matcher matcher = VALID_PATTERN.matcher(lineCode);
+		if (!matcher.find()){
+			return null;
+		}
+		
+		/*DEBUG
+		UI.printResponse("LC: " + lineCode + "\n");
+		UI.printResponse("GC: " + matcher.groupCount() + "\n");
+		UI.printResponse("G0: " + matcher.group(0) + "\n");
+		UI.printResponse("G1: " + matcher.group(1) + "\n");
+		UI.printResponse("G2: " + matcher.group(2) + "\n");
+		*/
 		if (matcher.groupCount() < 2) {
 			logger.log(Level.SEVERE, String.format(DEBUG_INVALID_IO, lineCode),
 					new IOException());
 		}
 		
-		String taskType = matcher.group(0).toLowerCase();
-		int index = new Integer(matcher.group(1));
+		String taskType = matcher.group(1).toLowerCase();
+		int index = new Integer(matcher.group(2));
 		
 		try {
 			switch (taskType){

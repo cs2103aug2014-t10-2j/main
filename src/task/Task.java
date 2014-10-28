@@ -161,7 +161,7 @@ public class Task implements Comparable<Task> {
 	 */
 	
 	public boolean isOverdue() {
-		if (isFloatingTask()){
+		if (this.isFloatingTask()){
 			return false;
 		}
 		return this.endTime.before(Calendar.getInstance());
@@ -173,7 +173,7 @@ public class Task implements Comparable<Task> {
 	 */
 	
 	public boolean isFloatingTask() {
-		return this.endTime == null;
+		return this.endTime == null && this.startTime == null;
 	}
 	
 	public boolean isDeadlineTask() {

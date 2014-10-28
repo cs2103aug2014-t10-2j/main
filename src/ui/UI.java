@@ -86,13 +86,14 @@ public class UI
 	public static final Ansi.Color COLOR_CYAN = Ansi.Color.CYAN;
 	public static final Ansi.Color COLOR_WHITE = Ansi.Color.WHITE;
 	
-	public static final String HEADER_AGENDA = "(Agenda)\n";
+	public static final String HEADER_AGENDA = "(Agenda)\n\n";
 	public static final String HEADER_DAILY = "(Daily)\n";
 	public static final String HEADER_WEEKLY = "(Weekly)\n";
 	public static final String HEADER_MONTHLY = "(Monthly)\n";
 	public static final String HEADER_ANNUAL = "(Annual)\n";
-	public static final String HEADER_TODAY = "Current Time: "; //"Today, "
-	public static final String HEADER_OVERDUE = "OVERDUE TASKS\n";
+	public static final String HEADER_TODAY = "Current Time: ";
+	public static final String HEADER_OVERDUE = "Overdue Tasks\n";
+	public static final String HEADER_FLOATING_TASKS = "Floating Tasks\n";
 	public static final String HEADER_LINE_DOUBLE = "\n\n";
 	public static final String HEADER_LINE_SINGLE = "\n";
 	
@@ -207,10 +208,9 @@ public class UI
 		 * Add overdue Tasks
 		 */
 		
-		str = str.concat(HEADER_OVERDUE);
-		
 		TaskUIFormat overdueTasks = getOverdueTasks(tasks);
 		if (!overdueTasks.isEmpty()){
+			str = str.concat(HEADER_OVERDUE);
 			for (Task task : overdueTasks.getDeadlineTasks()){
 				str += printTask(task, 0, 0);
 			}
@@ -221,7 +221,20 @@ public class UI
 		}
 		
 		/*
-		 * Add all Tasks
+		 * Add floating Tasks
+		 */
+		
+		if (!tasks.getFloatingTasks().isEmpty()){
+			str = str.concat(HEADER_FLOATING_TASKS);
+			for (Task task : tasks.getFloatingTasks()){
+				str += printTask(task, 0, 0);
+			}
+			str = str.concat(HEADER_LINE_SINGLE);
+		}
+		
+		
+		/*
+		 * Add non-floating Tasks
 		 */
 		
 		for (Task task : tasks.getScheduledTasks()){
@@ -235,7 +248,6 @@ public class UI
 	private static String printDaily(TaskUIFormat tasks) throws Exception {
 		String str = new String(HEADER_DAILY);
 		return str;
-		
 	}
 	
 	/**
@@ -254,7 +266,7 @@ public class UI
 	 * @return String
 	 */
 	
-	private static String printTask(Task task, int verbosity, int tabs){
+	public static String printTask(Task task, int verbosity, int tabs){
 		
 		String response = "";
 		String tags = "";
@@ -287,7 +299,7 @@ public class UI
 					.a("End: " + FORMAT_DATETIME.format(task.getEndTime().getTime())).reset().toString());
 		}
 		
-		if(task.isFloatingTask()){
+		if(task.isTimedTask()){
 			response = response.concat(ansi().fg(COLOR_BLUE).a(generateTabs(tabs + TAB_INCREMENT))
 					.a("Start: " + FORMAT_DATETIME.format(task.getStartTime().getTime())).reset().toString());
 			response = response.concat(HEADER_LINE_SINGLE);
@@ -312,9 +324,7 @@ public class UI
 						printTask(subtask, verbosity - VERBOSITY_DECREMENT, tabs + TAB_INCREMENT));
 			}
 		}
-		/*
-		while()
-		*/
+		
 		assert(response != null);
 		return response;
 	}
