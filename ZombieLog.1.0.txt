@@ -1,0 +1,4 @@
+Oct 23, 2014 10:26:13 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:26:27 AM zombietask.ZombieTask main
+FINER: update D0 breakfast tomorrow

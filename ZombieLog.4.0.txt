@@ -1,0 +1,14 @@
+Oct 23, 2014 11:37:26 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 11:37:40 AM zombietask.ZombieTask main
+FINER: add dinner 7pm to 9pm
+Oct 23, 2014 11:37:44 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 11:38:12 AM zombietask.ZombieTask main
+FINER: update d0 dinner 7pm to 9pm #cafe
+Oct 23, 2014 11:38:16 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 11:38:33 AM zombietask.ZombieTask main
+FINER: search-tag cafe
+Oct 23, 2014 11:39:28 AM zombietask.ZombieTask main
+FINER: exit

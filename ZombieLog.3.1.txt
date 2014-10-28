@@ -1,0 +1,72 @@
+Oct 23, 2014 10:28:36 AM zombietask.ZombieTask main
+FINER: add dinner tomorrow
+Oct 23, 2014 10:28:40 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:29:46 AM zombietask.ZombieTask main
+FINER: add breakfast Oct 25
+Oct 23, 2014 10:29:49 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:31:25 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 10:31:32 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:32:18 AM zombietask.ZombieTask main
+FINER: update d1 can tomorrow
+Oct 23, 2014 10:32:23 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:34:56 AM zombietask.ZombieTask main
+FINER: undo
+Oct 23, 2014 10:35:01 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:36:04 AM zombietask.ZombieTask main
+FINER: add new task tomorrow
+Oct 23, 2014 10:36:07 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:36:10 AM zombietask.ZombieTask main
+FINER: undo
+Oct 23, 2014 10:36:15 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:37:57 AM zombietask.ZombieTask main
+FINER: add noob
+Oct 23, 2014 10:38:08 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:38:29 AM zombietask.ZombieTask main
+FINER: undo
+Oct 23, 2014 10:38:34 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:47:41 AM zombietask.ZombieTask main
+FINER: add task 7pm 9pm
+Oct 23, 2014 10:48:02 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:48:34 AM zombietask.ZombieTask main
+FINER: add newtask 7pm to 9pm
+Oct 23, 2014 10:48:38 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:49:06 AM zombietask.ZombieTask main
+FINER: add lunch 7pm to 9pm
+Oct 23, 2014 10:49:10 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:50:24 AM zombietask.ZombieTask main
+FINER: add 7pm to 9pm anotherlunch
+Oct 23, 2014 10:52:22 AM zombietask.ZombieTask main
+FINER: update d3 lunch #somecafe
+Oct 23, 2014 10:52:26 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:52:52 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 10:52:55 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 10:52:59 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 10:53:04 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 10:53:07 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 10:53:10 AM zombietask.ZombieTask main
+FINER: delte 0
+Oct 23, 2014 10:53:29 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 10:53:34 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:53:40 AM zombietask.ZombieTask main
+FINER: delete 0

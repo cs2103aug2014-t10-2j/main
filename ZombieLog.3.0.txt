@@ -1,0 +1,14 @@
+Oct 23, 2014 10:54:12 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 10:54:15 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 10:54:18 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 10:54:54 AM zombietask.ZombieTask main
+FINER: add lunch 7pm to 9pm 
+Oct 23, 2014 10:55:00 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:56:03 AM zombietask.ZombieTask main
+FINER: add dinner 7pm #nocafe
+Oct 23, 2014 10:56:07 AM zombietask.ZombieTask main
+FINER: view agenda

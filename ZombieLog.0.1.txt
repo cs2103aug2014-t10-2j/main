@@ -1,0 +1,38 @@
+Oct 23, 2014 10:08:57 AM zombietask.ZombieTask main
+FINER: add a 
+Oct 23, 2014 10:09:01 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:09:15 AM zombietask.ZombieTask main
+INFO: Command Missing Arguments:
+update a
+Oct 23, 2014 10:09:23 AM zombietask.ZombieTask main
+INFO: Command Missing Arguments:
+update a 7 pm]
+Oct 23, 2014 10:09:31 AM zombietask.ZombieTask main
+FINER: uapdate a 7 pm
+Oct 23, 2014 10:09:42 AM zombietask.ZombieTask main
+INFO: Command Missing Arguments:
+update a 7 pm
+Oct 23, 2014 10:09:54 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:10:38 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 10:10:40 AM zombietask.ZombieTask main
+FINER: delete 0 
+Oct 23, 2014 10:10:45 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 10:10:49 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 10:11:20 AM zombietask.ZombieTask main
+FINER: add dinner tomorrow
+Oct 23, 2014 10:11:26 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:13:51 AM zombietask.ZombieTask main
+INFO: Command Missing Arguments:
+update 0 7pm
+Oct 23, 2014 10:13:57 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:14:10 AM zombietask.ZombieTask main
+FINER: update D0 lunch tomorrow
+Oct 23, 2014 10:14:15 AM zombietask.ZombieTask main
+FINER: view agenda

@@ -1,0 +1,53 @@
+Oct 23, 2014 3:31:01 AM zombietask.ZombieTask main
+FINER: add dinner tomorrow
+Oct 23, 2014 3:31:12 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 3:31:48 AM zombietask.ZombieTask main
+FINER: add eat Nov 1 9pm
+Oct 23, 2014 3:31:54 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 3:32:35 AM zombietask.ZombieTask main
+INFO: Command Missing Arguments:
+delete 32m
+Oct 23, 2014 3:32:48 AM zombietask.ZombieTask main
+FINER: 
+Oct 23, 2014 3:32:48 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 3:33:04 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 3:33:10 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 3:33:14 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 3:33:18 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 3:33:36 AM zombietask.ZombieTask main
+FINER: view calendar
+Oct 23, 2014 3:33:50 AM zombietask.ZombieTask main
+FINER: add dinner tomorrow
+Oct 23, 2014 3:33:55 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 3:34:01 AM zombietask.ZombieTask main
+FINER: view calendar
+Oct 23, 2014 3:34:08 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 3:34:57 AM zombietask.ZombieTask main
+FINER: add dinner 9pm Nov 1
+Oct 23, 2014 3:35:05 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 3:35:37 AM zombietask.ZombieTask main
+FINER: a task Oct 28
+Oct 23, 2014 3:35:41 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 3:36:07 AM zombietask.ZombieTask main
+FINER: ad dinner Tuesday
+Oct 23, 2014 3:36:20 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 3:36:41 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 3:36:43 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 3:36:46 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 3:36:49 AM zombietask.ZombieTask main
+FINER: delete 0

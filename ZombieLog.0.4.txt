@@ -1,0 +1,8 @@
+Oct 23, 2014 3:18:07 AM zombietask.ZombieTask main
+FINER: add a
+Oct 23, 2014 3:18:13 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 3:18:22 AM zombietask.ZombieTask main
+FINER: delete 0
+Oct 23, 2014 3:18:38 AM zombietask.ZombieTask main
+FINER: exit

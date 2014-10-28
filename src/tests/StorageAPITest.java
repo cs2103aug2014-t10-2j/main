@@ -59,7 +59,7 @@ public class StorageAPITest {
 			task1 = new Task(taskName, date1);
 			task2 = new Task(updateName, date2);
 			task3 = new Task(updateName, deadline);
-			task4 = new Task(taskName);
+			task4 = new Task(taskName,deadline);
 	}
 	
 	/**
@@ -134,7 +134,7 @@ public class StorageAPITest {
 	
 	public void testSearchIntArray() throws Exception {
 		testStorage.add(task4);
-		Task testResult = testStorage.search(""+testID);
+		Task testResult = testStorage.search("D"+testID);
 		Task testExpected = task4;
 		
 		assertEquals(testExpected.getSubtask(),testResult.getSubtask());

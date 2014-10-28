@@ -1,0 +1,4 @@
+Oct 23, 2014 10:27:16 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 23, 2014 10:27:21 AM zombietask.ZombieTask main
+FINER: update d0 blah
