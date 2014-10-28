@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import logger.ZombieLogger;
 
+
 /**
  * 
  * Whoa hold on there, please wait till this is up first before making
@@ -83,6 +84,7 @@ public class ZombieTask {
 	public static void main(String[] args) throws Exception {
 		showToUser(MESSAGE_WELCOME);
 		initStorage(args);
+		UI.initUIOnce();
 		
 		while(sc.hasNext() && !setExit){
 			try {

@@ -333,8 +333,6 @@ public class ZombieTaskCommandHandler {
 	protected static void invalidCommand(String commandString) {
 		showToUser(String.format(MESSAGE_INVALID_COMMAND, commandString));
 	}
-	
-	Integer.parseInt("1");
 
 	protected static void undo() {
 		try{

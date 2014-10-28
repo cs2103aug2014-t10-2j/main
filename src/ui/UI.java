@@ -19,19 +19,27 @@ package ui;
  * 2. Implemented ANSI Console color output
  */
 
+
+
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import ext.jansi.Ansi;
+import ext.jansi.AnsiConsole;
+import static ext.jansi.Ansi.ansi;
 import logger.ZombieLogger;
 import storage.Storage;
 import storage.StorageAPI;
 import task.Task;
 import task.TaskUIFormat;
 import zombietask.ZombieTask;
+
+
 
 public class UI
 {
@@ -52,32 +60,31 @@ public class UI
 	 * 
 	 * Color Standardization
 	 * 
-	 * Names
+	 * @Names
 	 * 
 	 * Red - Overdue
 	 * Green - Floating Tasks
 	 * Yellow - Dateline Tasks
 	 * Cyan - Timed Tasks
 	 * 
-	 * Tags
+	 * @Tags
 	 * 
 	 * White - all
 	 * 
-	 * SubTasks
+	 * @SubTasks
 	 * 
 	 * Purple - all
 	 * 
+	 * 
 	 */
-	
-	public static final String RESET = "\u001B[0m";
-	public static final String BLACK = "\u001B[30m";
-	public static final String RED = "\u001B[31m";
-	public static final String GREEN = "\u001B[32m";
-	public static final String YELLOW = "\u001B[33m";
-	public static final String BLUE = "\u001B[34m";
-	public static final String PURPLE = "\u001B[35m";
-	public static final String CYAN = "\u001B[36m";
-	public static final String WHITE = "\u001B[37m";
+	public static final Ansi.Color COLOR_BLACK = Ansi.Color.BLACK;
+	public static final Ansi.Color COLOR_RED = Ansi.Color.RED;
+	public static final Ansi.Color COLOR_GREEN = Ansi.Color.GREEN;
+	public static final Ansi.Color COLOR_YELLOW = Ansi.Color.YELLOW;
+	public static final Ansi.Color COLOR_BLUE = Ansi.Color.BLUE;
+	public static final Ansi.Color COLOR_MAGENTA = Ansi.Color.MAGENTA;
+	public static final Ansi.Color COLOR_CYAN = Ansi.Color.CYAN;
+	public static final Ansi.Color COLOR_WHITE = Ansi.Color.WHITE;
 	
 	public static final String HEADER_AGENDA = "(Agenda)\n";
 	public static final String HEADER_DAILY = "(Daily)\n";
@@ -85,16 +92,19 @@ public class UI
 	public static final String HEADER_MONTHLY = "(Monthly)\n";
 	public static final String HEADER_ANNUAL = "(Annual)\n";
 	public static final String HEADER_TODAY = "Current Time: "; //"Today, "
+	public static final String HEADER_OVERDUE = "OVERDUE TASKS\n";
 	public static final String HEADER_LINE_DOUBLE = "\n\n";
 	public static final String HEADER_LINE_SINGLE = "\n";
 	
-	public static final String STYLE_VERBOSITY_0 = "%s%s%s%s"; // Tabs | Color | TaskName | Color
-	public static final String STYLE_VERBOSITY_1_TAGS = "%s%s%s%s"; // Tabs | Color | Tags | Color
-	public static final String STYLE_VERBOSITY_1_DATE = "%s%s%s%s"; // Tabs | Color | Date | Color
+	public static final String FORMAT_NAME_DATE = "%s%s[%s] %s%s%s%s\n"; // Tabs | Color | TaskID | Color | TaskName | Date | Color_Reset
+	public static final String FORMAT_TAGS = "%s%sTags: [%s]%s\n"; // Tabs | Color | Tags | Color_Reset
+	public static final String TAG_SEPARATOR = "; ";
 	
 	public static final int VERBOSITY_NAME_ONLY = 0;
 	public static final int VERBOSITY_TAG_INCLUSIVE = 1;
 	public static final int VERBOSITY_SUBTASK_INCLUSIVE = 2;
+	public static final int VERBOSITY_DECREMENT = 2;
+	public static final int TAB_INCREMENT = 1;
 	
 	public static final FORMAT AGENDA = FORMAT.AGENDA;
 	public static final FORMAT DAILY = FORMAT.DAILY;
@@ -109,12 +119,16 @@ public class UI
 	private static final Format FORMAT_TODAY = new SimpleDateFormat("dd MMMMM yyyy, HH:mm");
 	private static final Format FORMAT_WEEKNUM = new SimpleDateFormat("ww");
 	
+	private static final ArrayList<Task> EMPTY_LIST = new ArrayList<Task>();
+	
+	
 	/*
 	 * Class variables
 	 */
 	
 	private static Logger logger = ZombieLogger.getLogger();
 	private static StorageAPI storage = ZombieTask.getStorage();
+	private static boolean uiInit = false;
 	
 	/*
 	 *  PRIMARY METHODS
@@ -176,6 +190,10 @@ public class UI
 	 * 
 	 * Prints an agenda, a list of tasks according to type of task.
 	 * 
+	 * First up, all overdue tasks.
+	 * 
+	 * Secondly, all tasks, sorted chronologically.
+	 * 
 	 * @param tasks
 	 * @return String to be printed
 	 * @throws Exception
@@ -183,7 +201,13 @@ public class UI
 	
 	private static String printAgenda(TaskUIFormat tasks) throws Exception {
 		
-		String str = HEADER_AGENDA;
+		String str = new String(HEADER_AGENDA);
+		
+		/*
+		 * Add overdue Tasks
+		 */
+		
+		str = str.concat(HEADER_OVERDUE);
 		
 		TaskUIFormat overdueTasks = getOverdueTasks(tasks);
 		if (!overdueTasks.isEmpty()){
@@ -193,36 +217,25 @@ public class UI
 			for (Task task : overdueTasks.getTimedTasks()){
 				str += printTask(task, 0, 0);
 			}
+			str = str.concat(HEADER_LINE_SINGLE);
 		}
 		
-		str += HEADER_TODAY + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
+		/*
+		 * Add all Tasks
+		 */
 		
-		Calendar begin = delimitTime(Calendar.getInstance());
-		begin.set(Calendar.HOUR_OF_DAY, 0);
-		Calendar end = delimitTime(Calendar.getInstance());
-		end.set(Calendar.HOUR_OF_DAY, 0);
-		end.add(Calendar.DATE, 1);
-		ArrayList<String> floatingStrings = new ArrayList<String>();
-		for(Task task : processedTasks) {
-			if(task.isDeadlineTask() && task.isOverdue() == false) {
-				while(withinTimePeriod(task.getEndTime(), begin, end) == false) {
-					begin.add(Calendar.DATE, 1);
-					end.add(Calendar.DATE, 1);
-					str += FORMAT_DAYDATE.format(begin.getTime()) + "\n";
-				}
-				str += task.getTaskName() + "\n";
-			}
-			if(task.isFloatingTask())	floatingStrings.add(task.getTaskName());
+		for (Task task : tasks.getScheduledTasks()){
+			str += printTask(task, 0, 0);
 		}
 		
-		if(!tasks.getFloatingTasks().isEmpty())
-		{
-			str += "<<<<< Floating Tasks >>>>>\n";
-			for(Task floatingTask : tasks.getFloatingTasks()){
-				str += floatingTask.getTaskName() + "\n";
-			}
-		}
+		assert (str != null);
 		return str;
+	}
+	
+	private static String printDaily(TaskUIFormat tasks) throws Exception {
+		String str = new String(HEADER_DAILY);
+		return str;
+		
 	}
 	
 	/**
@@ -241,25 +254,100 @@ public class UI
 	 * @return String
 	 */
 	
-	private static String printTask(Task task, int verbosity, int tab){
+	private static String printTask(Task task, int verbosity, int tabs){
+		
 		String response = "";
+		String tags = "";
+		
+		/*
+		 * Exit Condition for recursive call
+		 */
+		
 		if (task == null || verbosity < 0){
 			return response;
 		}
-		if (verbosity == 0){
-			return response.concat(String.format(STYLE_VERBOSITY_0, "", getTaskColor(),
-					task.getTaskName(),getTaskColour()));
+		
+		logger.log(Level.FINE, task.toString());
+		
+		/*
+		 * Print taskname first
+		 */
+		
+		response = response.concat(ansi().a(generateTabs(tabs)).fg(COLOR_WHITE).a("[")
+				.a(storage.indexOf(task)).a("] ").fg(getTaskColor(task)).a(task.getTaskName())
+				.reset().toString());
+		response = response.concat(HEADER_LINE_SINGLE);
+		
+		/*
+		 * Print Dates
+		 */
+		
+		if(task.isDeadlineTask()){
+			response = response.concat(ansi().fg(COLOR_BLUE).a(generateTabs(tabs + TAB_INCREMENT))
+					.a("End: " + FORMAT_DATETIME.format(task.getEndTime().getTime())).reset().toString());
 		}
-		if (verbosity == 1){
-			response = response.concat(String.format(STYLE_VERBOSITY_0, "", getTaskColor(),
-					task.getTaskName(),getTaskColour()));
-			return ;
+		
+		if(task.isFloatingTask()){
+			response = response.concat(ansi().fg(COLOR_BLUE).a(generateTabs(tabs + TAB_INCREMENT))
+					.a("Start: " + FORMAT_DATETIME.format(task.getStartTime().getTime())).reset().toString());
+			response = response.concat(HEADER_LINE_SINGLE);
+			response = response.concat(ansi().fg(COLOR_BLUE).a(generateTabs(tabs + TAB_INCREMENT))
+					.a("End: " + FORMAT_DATETIME.format(task.getEndTime().getTime())).reset().toString());
+		}
+		
+		response = response.concat(HEADER_LINE_SINGLE);
+		
+		if (verbosity > 0){
+			for(String tag : task.getTags()){
+				tags += tag;
+				if (task.getTags().indexOf(tag) != task.getTags().size() - 1){
+					tags += TAG_SEPARATOR;
+				}
+			}
+			response = response.concat(ansi().a(generateTabs(tabs + TAB_INCREMENT)).fg(COLOR_WHITE).a(tags).reset().toString());
+			response = response.concat(HEADER_LINE_SINGLE);
+			
+			for (Task subtask : task.getSubtask()){
+				response =  response.concat(HEADER_LINE_SINGLE).concat(
+						printTask(subtask, verbosity - VERBOSITY_DECREMENT, tabs + TAB_INCREMENT));
+			}
 		}
 		/*
 		while()
 		*/
 		assert(response != null);
 		return response;
+	}
+	
+	/**
+	 * Returns the appropriate tab spacing for task display
+	 * 
+	 * @param tabs number of tabs
+	 * @return String representation of tabs
+	 */
+	
+	private static String generateTabs(int tabs){
+		String response = "";
+		for (int i = 0; i < tabs; i++){
+			response = response.concat("\t");
+		}
+		return response;
+	}
+	
+	private static Ansi.Color getTaskColor(Task task){
+		if (task.isOverdue()){
+			return COLOR_RED;
+		}
+		if (task.isFloatingTask()){
+			return COLOR_GREEN;
+		}
+		if (task.isDeadlineTask()){
+			return COLOR_YELLOW;
+		}
+		if (task.isFloatingTask()){
+			return COLOR_CYAN;
+		}
+		return COLOR_GREEN;
 	}
 	
 	private static TaskUIFormat getOverdueTasks(TaskUIFormat tasks){
@@ -275,7 +363,7 @@ public class UI
 				searchTimedList.add(task);
 			}
 		}
-		return new TaskUIFormat(null, searchDeadlineList, searchTimedList);
+		return new TaskUIFormat(EMPTY_LIST, searchDeadlineList, searchTimedList);
 	}
 	
 	/*
@@ -422,6 +510,8 @@ public class UI
 	 *  MISCELLENEOUS METHODS
 	 */
 	
+	/*
+	
 	public static String taskToString(String name, int index, char check, Date date)
 	{
 		char prefix = (check == 'S' || check == 'E') ? 'T' : check;
@@ -445,6 +535,8 @@ public class UI
 			default:  return "!!!!!";
 		}
 	}
+	
+	*/
 	// Standardizes Calendar.getInstance() by zeroing smaller values
 	private static Calendar delimitTime(Calendar time)
 	{
@@ -466,6 +558,17 @@ public class UI
 			case "calendar":	return FORMAT.CALENDAR;
 			default:			return FORMAT.INVALID;
 		}
+	}
+	
+	public static void initUIOnce(){
+		if (!uiInit){
+			initUI();
+		}
+	}
+	
+	private static void initUI(){
+		System.setProperty("jansi.passthrough", "true");
+		AnsiConsole.systemInstall();
 	}
 	
 	/*

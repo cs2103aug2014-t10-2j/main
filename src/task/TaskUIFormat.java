@@ -17,20 +17,11 @@ public class TaskUIFormat {
 	 * Class Constants
 	 */
 	
-	/*
-	private static final Pattern VALID_PATTERN = Pattern.compile("[A-Z]+|[0-9]+");
-	
-	private static final String DEBUG_INVALID_IO = "INVALID IO STRING: %s";
-	private static final String DEBUG_HASNT_SORTED = "HAS NOT SORTED - HAS TO OPERATE FROM INSTANCE";
-	
-	private static final String FLOATING_ID = "f";
-	private static final String DEADLINE_ID = "d";
-	private static final String TIMED_ID = "t";
 	
 	private static final Comparator<Task> startTimeComparator = new TaskStartTimeComparator();
 	private static final Comparator<Task> endTimeComparator = new TaskEndTimeComparator();
 	
-	*/
+	
 	
 	/*
 	 * Class Variables
@@ -116,6 +107,18 @@ public class TaskUIFormat {
 		floatingTasks.remove(deletedTask);
 		deadlineTasks.remove(deletedTask);
 		timedTasks.remove(deletedTask);
+	}
+	
+	public int size(){
+		return floatingTasks.size() + deadlineTasks.size() + timedTasks.size();
+	}
+	
+	public ArrayList<Task> getScheduledTasks(){
+		ArrayList<Task> scheduledTasks = new ArrayList<Task>();
+		scheduledTasks.addAll(deadlineTasks);
+		scheduledTasks.addAll(timedTasks);
+		Collections.sort(scheduledTasks, endTimeComparator);
+		return scheduledTasks;
 	}
 	
 	/**
