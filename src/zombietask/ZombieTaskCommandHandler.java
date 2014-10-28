@@ -324,13 +324,16 @@ public class ZombieTaskCommandHandler {
 		CommandAdd currentAddCommand = currentUpdateCommand.getUpdatedTask();
 		String taskName = currentAddCommand.getTaskName();
 		Calendar taskTime = currentAddCommand.getStartDate();
+		Calendar endTime = currentAddCommand.getEndDate();
 		ArrayList<String> tags = currentAddCommand.getTags();
 		
 		currentTask = null;
-		if (taskTime != null){
-			currentTask = new Task(taskName, taskTime);
-		}else{
+		if (taskTime == null){
 			currentTask = new Task(taskName);
+		}else if((taskTime != null) &&(endTime != null)){
+			currentTask = new Task(taskName,endTime,taskTime);
+		}else {
+			currentTask = new Task(taskName,taskTime);
 		}
 		
 		//Add Tags
