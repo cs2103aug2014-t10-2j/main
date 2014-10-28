@@ -149,24 +149,28 @@ public class Storage {
 	
 	public TaskUIFormat searchTask(Calendar startTime, Calendar endTime) throws Exception{
 		if (startTime.after(endTime)){
-			throw new Exception(MESSAGE_TIME_CONFLICT);
+			Calendar tempTime = startTime;
+			startTime = endTime;
+			endTime = tempTime;
+			//throw new Exception(MESSAGE_TIME_CONFLICT);
 		}
+		
 		ArrayList<Task> searchDeadlineList = new ArrayList<Task> ();
 		ArrayList<Task> searchTimedList = new ArrayList<Task> ();
+		
 		for(Task task : deadlineTasks){
-			if (task.getStartTime() == null){
-				if (task.getEndTime().compareTo(endTime)<=0 && task.getEndTime().compareTo(startTime)>=0){
-					searchDeadlineList.add(task);
-				}
-				continue;
+			if (task.getEndTime().compareTo(endTime)<=0 && task.getEndTime().compareTo(startTime)>=0){
+				searchDeadlineList.add(task);
 			}
 		}
+		
 		for(Task task : timedTasks){
 			if (task.getEndTime().compareTo(endTime)<=0 && task.getStartTime().compareTo(endTime)<=0){
 				searchTimedList.add(task);
 			}
 		}
-		return new TaskUIFormat(null , searchDeadlineList, searchTimedList);
+		
+		return new TaskUIFormat(new ArrayList<Task>() , searchDeadlineList, searchTimedList);
 	}
 	
 	public Task search(String lineCode){

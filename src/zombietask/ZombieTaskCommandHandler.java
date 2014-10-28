@@ -50,6 +50,7 @@ public class ZombieTaskCommandHandler {
 	private final static String MESSAGE_HELP = "THIS HELP NEEDS A BIT OF HELP!";
 	private final static String MESSAGE_ADD = "Added %s to database";
 	private final static String MESSAGE_DELETE = "Deleted %s from database";
+	private final static String MESSAGE_UPDATE = "Updated %s to %s from database";
 	private final static String MESSAGE_OUTOFBOUNDS = "Warning: input %s is out of bounds,";
 	
 	private final static String ERROR_EMPTY_UNDO_STACK = "There is nothing to undo!";
@@ -123,6 +124,7 @@ public class ZombieTaskCommandHandler {
 			break;
 		case COMMAND_SEARCH_TIME:
 			searchTime(currentCommand);
+			break;
 		case COMMAND_EXIT:
 			exit();
 			break;
@@ -191,13 +193,11 @@ public class ZombieTaskCommandHandler {
 				currentTask.addTag(tag);
 			}
 			
-			showToUser(UI.printTask(currentTask, 1, 0));
-			
 			//Store Task
 			storage.add(currentTask);
 			recordCommand();
 			showToUser(String.format(MESSAGE_ADD, currentTask.getTaskName()));
-			
+			showToUser(UI.printTask(currentTask, 1, 0));
 		} catch (Exception err){
 			err.printStackTrace();
 			showToUser(err.getMessage());
@@ -215,19 +215,6 @@ public class ZombieTaskCommandHandler {
 			storage.delete(currentTask);
 			recordCommand();
 			showToUser(String.format(MESSAGE_DELETE, currentTask.getTaskName()));
-			/*
-			 * ArrayList<Task> allTasks = storage.getAllTasks();
-			 * 
-			if (lineNumber < allTasks.size() && lineNumber >= 0){
-				currentTask = allTasks.remove(lineNumber);
-				storage.delete(currentTask);
-				recordCommand();
-				showToUser(String.format(MESSAGE_DELETE, currentTask.getTaskName()));
-			}else{
-				showToUser(String.format(MESSAGE_OUTOFBOUNDS, lineNumber));
-				throw new IndexOutOfBoundsException("Index is too large or small : " + lineNumber);
-			}
-			*/
 			
 		} catch (Exception err){
 			showToUser(err.getMessage());
@@ -323,17 +310,33 @@ public class ZombieTaskCommandHandler {
 		
 		CommandAdd currentAddCommand = currentUpdateCommand.getUpdatedTask();
 		String taskName = currentAddCommand.getTaskName();
-		Calendar taskTime = currentAddCommand.getStartDate();
+		Calendar startTime = currentAddCommand.getStartDate();
 		Calendar endTime = currentAddCommand.getEndDate();
 		ArrayList<String> tags = currentAddCommand.getTags();
 		
+		/*
+		 * Temp fix for SP's code
+		 */
+		
+		if (startTime != null && endTime == null){
+			Calendar tempTime = startTime;
+			startTime = endTime;
+			endTime = tempTime;
+		} else if (startTime != null && endTime != null){
+			if (startTime.after(endTime)){
+				Calendar tempTime = startTime;
+				startTime = endTime;
+				endTime = tempTime;
+			}
+		}
+		
 		currentTask = null;
-		if (taskTime == null){
+		if (startTime == null){
 			currentTask = new Task(taskName);
-		}else if((taskTime != null) &&(endTime != null)){
-			currentTask = new Task(taskName,endTime,taskTime);
+		}else if((startTime != null) && (endTime != null)){
+			currentTask = new Task(taskName,endTime,startTime);
 		}else {
-			currentTask = new Task(taskName,taskTime);
+			currentTask = new Task(taskName,startTime);
 		}
 		
 		//Add Tags
@@ -356,6 +359,7 @@ public class ZombieTaskCommandHandler {
 			err.printStackTrace();
 		}
 		
+		showToUser(String.format(MESSAGE_UPDATE, oldTask.getTaskName(), currentTask.getTaskName()));
 		
 		
 	}
@@ -445,12 +449,12 @@ public class ZombieTaskCommandHandler {
 	
 	protected static void searchName(Command command) throws Exception{
 		CommandSearchName searchCommand = (CommandSearchName) command;
-		storage.searchName(searchCommand.getSearchString());
+		UI.printPerspective(FORMAT.AGENDA, storage.searchName(searchCommand.getSearchString()));
 	}
 	
 	protected static void searchTime(Command command) throws Exception{
 		CommandSearchTime searchCommand = (CommandSearchTime) command;
-		storage.search(searchCommand.getTimeStart(), searchCommand.getTimeEnd());
+		UI.printPerspective(FORMAT.AGENDA, storage.search(searchCommand.getTimeStart(), searchCommand.getTimeEnd()));
 	}
 	
 	protected static void exit(){
