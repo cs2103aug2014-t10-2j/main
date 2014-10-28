@@ -125,8 +125,8 @@ public class InterpreterAtd {
 		CommandAdd add = (CommandAdd) command;
 
 		Calendar today = Calendar.getInstance();
-		testDate(add.getStartDate(), today);
-		assertNull(add.getEndDate());
+		assertNull(add.getStartDate());
+		testDate(add.getEndDate(), today);
 
 		testTags(add.getTags(), "#food #impt");
 		assertEquals(">home", add.getLocation());
@@ -139,12 +139,12 @@ public class InterpreterAtd {
 		command = Interpreter.getCommand("   Add   30 Sep \n#food Eat #impt");
 		assertEquals(Command.ADD, command.getCommandType());
 		add = (CommandAdd) command;
-
-		testDate(add.getStartDate(), today.get(Calendar.YEAR), 8, 30,
+		
+		assertNull(add.getStartDate());
+		testDate(add.getEndDate(), today.get(Calendar.YEAR), 8, 30,
 				today.get(Calendar.HOUR_OF_DAY), today.get(Calendar.MINUTE),
 				today.get(Calendar.SECOND));
-		assertNull(add.getEndDate());
-
+		
 		testTags(add.getTags(), "#food #impt");
 		assertEquals("Eat", add.getTaskName());
 		assertEquals("   Add   30 Sep \n#food Eat #impt", add.getUserInput());
@@ -153,10 +153,12 @@ public class InterpreterAtd {
 		command = Interpreter.getCommand("30 Sep Lunch >home #impt #food");
 		assertEquals(Command.ADD, command.getCommandType());
 		add = (CommandAdd) command;
-		testDate(add.getStartDate(), 2014, 8, 30,
+		
+		assertNull(add.getStartDate());
+		testDate(add.getEndDate(), 2014, 8, 30,
 				today.get(Calendar.HOUR_OF_DAY), today.get(Calendar.MINUTE),
 				today.get(Calendar.SECOND));
-		assertNull(add.getEndDate());
+		
 		testTags(add.getTags(), "#impt #food");
 		assertEquals(">home", add.getLocation());
 		assertEquals("Lunch", add.getTaskName());
@@ -171,8 +173,10 @@ public class InterpreterAtd {
 		Calendar tomorrow = Calendar.getInstance();
 		tomorrow.add(Calendar.DATE, 1);
 		tomorrow.setTime(tomorrow.getTime());
-		testDate(add.getStartDate(), tomorrow);
-		assertNull(add.getEndDate());
+		
+		assertNull(add.getStartDate());
+		testDate(add.getEndDate(), tomorrow);
+		
 
 		testTags(add.getTags(), "#fruit");
 		assertEquals(">sch", add.getLocation());
@@ -185,8 +189,8 @@ public class InterpreterAtd {
 		assertEquals(Command.ADD, command.getCommandType());
 		add = (CommandAdd) command;
 
-		testDate(add.getStartDate(), tomorrow);
-		assertNull(add.getEndDate());
+		assertNull(add.getStartDate());
+		testDate(add.getEndDate(), tomorrow);
 
 		assertEquals("read Friday's papers", add.getTaskName());
 		assertEquals("read *Friday's papers tomorrow", add.getUserInput());
@@ -385,7 +389,7 @@ public class InterpreterAtd {
 		assertEquals(">sch", updatedTask.getLocation());
 		assertEquals("go lunch", updatedTask.getTaskName());
 		Calendar today = Calendar.getInstance();
-		testDate(updatedTask.getStartDate(), today.get(Calendar.YEAR), 8, 21,
+		testDate(updatedTask.getEndDate(), today.get(Calendar.YEAR), 8, 21,
 				today.get(Calendar.HOUR_OF_DAY), today.get(Calendar.MINUTE),
 				today.get(Calendar.SECOND));
 
@@ -416,7 +420,7 @@ public class InterpreterAtd {
 		assertEquals("go lunch", updatedTask.getTaskName());
 		testTags(updatedTask.getTags(), "#food");
 		assertEquals(">sch", updatedTask.getLocation());
-		testDate(updatedTask.getStartDate(), today.get(Calendar.YEAR), 8, 21,
+		testDate(updatedTask.getEndDate(), today.get(Calendar.YEAR), 8, 21,
 				today.get(Calendar.HOUR_OF_DAY), today.get(Calendar.MINUTE),
 				today.get(Calendar.SECOND));
 
