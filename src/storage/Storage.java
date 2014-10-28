@@ -184,6 +184,7 @@ public class Storage {
 		UI.printResponse("G1: " + matcher.group(1) + "\n");
 		UI.printResponse("G2: " + matcher.group(2) + "\n");
 		*/
+		
 		if (matcher.groupCount() < 2) {
 			logger.log(Level.SEVERE, String.format(DEBUG_INVALID_IO, lineCode),
 					new IOException());

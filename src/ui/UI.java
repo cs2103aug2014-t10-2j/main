@@ -94,6 +94,7 @@ public class UI
 	public static final String HEADER_TODAY = "Current Time: ";
 	public static final String HEADER_OVERDUE = "Overdue Tasks\n";
 	public static final String HEADER_FLOATING_TASKS = "Floating Tasks\n";
+	public static final String HEADER_SCHEDULED_TASKS = "Scheduled Tasks\n";
 	public static final String HEADER_LINE_DOUBLE = "\n\n";
 	public static final String HEADER_LINE_SINGLE = "\n";
 	
@@ -236,9 +237,11 @@ public class UI
 		/*
 		 * Add non-floating Tasks
 		 */
-		
-		for (Task task : tasks.getScheduledTasks()){
-			str += printTask(task, 0, 0);
+		if (!tasks.getFloatingTasks().isEmpty()){
+			str = str.concat(HEADER_SCHEDULED_TASKS);
+			for (Task task : tasks.getScheduledTasks()){
+				str += printTask(task, 0, 0);
+			}
 		}
 		
 		assert (str != null);
