@@ -364,7 +364,7 @@ public class Interpreter {
 						taskName = taskName.replace(" " + ESCAPE_CHAR, " ");
 						assert !taskName.contains(" " + ESCAPE_CHAR);
 
-						return new CommandAdd(taskName, cal1, null, tags,
+						return new CommandAdd(taskName, null, cal1, tags,
 								location, userInput, false);
 					}
 				}
