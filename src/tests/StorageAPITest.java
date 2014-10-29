@@ -43,7 +43,7 @@ public class StorageAPITest {
 	Task task2 = null; 
 	Task task3 = null; 
 	Task task4 = null; 
-	Task deletedTask;
+	Task deletedTask=null;
 	/**
 	 *  clear the file and set 4 Tasks which will be used later
 	 * @throws Exception
@@ -62,6 +62,7 @@ public class StorageAPITest {
 			task2 = new Task(updateName, date2);
 			task3 = new Task(updateName, deadline);
 			task4 = new Task(taskName);
+			deletedTask = new Task(taskName,date2);
 	}
 	
 	@AfterClass
@@ -84,9 +85,9 @@ public class StorageAPITest {
 		
 		testStorage.add(task4);
 		BufferedReader br = new BufferedReader(new FileReader(file));
-		result = br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine();
+		result = br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine();
 		br.close();
-		expected = "{  \"taskList\": [    {      \"taskName\": \"tempTask\",      \"endTime\": null,      \"startTime\": null,      \"tags\": [],      \"subtasks\": []    }  ]}";
+		expected = "{  \"floatingTasks\": [    {      \"taskName\": \"tempTask\",      \"endTime\": null,      \"startTime\": null,      \"tags\": [],      \"subtasks\": []    }  ],  \"deadlineTasks\": [],  \"timedTasks\": []}";
 		testStorage.delete(task4);
 		assertEquals("problems:",expected, result);
 		
@@ -103,9 +104,9 @@ public class StorageAPITest {
 		testStorage.add(deletedTask);
 		testStorage.delete(deletedTask);
 		BufferedReader br = new BufferedReader(new FileReader(file));
-		result = br.readLine()+ br.readLine()+ br.readLine();
+		result = br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine();
 		br.close();
-		expected = "{  \"taskList\": []}";
+		expected = "{  \"floatingTasks\": [],  \"deadlineTasks\": [],  \"timedTasks\": []}";
 		assertEquals("problems:",expected, result);
 		//fail("Not yet implemented");
 	}
@@ -118,13 +119,13 @@ public class StorageAPITest {
 	public void testDisplayAll() throws Exception{
 		
 		testStorage.add(task4);
-		testStorage.add(task3);
+		testStorage.add(task2);
 		ArrayList <Task> expectedTest = new ArrayList <Task> ();
 		ArrayList<Task> floatingTasks = testStorage.getAllTasks().getFloatingTasks();
 		ArrayList<Task> deadlineTasks = testStorage.getAllTasks().getDeadlineTasks();
 		
 		expectedTest.add(task4);
-		expectedTest.add(task3);
+		expectedTest.add(task2);
 		
 		assertEquals(expectedTest.get(0).getSubtask(), floatingTasks.get(0).getSubtask());
 		assertEquals(expectedTest.get(0).getEndTime(), floatingTasks.get(0).getEndTime());
@@ -135,7 +136,7 @@ public class StorageAPITest {
 		assertEquals(expectedTest.get(1).getTags(), deadlineTasks.get(0).getTags());
 		assertEquals(expectedTest.get(1).getTaskName(), deadlineTasks.get(0).getTaskName());
 		testStorage.delete(task4);
-		testStorage.delete(task3);
+		testStorage.delete(task2);
 	}
 	
 	/**
@@ -172,8 +173,7 @@ public class StorageAPITest {
 		ArrayList<Task> expectedTest= new ArrayList<Task>();
 		expectedTest.add(task1);
 		expectedTest.add(task2);
-		testStorage.delete(task2);
-		testStorage.delete(task1);
+		
 		assertEquals(expectedTest.get(0).getSubtask(),deadlineTasks.get(0).getSubtask());
 		assertEquals(expectedTest.get(0).getEndTime(),deadlineTasks.get(0).getEndTime());
 		assertEquals(expectedTest.get(0).getTags(),deadlineTasks.get(0).getTags());
@@ -182,6 +182,8 @@ public class StorageAPITest {
 		assertEquals(expectedTest.get(1).getEndTime(),deadlineTasks.get(1).getEndTime());
 		assertEquals(expectedTest.get(1).getTags(),deadlineTasks.get(1).getTags());
 		assertEquals(expectedTest.get(1).getTaskName(),deadlineTasks.get(1).getTaskName());
+		testStorage.delete(task2);
+		testStorage.delete(task1);
 	}
 	
 	/**

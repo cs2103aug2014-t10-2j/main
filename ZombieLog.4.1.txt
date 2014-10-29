@@ -1,0 +1,10 @@
+Oct 28, 2014 12:09:57 PM interpreter.Interpreter getCommand
+INFO: Creating command of type view
+Oct 28, 2014 12:09:57 PM zombietask.ZombieTask main
+FINER: view agenda
+Oct 28, 2014 12:09:57 PM ui.UI printTask
+FINE: task.Task@5a4a8ece
+Oct 28, 2014 12:10:05 PM interpreter.Interpreter getCommand
+INFO: Creating command of type search-name
+Oct 28, 2014 12:10:05 PM zombietask.ZombieTask main
+FINER: search-name a

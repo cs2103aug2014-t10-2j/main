@@ -1,0 +1,80 @@
+Oct 28, 2014 11:56:36 AM interpreter.Interpreter getCommand
+INFO: Creating command of type view
+Oct 28, 2014 11:56:36 AM zombietask.ZombieTask main
+FINER: view agenda
+Oct 28, 2014 11:56:43 AM interpreter.Interpreter getCommand
+INFO: Creating command of type delete
+Oct 28, 2014 11:56:43 AM zombietask.ZombieTask main
+FINER: delete f0
+Oct 28, 2014 11:56:48 AM interpreter.Interpreter getCommand
+INFO: Creating command of type delete
+Oct 28, 2014 11:56:48 AM zombietask.ZombieTask main
+FINER: delete t0
+Oct 28, 2014 11:56:54 AM interpreter.Interpreter getCommand
+INFO: Creating command of type delete
+Oct 28, 2014 11:56:54 AM zombietask.ZombieTask main
+FINER: delete d0
+Oct 28, 2014 11:57:05 AM interpreter.Interpreter getCommand
+INFO: Creating command of type add
+Oct 28, 2014 11:57:06 AM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 11:57:06 AM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 11:57:06 AM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 11:57:06 AM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 11:57:06 AM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 11:57:06 AM interpreter.Interpreter getTaskName
+INFO: Task name: dinner
+Oct 28, 2014 11:57:06 AM interpreter.Interpreter getTaskName
+INFO: Task name: dinner
+Oct 28, 2014 11:57:06 AM interpreter.Interpreter getTaskName
+INFO: Task name: dinner
+Oct 28, 2014 11:57:06 AM interpreter.Interpreter getTaskName
+INFO: Task name: dinner
+Oct 28, 2014 11:57:06 AM zombietask.ZombieTask main
+FINER: add dinner 7pm to 9pm
+Oct 28, 2014 11:57:06 AM ui.UI printTask
+FINE: task.Task@6607a2e0
+Oct 28, 2014 11:57:24 AM interpreter.Interpreter getCommand
+INFO: Creating command of type update
+Oct 28, 2014 11:57:24 AM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 11:57:24 AM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 11:57:24 AM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 11:57:24 AM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 11:57:24 AM interpreter.Interpreter getTaskName
+INFO: Task name: lunch
+Oct 28, 2014 11:57:24 AM interpreter.Interpreter getTaskName
+INFO: Task name: lunch
+Oct 28, 2014 11:57:24 AM interpreter.Interpreter getTaskName
+INFO: Task name: lunch
+Oct 28, 2014 11:57:24 AM interpreter.Interpreter getTaskName
+INFO: Task name: lunch
+Oct 28, 2014 11:57:24 AM zombietask.ZombieTask main
+FINER: update t0 lunch 11am to 1pm
+Oct 28, 2014 11:58:00 AM interpreter.Interpreter getCommand
+INFO: Creating command of type update
+Oct 28, 2014 11:58:00 AM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 11:58:00 AM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 11:58:00 AM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 11:58:00 AM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 11:58:00 AM interpreter.Interpreter getTaskName
+INFO: Task name: lunchn to 2pm
+Oct 28, 2014 11:58:00 AM interpreter.Interpreter getTaskName
+INFO: Task name: lunchn to 2pm
+Oct 28, 2014 11:58:00 AM interpreter.Interpreter getTaskName
+INFO: Task name: lunchn to
+Oct 28, 2014 11:58:00 AM interpreter.Interpreter getTaskName
+INFO: Task name: lunchn to
+Oct 28, 2014 11:58:00 AM zombietask.ZombieTask main
+FINER: update t0 lunch 1pn to 2pm

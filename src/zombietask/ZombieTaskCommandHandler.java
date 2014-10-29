@@ -67,6 +67,7 @@ public class ZombieTaskCommandHandler {
 	private static String currentCommandString = null;
 	private static Command currentCommand = null;
 	private static Task currentTask = null;
+	private static Task oldTask = null;
 	
 	private static ArrayList<String> futureCommandDescriptorList = new ArrayList<String>();
 	private static ArrayList<Command> futureCommandList = new ArrayList<Command>();
@@ -324,13 +325,16 @@ public class ZombieTaskCommandHandler {
 		CommandAdd currentAddCommand = currentUpdateCommand.getUpdatedTask();
 		String taskName = currentAddCommand.getTaskName();
 		Calendar taskTime = currentAddCommand.getStartDate();
+		Calendar endTime = currentAddCommand.getEndDate();
 		ArrayList<String> tags = currentAddCommand.getTags();
 		
 		currentTask = null;
-		if (taskTime != null){
-			currentTask = new Task(taskName, taskTime);
-		}else{
+		if (taskTime == null){
 			currentTask = new Task(taskName);
+		}else if((taskTime != null) &&(endTime != null)){
+			currentTask = new Task(taskName,endTime,taskTime);
+		}else {
+			currentTask = new Task(taskName,taskTime);
 		}
 		
 		//Add Tags
@@ -342,12 +346,13 @@ public class ZombieTaskCommandHandler {
 		/*
 		 * Note old method depriciated.
 		 */
-		Task oldTask = storage.search(currentUpdateCommand.getLineCode());
+		oldTask = storage.search(currentUpdateCommand.getLineCode());
 		
 		//delete old task
 		try {
 			storage.delete(oldTask);
 			storage.add(currentTask);
+			recordCommand();
 		} catch (Exception err){
 			showToUser(err.getMessage());
 			err.printStackTrace();
@@ -380,6 +385,10 @@ public class ZombieTaskCommandHandler {
 				break;
 			case COMMAND_DELETE:
 				storage.add(currentTask);
+				break;
+			case COMMAND_UPDATE:
+				currentTask = storage.delete(currentTask);
+				storage.add(oldTask);
 				break;
 			default:
 			case COMMAND_INVALID:
@@ -418,6 +427,8 @@ public class ZombieTaskCommandHandler {
 			case COMMAND_DELETE:
 				storage.add(currentTask);
 				break;
+			case COMMAND_UPDATE:
+				System.out.println("redo have not been implemented");
 			default:
 			case COMMAND_INVALID:
 				throw new Exception(ERROR_INVALID_UNDO_REDO);

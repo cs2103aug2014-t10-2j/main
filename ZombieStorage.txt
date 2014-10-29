@@ -1,0 +1,28 @@
+{
+  "floatingTasks": [
+    {
+      "taskName": "b",
+      "endTime": null,
+      "startTime": null,
+      "tags": [],
+      "subtasks": []
+    }
+  ],
+  "deadlineTasks": [
+    {
+      "taskName": "dinner",
+      "endTime": {
+        "year": 2014,
+        "month": 9,
+        "dayOfMonth": 29,
+        "hourOfDay": 21,
+        "minute": 0,
+        "second": 0
+      },
+      "startTime": null,
+      "tags": [],
+      "subtasks": []
+    }
+  ],
+  "timedTasks": []
+}
