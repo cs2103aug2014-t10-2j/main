@@ -1,0 +1,45 @@
+{
+  "floatingTasks": [
+    {
+      "taskName": "lunch",
+      "endTime": null,
+      "startTime": null,
+      "tags": [],
+      "subtasks": [],
+      "location": null
+    },
+    {
+      "taskName": "a",
+      "endTime": null,
+      "startTime": null,
+      "tags": [],
+      "subtasks": [],
+      "location": null
+    }
+  ],
+  "deadlineTasks": [],
+  "timedTasks": [
+    {
+      "taskName": "anything",
+      "endTime": {
+        "year": 2014,
+        "month": 9,
+        "dayOfMonth": 30,
+        "hourOfDay": 21,
+        "minute": 0,
+        "second": 0
+      },
+      "startTime": {
+        "year": 2014,
+        "month": 9,
+        "dayOfMonth": 30,
+        "hourOfDay": 19,
+        "minute": 0,
+        "second": 0
+      },
+      "tags": [],
+      "subtasks": [],
+      "location": null
+    }
+  ]
+}

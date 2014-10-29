@@ -457,13 +457,16 @@ public class ZombieTaskCommandHandler {
 			
 			switch (currentCommandDescriptor){
 			case COMMAND_ADD:
-				currentTask = storage.delete(currentTask);
-				break;
-			case COMMAND_DELETE:
 				storage.add(currentTask);
 				break;
+			case COMMAND_DELETE:
+				storage.delete(currentTask);
+				break;
 			case COMMAND_UPDATE:
-				System.out.println("redo have not been implemented");
+				storage.add(currentTask);
+				storage.delete(oldTask);
+				break;
+				
 			default:
 			case COMMAND_INVALID:
 				throw new Exception(ERROR_INVALID_UNDO_REDO);
