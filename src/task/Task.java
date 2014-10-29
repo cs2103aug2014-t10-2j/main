@@ -344,7 +344,7 @@ public class Task implements Comparable<Task> {
 	}
 	
 	public boolean taskClash(Task otherTask){
-		if (otherTask.isFloatingTask() || this.isFloatingTask()){
+		if (this.equals(otherTask) || otherTask.isFloatingTask() || this.isFloatingTask()){
 			return false;
 		}
 		

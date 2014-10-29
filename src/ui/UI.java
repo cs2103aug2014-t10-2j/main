@@ -205,7 +205,7 @@ public class UI
 		/*
 		 * Add non-floating Tasks
 		 */
-		if (!tasks.getFloatingTasks().isEmpty()){
+		if (!tasks.getScheduledTasks().isEmpty()){
 			str = str.concat(HEADER_SCHEDULED_TASKS);
 			for (Task task : tasks.getScheduledTasks()){
 				str += printTask(task, 0, 0);

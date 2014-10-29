@@ -224,9 +224,9 @@ public class ZombieTaskCommandHandler {
 			
 			ArrayList<Task> clashedTasks = storage.taskClash(currentTask);
 			if(clashedTasks.size() == 1){
-				showToUser(String.format(MESSAGE_CLASH_WARNING, currentTask.getTaskName(), clashedTasks.get(0)));
+				showToUser(String.format(MESSAGE_CLASH_WARNING, currentTask.getTaskName(), clashedTasks.get(0).getTaskName()));
 			}else if (clashedTasks.size() > 1){
-				showToUser(String.format(MESSAGE_CLASH_MORE_THAN_ONE, currentTask.getTaskName(), clashedTasks.get(0), clashedTasks.size() - 1));
+				showToUser(String.format(MESSAGE_CLASH_MORE_THAN_ONE, currentTask.getTaskName(), clashedTasks.size()));
 			}
 			showToUser(String.format(MESSAGE_ADD, currentTask.getTaskName()));
 			showToUser(UI.printTask(currentTask, 1, 0));
