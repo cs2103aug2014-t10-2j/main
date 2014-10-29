@@ -31,7 +31,7 @@ public class ZombieLogger {
 	private static final int MAX_FILES = 20;
 	private static final int MAX_LOGS = 1024*1024*4;
 	private static final String DEFAULT_FILENAME = "ZombieLog.%u.%g.txt";
-	private static final Level DEFAULT_LEVEL = Level.ALL;
+	private static final Level DEFAULT_LEVEL = Level.OFF;
 	/*
 	 * Class variable
 	 */
