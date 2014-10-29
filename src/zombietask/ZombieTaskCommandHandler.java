@@ -19,6 +19,10 @@ import interpreter.CommandSearchTime;
 import interpreter.CommandUpdate;
 import interpreter.CommandView;
 
+import ext.jansi.Ansi;
+import ext.jansi.AnsiConsole;
+import static ext.jansi.Ansi.ansi;
+
 public class ZombieTaskCommandHandler {
 	
 	/*
@@ -47,11 +51,25 @@ public class ZombieTaskCommandHandler {
 	 */
 	
 	private final static String MESSAGE_INVALID_COMMAND = "Invalid Command:\n%s";
-	private final static String MESSAGE_HELP = "THIS HELP NEEDS A BIT OF HELP!";
+	private final static String MESSAGE_HELP = ansi()
+			.fg(Ansi.Color.DEFAULT).a("Help\nAdd Tasks:\n\t")
+			.fg(Ansi.Color.CYAN).a("add ").fg(Ansi.Color.RED).a("taskname\n\t")
+			.fg(Ansi.Color.CYAN).a("add ").fg(Ansi.Color.RED).a("taskname ").fg(Ansi.Color.GREEN).a("end time\n\t")
+			.fg(Ansi.Color.CYAN).a("add ").fg(Ansi.Color.RED).a("taskname ").fg(Ansi.Color.GREEN).a("start time to end time\n")
+			.fg(Ansi.Color.DEFAULT).a("Delete:\n\t")
+			.fg(Ansi.Color.CYAN).a("delete ").fg(Ansi.Color.RED).a("task number\n")
+			.fg(Ansi.Color.DEFAULT).a("Search:\n\t")
+			.fg(Ansi.Color.CYAN).a("search-time ").fg(Ansi.Color.RED).a("start time ").fg(Ansi.Color.GREEN).a("to").fg(Ansi.Color.RED).a("end time\n")
+			.fg(Ansi.Color.DEFAULT).a("Update:\n\t")
+			.fg(Ansi.Color.CYAN).a("add ").fg(Ansi.Color.RED).a("task number ").fg(Ansi.Color.RED).a("start time ").fg(Ansi.Color.GREEN).a("to").fg(Ansi.Color.RED).a("end time\n")
+			.reset()
+			.toString();
 	private final static String MESSAGE_ADD = "Added %s to database";
 	private final static String MESSAGE_DELETE = "Deleted %s from database";
 	private final static String MESSAGE_UPDATE = "Updated %s to %s from database";
-	private final static String MESSAGE_OUTOFBOUNDS = "Warning: input %s is out of bounds,";
+	private final static String MESSAGE_OUTOFBOUNDS = "Warning: input %s is out of bounds";
+	private final static String MESSAGE_CLASH_WARNING = "Warning:\n\tTasks %s and %s clashes";
+	private final static String MESSAGE_CLASH_MORE_THAN_ONE = "Warning\n\tTasks %s and %d other task(s) clashes";
 	
 	private final static String ERROR_EMPTY_UNDO_STACK = "There is nothing to undo!";
 	private final static String ERROR_EMPTY_REDO_STACK = "There is nothing to redo!";
@@ -150,6 +168,7 @@ public class ZombieTaskCommandHandler {
 			String taskName = currentAddCommand.getTaskName();
 			Calendar startTime = currentAddCommand.getStartDate();
 			Calendar endTime = currentAddCommand.getEndDate();
+			String location = currentAddCommand.getLocation();
 			ArrayList<String> tags = currentAddCommand.getTags();
 			
 			/* 
@@ -193,9 +212,21 @@ public class ZombieTaskCommandHandler {
 				currentTask.addTag(tag);
 			}
 			
+			//Add location
+			if (location != null){
+				currentTask.setLocation(location);
+			}
+			
 			//Store Task
 			storage.add(currentTask);
 			recordCommand();
+			
+			ArrayList<Task> clashedTasks = storage.taskClash(currentTask);
+			if(clashedTasks.size() == 1){
+				showToUser(String.format(MESSAGE_CLASH_WARNING, currentTask.getTaskName(), clashedTasks.get(0)));
+			}else if (clashedTasks.size() > 1){
+				showToUser(String.format(MESSAGE_CLASH_MORE_THAN_ONE, currentTask.getTaskName(), clashedTasks.get(0), clashedTasks.size() - 1));
+			}
 			showToUser(String.format(MESSAGE_ADD, currentTask.getTaskName()));
 			showToUser(UI.printTask(currentTask, 1, 0));
 		} catch (Exception err){

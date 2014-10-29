@@ -31,11 +31,12 @@ public class Task implements Comparable<Task> {
 	private Calendar startTime = null;
 	private ArrayList<String> tags = new ArrayList<String>();
 	private ArrayList<Task> subtasks = new ArrayList<Task>();
+	private String location = null;
 	
 	/*
 	 * CONSTRUCTORS
 	 */
-	
+
 	/**
 	 * Constructor for task
 	 * @param taskName String identifier for Task
@@ -69,6 +70,13 @@ public class Task implements Comparable<Task> {
 		setTaskName(taskName);
 		setEndTime(endTime);
 		setStartTime(startTime);
+	}
+	
+	public Task(String taskName, Calendar endTime, Calendar startTime, String location) throws Exception{
+		setTaskName(taskName);
+		setEndTime(endTime);
+		setStartTime(startTime);
+		setLocation(location);
 	}
 	
 	/*
@@ -312,123 +320,51 @@ public class Task implements Comparable<Task> {
 		return this.endTime.after(Calendar.getInstance()) && this.startTime.before(Calendar.getInstance());
 	}
 	
+	/**
+	 * 
+	 * Returns task location
+	 * 
+	 * @return String
+	 */
+	
+	public String getLocation() {
+		return location;
+	}
+	
+	/**
+	 * 
+	 * Sets task location
+	 * 
+	 * @param location String
+	 * 
+	 */
+	
+	public void setLocation(String location) {
+		this.location = location;
+	}
+	
+	public boolean taskClash(Task otherTask){
+		if (otherTask.isFloatingTask() || this.isFloatingTask()){
+			return false;
+		}
+		
+		if (otherTask.isDeadlineTask() && this.isDeadlineTask()){
+			return this.getEndTime().equals(otherTask.getEndTime());
+		}
+		
+		if (otherTask.isDeadlineTask() && this.isTimedTask()){
+			return otherTask.getEndTime().before(this.getEndTime()) && otherTask.getEndTime().after(this.getStartTime());
+		}
+		
+		if (otherTask.isTimedTask() && this.isDeadlineTask()){
+			return otherTask.getStartTime().before(this.getEndTime()) && otherTask.getEndTime().after(this.getEndTime());
+		}
+		
+		return this.getStartTime().after(otherTask.getEndTime()) || this.getEndTime().before(otherTask.getStartTime());
+	}
+	
 	/*
 	 * REDUNDANT METHODS
 	 */
 	
-	/*
-	
-	//setter and getter for deadline2
-	public void setDeadline2(Calendar deadline2) {
-		this.deadline2 = deadline2;	}
-	public void setDeadline2(int year, int mth, int date, int hour, int min)
-	{
-		deadline2 = Calendar.getInstance();
-		deadline2.set(year, mth - 1, date, hour, min, 0);
-	}
-	public Calendar getDeadline2() {
-		return deadline2;	}
-	public boolean isOverdue2() {
-		return deadline2.before(Calendar.getInstance());	}
-	public boolean isFloatingTask2() {
-		return (deadline2 == null) ? true : false;	}
-		
-		*/
-	
-	/*
-	public void setDeadline(int year, int mth, int date, int hour, int min)
-	{
-		deadline = Calendar.getInstance();
-		deadline.set(year, mth - 1, date, hour, min, 0);
-	}
-	*/
-	
-	/*
-	public String getTag(int index) {
-		return (tags.isEmpty()) ? "" : tags.get(index);
-	}
-	*/
-	
-	
-	/*
-	 * Data / Time Formats
-	 */
-	
-	/*
-	public void addSubtask(String subtask) {
-		subtasks.add(new Task(subtask));	}
-	public void addSubtask(String subtask, Calendar date) {
-		subtasks.add(new Task(subtask, date));
-	}
-	*/
-	
-	/*
-	
-	private static final Format FORMAT_DATETIME = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
-	private static final Format FORMAT_DATEONLY = new SimpleDateFormat("dd/MM/yyyy");
-	private static final Format FORMAT_TIME12H = new SimpleDateFormat("hh:mm a");
-	private static final Format FORMAT_TIME24H = new SimpleDateFormat("HH:mm");
-	
-	*/
-	
-	/*
-	public String subtasksToString()
-	{
-		String str = "";
-		if(subtasks.isEmpty())	return "No Subtasks!";
-		else
-		{
-			int i = 0;
-			for(Task task: subtasks)	str += i++ + ": " +task.toString() + "\n";
-		}
-		return str;
-	}
-	*/
-	
-	/*
-	
-	//////////////////// MISCELLENEOUS ////////////////////
-	public String toString()
-	{
-		return taskName + " [" + getDeadlineString() + "]";
-	}
-	public String getDeadlineString()
-	{
-		return (deadline == null) ? "" : FORMAT_DATETIME.format(deadline.getTime());
-	}
-	public String getDayString()
-	{
-		return (deadline == null) ? "" : FORMAT_DATEONLY.format(deadline.getTime());
-	}
-	public String getTime12HourString()
-	{
-		return (deadline == null) ? "" : FORMAT_TIME12H.format(deadline.getTime());
-	}
-	public String getTime24HourString()
-	{
-		return (deadline == null) ? "" : FORMAT_TIME24H.format(deadline.getTime());
-	}
-	public String postpone(int field, int num)
-	{
-		deadline.roll(field, num);
-		return getDayString();
-	}
-	public String postpone(int num)	{	return postpone(Calendar.DATE, num);	}
-	public String postponeTomorrow()	{	return postpone(Calendar.DATE, 1);	}
-	public String postponeNextWeek()	{	return postpone(Calendar.DATE, 7);	}
-	public String postponeNextMonth()	{	return postpone(Calendar.MONTH, 7);	}
-	public int getYear()
-	{
-		return (deadline == null) ? 0 : deadline.get(Calendar.YEAR);
-	}
-	public int getMonth()
-	{
-		return (deadline == null) ? 0 : deadline.get(Calendar.MONTH);
-	}
-	public int getDate()
-	{
-		return (deadline == null) ? 0 : deadline.get(Calendar.DATE);
-	}
-	
-	*/
 }
