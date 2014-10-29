@@ -1,32 +1,26 @@
-Oct 28, 2014 11:13:59 AM interpreter.Interpreter getCommand
+Oct 29, 2014 7:20:25 PM interpreter.Interpreter getCommand
 INFO: Creating command of type view
-Oct 28, 2014 11:13:59 AM zombietask.ZombieTask main
+Oct 29, 2014 7:20:25 PM zombietask.ZombieTask main
 FINER: view agenda
-Oct 28, 2014 11:14:24 AM interpreter.Interpreter getCommand
-INFO: Creating command of type add
-Oct 28, 2014 11:14:24 AM interpreter.Interpreter getTags
+Oct 29, 2014 7:20:25 PM ui.UI printTask
+FINE: task.Task@54e5a4b1
+Oct 29, 2014 7:20:38 PM interpreter.Interpreter getCommand
+INFO: Creating command of type update
+Oct 29, 2014 7:20:38 PM interpreter.Interpreter getTags
 INFO: Tags: []
-Oct 28, 2014 11:14:24 AM interpreter.Interpreter getTags
-INFO: Tags: []
-Oct 28, 2014 11:14:24 AM interpreter.Interpreter getTaskName
-INFO: Task name: firstTask
-Oct 28, 2014 11:14:24 AM interpreter.Interpreter getTaskName
-INFO: Task name: firstTask
-Oct 28, 2014 11:14:24 AM zombietask.ZombieTask main
-FINER: add firstTask 
-Oct 28, 2014 11:14:24 AM ui.UI printTask
-FINE: task.Task@75de997c
-Oct 28, 2014 11:14:41 AM interpreter.Interpreter getCommand
+Oct 29, 2014 7:20:38 PM interpreter.Interpreter getTaskName
+INFO: Task name: b
+Oct 29, 2014 7:20:38 PM interpreter.Interpreter getTaskName
+INFO: Task name: b
+Oct 29, 2014 7:20:38 PM zombietask.ZombieTask main
+FINER: update f0 b
+Oct 29, 2014 7:20:41 PM interpreter.Interpreter getCommand
 INFO: Creating command of type view
-Oct 28, 2014 11:14:41 AM zombietask.ZombieTask main
+Oct 29, 2014 7:20:41 PM zombietask.ZombieTask main
 FINER: view agenda
-Oct 28, 2014 11:14:41 AM ui.UI printTask
-FINE: task.Task@75de997c
-Oct 28, 2014 11:15:14 AM interpreter.Interpreter getCommand
+Oct 29, 2014 7:20:41 PM ui.UI printTask
+FINE: task.Task@13a8e59b
+Oct 29, 2014 7:20:45 PM interpreter.Interpreter getCommand
 INFO: Creating command of type undo
-Oct 28, 2014 11:15:14 AM zombietask.ZombieTask main
+Oct 29, 2014 7:20:45 PM zombietask.ZombieTask main
 FINER: undo
-Oct 28, 2014 11:15:22 AM interpreter.Interpreter getCommand
-INFO: Creating command of type view
-Oct 28, 2014 11:15:22 AM zombietask.ZombieTask main
-FINER: view agenda

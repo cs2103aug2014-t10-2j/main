@@ -1,0 +1,81 @@
+Oct 28, 2014 11:58:54 AM interpreter.Interpreter getCommand
+INFO: Creating command of type update
+Oct 28, 2014 11:58:54 AM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 11:58:54 AM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 11:58:54 AM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 11:58:54 AM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 11:58:54 AM interpreter.Interpreter getTaskName
+INFO: Task name: lunch
+Oct 28, 2014 11:58:54 AM interpreter.Interpreter getTaskName
+INFO: Task name: lunch
+Oct 28, 2014 11:58:54 AM interpreter.Interpreter getTaskName
+INFO: Task name: lunch
+Oct 28, 2014 11:58:54 AM interpreter.Interpreter getTaskName
+INFO: Task name: lunch
+Oct 28, 2014 11:58:54 AM zombietask.ZombieTask main
+FINER: update t0 lunch 11am to 1pm
+Oct 28, 2014 12:03:59 PM interpreter.Interpreter getCommand
+INFO: Creating command of type add
+Oct 28, 2014 12:03:59 PM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 12:03:59 PM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 12:03:59 PM interpreter.Interpreter getTaskName
+INFO: Task name: search lunch
+Oct 28, 2014 12:03:59 PM interpreter.Interpreter getTaskName
+INFO: Task name: search lunch
+Oct 28, 2014 12:03:59 PM zombietask.ZombieTask main
+FINER: search lunch
+Oct 28, 2014 12:03:59 PM ui.UI printTask
+FINE: task.Task@3ad5ba3a
+Oct 28, 2014 12:04:15 PM interpreter.Interpreter getCommand
+INFO: Creating command of type delete
+Oct 28, 2014 12:04:15 PM zombietask.ZombieTask main
+FINER: delete f0
+Oct 28, 2014 12:04:29 PM interpreter.Interpreter getCommand
+INFO: Creating command of type search-name
+Oct 28, 2014 12:04:29 PM zombietask.ZombieTask main
+FINER: search-name lunch
+Oct 28, 2014 12:04:56 PM interpreter.Interpreter getCommand
+INFO: Creating command of type delete
+Oct 28, 2014 12:04:56 PM zombietask.ZombieTask main
+FINER: delete t0
+Oct 28, 2014 12:05:00 PM interpreter.Interpreter getCommand
+INFO: Creating command of type add
+Oct 28, 2014 12:05:00 PM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 12:05:00 PM interpreter.Interpreter getTags
+INFO: Tags: []
+Oct 28, 2014 12:05:00 PM interpreter.Interpreter getTaskName
+INFO: Task name: a
+Oct 28, 2014 12:05:00 PM interpreter.Interpreter getTaskName
+INFO: Task name: a
+Oct 28, 2014 12:05:00 PM zombietask.ZombieTask main
+FINER: add a
+Oct 28, 2014 12:05:00 PM ui.UI printTask
+FINE: task.Task@5f9beb29
+Oct 28, 2014 12:05:05 PM interpreter.Interpreter getCommand
+INFO: Creating command of type search-name
+Oct 28, 2014 12:05:05 PM zombietask.ZombieTask main
+FINER: search-name a
+Oct 28, 2014 12:05:21 PM interpreter.Interpreter getCommand
+INFO: Creating command of type search-time
+Oct 28, 2014 12:05:21 PM interpreter.Interpreter getCommandSearchTime
+INFO: No date found
+Oct 28, 2014 12:05:21 PM zombietask.ZombieTask main
+INFO: Command Missing Arguments:
+search-time null
+Oct 28, 2014 12:05:36 PM interpreter.Interpreter getCommand
+INFO: Creating command of type view
+Oct 28, 2014 12:05:36 PM zombietask.ZombieTask main
+FINER: view agenda
+Oct 28, 2014 12:05:36 PM ui.UI printTask
+FINE: task.Task@5f9beb29
+Oct 28, 2014 12:06:02 PM interpreter.Interpreter getCommand
+INFO: Creating command of type search-name
+Oct 28, 2014 12:06:02 PM zombietask.ZombieTask main
+FINER: search-name a
