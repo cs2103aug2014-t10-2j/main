@@ -13,7 +13,7 @@ import java.util.Calendar;
 
 public class CommandAdd extends Command {
 
-	public static String DEFAULT_LOCATION = "none";
+	public static String DEFAULT_LOCATION = null; //"none";
 
 	String taskName = null;
 	Calendar startDate = null;

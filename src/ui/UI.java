@@ -44,39 +44,7 @@ import zombietask.ZombieTask;
 public class UI
 {
 	
-	/*
-	 * WTF NO HARD CODED LIMITS HERE
-	 */
 	
-	/*
-	private static final int DAILY_LIMIT = 24;
-	private static final int WEEKLY_LIMIT = 28;
-	private static final int MONTHLY_LIMIT = 30;
-	private static final int ANNUAL_LIMIT = 52;
-	*/
-	
-	/*
-	 * Class Constants
-	 * 
-	 * Color Standardization
-	 * 
-	 * @Names
-	 * 
-	 * Red - Overdue
-	 * Green - Floating Tasks
-	 * Yellow - Dateline Tasks
-	 * Cyan - Timed Tasks
-	 * 
-	 * @Tags
-	 * 
-	 * White - all
-	 * 
-	 * @SubTasks
-	 * 
-	 * Purple - all
-	 * 
-	 * 
-	 */
 	public static final Ansi.Color COLOR_BLACK = Ansi.Color.BLACK;
 	public static final Ansi.Color COLOR_RED = Ansi.Color.RED;
 	public static final Ansi.Color COLOR_GREEN = Ansi.Color.GREEN;
@@ -121,7 +89,7 @@ public class UI
 	private static final Format FORMAT_TODAY = new SimpleDateFormat("dd MMMMM yyyy, HH:mm");
 	private static final Format FORMAT_WEEKNUM = new SimpleDateFormat("ww");
 	
-	private static final ArrayList<Task> EMPTY_LIST = new ArrayList<Task>();
+	private static final ArrayList<Task> EMPTY_LIST = Storage.EMPTY_LIST;
 	
 	
 	/*
@@ -237,7 +205,7 @@ public class UI
 		/*
 		 * Add non-floating Tasks
 		 */
-		if (!tasks.getFloatingTasks().isEmpty()){
+		if (!tasks.getScheduledTasks().isEmpty()){
 			str = str.concat(HEADER_SCHEDULED_TASKS);
 			for (Task task : tasks.getScheduledTasks()){
 				str += printTask(task, 0, 0);

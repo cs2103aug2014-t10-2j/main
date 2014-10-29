@@ -44,6 +44,8 @@ public class Storage {
 	private static final Comparator<Task> startTimeComparator = new TaskStartTimeComparator();
 	private static final Comparator<Task> endTimeComparator = new TaskEndTimeComparator();
 	
+	public static final ArrayList<Task> EMPTY_LIST = new ArrayList<Task>();
+	
 	/*
 	 * INSTANCE ATTRIBUTES
 	 */
@@ -149,24 +151,28 @@ public class Storage {
 	
 	public TaskUIFormat searchTask(Calendar startTime, Calendar endTime) throws Exception{
 		if (startTime.after(endTime)){
-			throw new Exception(MESSAGE_TIME_CONFLICT);
+			Calendar tempTime = startTime;
+			startTime = endTime;
+			endTime = tempTime;
+			//throw new Exception(MESSAGE_TIME_CONFLICT);
 		}
+		
 		ArrayList<Task> searchDeadlineList = new ArrayList<Task> ();
 		ArrayList<Task> searchTimedList = new ArrayList<Task> ();
+		
 		for(Task task : deadlineTasks){
-			if (task.getStartTime() == null){
-				if (task.getEndTime().compareTo(endTime)<=0 && task.getEndTime().compareTo(startTime)>=0){
-					searchDeadlineList.add(task);
-				}
-				continue;
+			if (task.getEndTime().compareTo(endTime)<=0 && task.getEndTime().compareTo(startTime)>=0){
+				searchDeadlineList.add(task);
 			}
 		}
+		
 		for(Task task : timedTasks){
 			if (task.getEndTime().compareTo(endTime)<=0 && task.getStartTime().compareTo(endTime)<=0){
 				searchTimedList.add(task);
 			}
 		}
-		return new TaskUIFormat(null , searchDeadlineList, searchTimedList);
+		
+		return new TaskUIFormat(EMPTY_LIST, searchDeadlineList, searchTimedList);
 	}
 	
 	public Task search(String lineCode){
@@ -287,6 +293,45 @@ public class Storage {
 			return "t".concat(String.valueOf(timedTasks.indexOf(task)));
 		}
 		return null;
+	}
+	
+	/**
+	 * Returns true if task clashes if existing tasks in storage
+	 * 
+	 * Floating Tasks always returns false.
+	 * 
+	 * Dateline Tasks returns true when it clashes with other dateline tasks
+	 * or timed tasks.
+	 * 
+	 * @param newTask
+	 * @return boolean value
+	 */
+	
+	public ArrayList<Task> taskClash(Task newTask){
+		
+		ArrayList<Task> clashedTasks = new ArrayList<Task>();
+		
+		if (newTask.isFloatingTask()){
+			return clashedTasks;
+		}
+		
+		for (Task oldTask: timedTasks){
+			if (!newTask.equals(oldTask)){
+				if (newTask.taskClash(oldTask)){
+					clashedTasks.add(oldTask);
+				}
+			}
+		}
+		
+		for (Task oldTask: deadlineTasks){
+			if (!newTask.equals(oldTask)){
+				if (newTask.taskClash(oldTask)){
+					clashedTasks.add(oldTask);
+				}
+			}
+		}
+		
+		return clashedTasks;
 	}
 
 }
