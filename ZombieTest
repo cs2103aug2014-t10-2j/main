@@ -1,0 +1,14 @@
+{
+  "floatingTasks": [
+    {
+      "taskName": "dinner",
+      "endTime": null,
+      "startTime": null,
+      "tags": [],
+      "subtasks": [],
+      "location": null
+    }
+  ],
+  "deadlineTasks": [],
+  "timedTasks": []
+}
