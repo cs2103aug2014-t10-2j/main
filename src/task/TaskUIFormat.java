@@ -1,15 +1,8 @@
 package task;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import logger.ZombieLogger;
 
 public class TaskUIFormat {
 	
@@ -17,17 +10,14 @@ public class TaskUIFormat {
 	 * Class Constants
 	 */
 	
-	
-	private static final Comparator<Task> startTimeComparator = new TaskStartTimeComparator();
+	//private static final Comparator<Task> startTimeComparator = new TaskStartTimeComparator();
 	private static final Comparator<Task> endTimeComparator = new TaskEndTimeComparator();
-	
-	
 	
 	/*
 	 * Class Variables
 	 */
 	
-	private static Logger logger = ZombieLogger.getLogger();
+	//private static Logger logger = ZombieLogger.getLogger();
 	
 	/*
 	 * Instance Variables
@@ -76,11 +66,19 @@ public class TaskUIFormat {
 	}
 	
 	public boolean isEmpty(){
-		return floatingTasks.isEmpty() && deadlineTasks.isEmpty() && timedTasks.isEmpty();
+		return floatingTasksIsEmpty() && deadlineTasksIsEmpty() && timedTasksIsEmpty();
 	}
-
+	public boolean floatingTasksIsEmpty() {
+		return(floatingTasks == null) ? true : floatingTasks.isEmpty();
+	}
+	public boolean deadlineTasksIsEmpty() {
+		return(deadlineTasks == null) ? true : deadlineTasks.isEmpty();
+	}
+	public boolean timedTasksIsEmpty() {
+		return(timedTasks == null) ? true : timedTasks.isEmpty();
+	}
 	public ArrayList<Task> getFloatingTasks() {
-		return floatingTasks;
+		return (floatingTasks == null) ? new ArrayList<Task>() : floatingTasks;
 	}
 
 	public void setFloatingTasks(ArrayList<Task> floatingTasks) {
@@ -88,7 +86,7 @@ public class TaskUIFormat {
 	}
 
 	public ArrayList<Task> getDeadlineTasks() {
-		return deadlineTasks;
+		return (deadlineTasks == null) ? new ArrayList<Task>() : deadlineTasks;
 	}
 
 	public void setDeadlineTasks(ArrayList<Task> deadlineTasks) {
@@ -96,7 +94,7 @@ public class TaskUIFormat {
 	}
 
 	public ArrayList<Task> getTimedTasks() {
-		return timedTasks;
+		return (timedTasks == null) ? new ArrayList<Task>() : timedTasks;
 	}
 
 	public void setTimedTasks(ArrayList<Task> timedTasks) {
