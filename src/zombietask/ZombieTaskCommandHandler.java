@@ -3,6 +3,7 @@ package zombietask;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import storage.Storage;
@@ -430,7 +431,9 @@ public class ZombieTaskCommandHandler {
 		try{
 			// Pop items from pastLists
 			if (pastCommandList.size() == 0){
-				throw new Exception(ERROR_EMPTY_UNDO_STACK);
+				logger.log(Level.INFO,ERROR_EMPTY_UNDO_STACK );
+				showToUser(ERROR_EMPTY_UNDO_STACK);
+				return;
 			}
 			currentCommandDescriptor = pastCommandDescriptorList.remove(pastCommandDescriptorList.size() - 1);
 			currentCommand = pastCommandList.remove(pastCommandList.size() - 1);
@@ -451,7 +454,8 @@ public class ZombieTaskCommandHandler {
 				break;
 			default:
 			case COMMAND_INVALID:
-				throw new Exception(ERROR_INVALID_UNDO_REDO);
+				logger.log(Level.INFO, ERROR_INVALID_UNDO_REDO);
+				showToUser(ERROR_INVALID_UNDO_REDO);
 			}
 			
 			// Push items into futureLists
@@ -469,8 +473,10 @@ public class ZombieTaskCommandHandler {
 	protected static void redo() {
 		try{
 			//Pop items from futureLists
-			if (pastCommandList.size() == 0){
-				throw new Exception(ERROR_EMPTY_REDO_STACK);
+			if (futureCommandDescriptorList.size() == 0){
+				logger.log(Level.INFO,ERROR_EMPTY_REDO_STACK );
+				showToUser(ERROR_EMPTY_REDO_STACK);
+				return;
 			}
 			currentCommandDescriptor = futureCommandDescriptorList.remove(futureCommandDescriptorList.size() - 1);
 			currentCommand = futureCommandList.remove(futureCommandList.size() - 1);
@@ -493,7 +499,8 @@ public class ZombieTaskCommandHandler {
 				
 			default:
 			case COMMAND_INVALID:
-				throw new Exception(ERROR_INVALID_UNDO_REDO);
+				logger.log(Level.INFO, ERROR_INVALID_UNDO_REDO);
+				showToUser(ERROR_INVALID_UNDO_REDO);
 			}
 			
 			// Push items into pastLists

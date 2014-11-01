@@ -7,6 +7,14 @@
       "tags": [],
       "subtasks": [],
       "location": null
+    },
+    {
+      "taskName": "nothing",
+      "endTime": null,
+      "startTime": null,
+      "tags": [],
+      "subtasks": [],
+      "location": null
     }
   ],
   "deadlineTasks": [
@@ -71,21 +79,6 @@
       "location": null
     },
     {
-      "taskName": "IHG",
-      "endTime": {
-        "year": 2014,
-        "month": 9,
-        "dayOfMonth": 30,
-        "hourOfDay": 23,
-        "minute": 59,
-        "second": 0
-      },
-      "startTime": null,
-      "tags": [],
-      "subtasks": [],
-      "location": null
-    },
-    {
       "taskName": "video",
       "endTime": {
         "year": 2014,
@@ -108,21 +101,6 @@
         "dayOfMonth": 1,
         "hourOfDay": 20,
         "minute": 20,
-        "second": 0
-      },
-      "startTime": null,
-      "tags": [],
-      "subtasks": [],
-      "location": null
-    },
-    {
-      "taskName": "supper",
-      "endTime": {
-        "year": 2014,
-        "month": 10,
-        "dayOfMonth": 2,
-        "hourOfDay": 2,
-        "minute": 0,
         "second": 0
       },
       "startTime": null,
