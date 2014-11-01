@@ -22,13 +22,14 @@ public class Command {
 	public static final String HELP = "help";
 	public static final String SEARCH_NAME = "search-name";
 	public static final String SEARCH_TIME = "search-time";
+	public static final String SEARCH_TAG = "search-tag";
 	public static final String EXIT = "exit";
 
 	// list for ease of checking valid commands
 	public static List<String> validCommands = Arrays.asList(Command.ADD,
 			Command.DELETE, Command.UPDATE, Command.VIEW, Command.UNDO,
 			Command.REDO, Command.HELP, Command.SEARCH_NAME,
-			Command.SEARCH_TIME, Command.EXIT);
+			Command.SEARCH_TIME, Command.SEARCH_TAG, Command.EXIT);
 
 	String commandType = null;
 	String userInput = null;

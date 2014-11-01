@@ -109,6 +109,12 @@ public class Interpreter {
 						return new CommandSearchTime(null, null, userInput,
 								true);
 					}
+				case Command.SEARCH_TAG:
+					if (userInputTokens.length > 1){
+						return getCommandSearchTag(userInput);
+					} else {
+						return new CommandSearchTag(null, userInput, true);
+					}
 				case Command.UNDO:
 					return new Command(Command.UNDO, userInput, false);
 				case Command.REDO:
@@ -171,6 +177,12 @@ public class Interpreter {
 		String searchString = userInput.replaceFirst(Command.SEARCH_NAME + " ",
 				"");
 		return new CommandSearchName(searchString, userInput, false);
+	}
+	
+	private static Command getCommandSearchTag(String userInput){
+		String searchString = userInput.replaceFirst(Command.SEARCH_TAG + " ", "");
+		
+		return new CommandSearchTag(searchString, userInput, false);
 	}
 
 	/**

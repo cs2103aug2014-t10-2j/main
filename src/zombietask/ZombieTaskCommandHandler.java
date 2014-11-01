@@ -15,10 +15,10 @@ import interpreter.Command;
 import interpreter.CommandAdd;
 import interpreter.CommandDelete;
 import interpreter.CommandSearchName;
+import interpreter.CommandSearchTag;
 import interpreter.CommandSearchTime;
 import interpreter.CommandUpdate;
 import interpreter.CommandView;
-
 import ext.jansi.Ansi;
 import ext.jansi.AnsiConsole;
 import static ext.jansi.Ansi.ansi;
@@ -38,7 +38,7 @@ public class ZombieTaskCommandHandler {
 	private final static String COMMAND_HELP = Command.HELP;
 	private final static String COMMAND_SEARCH_NAME = Command.SEARCH_NAME;
 	private final static String COMMAND_SEARCH_TIME = Command.SEARCH_TIME;
-	//private final static String COMMAND_SEARCH_TAG = Command.SEARCH_TAG;
+	private final static String COMMAND_SEARCH_TAG = Command.SEARCH_TAG;
 	private final static String COMMAND_EXIT = Command.EXIT;
 	private final static String COMMAND_INVALID = "invalid command %s";
 	
@@ -155,6 +155,10 @@ public class ZombieTaskCommandHandler {
 			commandCalled = Command.SEARCH_TIME;
 			searchTime(currentCommand);
 			break;
+		case COMMAND_SEARCH_TAG:
+			commandCalled = Command.SEARCH_TAG;
+			searchTag(currentCommand);
+			break;
 		case COMMAND_EXIT:
 			commandCalled = Command.EXIT;
 			exit();
@@ -170,6 +174,7 @@ public class ZombieTaskCommandHandler {
 	/**
 	 * For testing
 	 */
+	
 	public static String getCommandCalled() {
 		return commandCalled;
 	}
@@ -517,6 +522,12 @@ public class ZombieTaskCommandHandler {
 	protected static void searchTime(Command command) throws Exception{
 		CommandSearchTime searchCommand = (CommandSearchTime) command;
 		UI.printPerspective(FORMAT.AGENDA, storage.search(searchCommand.getTimeStart(), searchCommand.getTimeEnd()));
+	}
+	
+	protected static void searchTag(Command command) throws Exception{
+		CommandSearchTag searchCommand = (CommandSearchTag) command;
+		System.out.println(searchCommand.getTag());
+		UI.printPerspective(FORMAT.AGENDA, storage.searchTag(searchCommand.getTag()));
 	}
 	
 	protected static void exit(){
