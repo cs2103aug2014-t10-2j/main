@@ -465,7 +465,7 @@ public class ZombieTaskCommandHandler {
 	protected static void redo() {
 		try{
 			//Pop items from futureLists
-			if (pastCommandList.size() == 0){
+			if (futureCommandDescriptorList.size() == 0){
 				throw new Exception(ERROR_EMPTY_REDO_STACK);
 			}
 			currentCommandDescriptor = futureCommandDescriptorList.remove(futureCommandDescriptorList.size() - 1);
