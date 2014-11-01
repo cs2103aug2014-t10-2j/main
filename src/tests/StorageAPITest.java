@@ -45,7 +45,7 @@ public class StorageAPITest {
 	Task task4 = null; 
 	Task deletedTask=null;
 	/**
-	 *  clear the file and set 4 Tasks which will be used later
+	 *  clear the file and set 5 Tasks which will be used later
 	 * @throws Exception
 	 */
 	@Before

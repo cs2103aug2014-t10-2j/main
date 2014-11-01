@@ -1,0 +1,180 @@
+{
+  "floatingTasks": [
+    {
+      "taskName": "sleeping",
+      "endTime": null,
+      "startTime": null,
+      "tags": [],
+      "subtasks": [],
+      "location": null
+    }
+  ],
+  "deadlineTasks": [
+    {
+      "taskName": "lunch",
+      "endTime": {
+        "year": 2014,
+        "month": 9,
+        "dayOfMonth": 30,
+        "hourOfDay": 0,
+        "minute": 0,
+        "second": 0
+      },
+      "startTime": null,
+      "tags": [],
+      "subtasks": [],
+      "location": null
+    },
+    {
+      "taskName": "sick",
+      "endTime": {
+        "year": 2014,
+        "month": 9,
+        "dayOfMonth": 30,
+        "hourOfDay": 5,
+        "minute": 39,
+        "second": 49
+      },
+      "startTime": null,
+      "tags": [],
+      "subtasks": [],
+      "location": null
+    },
+    {
+      "taskName": "lab",
+      "endTime": {
+        "year": 2014,
+        "month": 9,
+        "dayOfMonth": 30,
+        "hourOfDay": 14,
+        "minute": 0,
+        "second": 0
+      },
+      "startTime": null,
+      "tags": [],
+      "subtasks": [],
+      "location": null
+    },
+    {
+      "taskName": "dinner",
+      "endTime": {
+        "year": 2014,
+        "month": 9,
+        "dayOfMonth": 30,
+        "hourOfDay": 18,
+        "minute": 0,
+        "second": 0
+      },
+      "startTime": null,
+      "tags": [],
+      "subtasks": [],
+      "location": null
+    },
+    {
+      "taskName": "IHG",
+      "endTime": {
+        "year": 2014,
+        "month": 9,
+        "dayOfMonth": 30,
+        "hourOfDay": 23,
+        "minute": 59,
+        "second": 0
+      },
+      "startTime": null,
+      "tags": [],
+      "subtasks": [],
+      "location": null
+    },
+    {
+      "taskName": "video",
+      "endTime": {
+        "year": 2014,
+        "month": 9,
+        "dayOfMonth": 31,
+        "hourOfDay": 5,
+        "minute": 33,
+        "second": 47
+      },
+      "startTime": null,
+      "tags": [],
+      "subtasks": [],
+      "location": null
+    },
+    {
+      "taskName": "revise EE",
+      "endTime": {
+        "year": 2014,
+        "month": 10,
+        "dayOfMonth": 1,
+        "hourOfDay": 20,
+        "minute": 20,
+        "second": 0
+      },
+      "startTime": null,
+      "tags": [],
+      "subtasks": [],
+      "location": null
+    },
+    {
+      "taskName": "supper",
+      "endTime": {
+        "year": 2014,
+        "month": 10,
+        "dayOfMonth": 2,
+        "hourOfDay": 2,
+        "minute": 0,
+        "second": 0
+      },
+      "startTime": null,
+      "tags": [],
+      "subtasks": [],
+      "location": null
+    }
+  ],
+  "timedTasks": [
+    {
+      "taskName": "CS2103TUT",
+      "endTime": {
+        "year": 2014,
+        "month": 9,
+        "dayOfMonth": 30,
+        "hourOfDay": 11,
+        "minute": 0,
+        "second": 0
+      },
+      "startTime": {
+        "year": 2014,
+        "month": 9,
+        "dayOfMonth": 30,
+        "hourOfDay": 10,
+        "minute": 0,
+        "second": 0
+      },
+      "tags": [],
+      "subtasks": [],
+      "location": null
+    },
+    {
+      "taskName": "training",
+      "endTime": {
+        "year": 2014,
+        "month": 9,
+        "dayOfMonth": 31,
+        "hourOfDay": 22,
+        "minute": 0,
+        "second": 0
+      },
+      "startTime": {
+        "year": 2014,
+        "month": 9,
+        "dayOfMonth": 31,
+        "hourOfDay": 19,
+        "minute": 0,
+        "second": 0
+      },
+      "tags": [],
+      "subtasks": [],
+      "location": null
+    }
+  ]
+}
