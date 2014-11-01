@@ -45,6 +45,8 @@ public class ZombieTaskCommandHandler {
 	private final static boolean SUCCESS = true;
 	private final static boolean FAILURE = false;
 	
+	// for testing
+	private static String commandCalled = null;
 	
 	/*
 	 * Messages
@@ -118,40 +120,58 @@ public class ZombieTaskCommandHandler {
 		currentCommandDescriptor = currentCommand.getCommandType();
 		switch(currentCommandDescriptor){
 		case COMMAND_ADD:
+			commandCalled = Command.ADD;
 			addCommand(currentCommand);
 			break;
 		case COMMAND_DELETE:
+			commandCalled = Command.DELETE;
 			deleteCommand(currentCommand);
 			break;
 		case COMMAND_VIEW:
+			commandCalled = Command.VIEW;
 			viewCommand(currentCommand);
 			break;
 		case COMMAND_UPDATE:
+			commandCalled = Command.UPDATE;
 			updateCommand(currentCommand);
 			break;
 		case COMMAND_UNDO:
+			commandCalled = Command.UNDO;
 			undo();
 			break;
 		case COMMAND_REDO:
+			commandCalled = Command.REDO;
 			redo();
 			break;
 		case COMMAND_HELP:
+			commandCalled = Command.HELP;
 			help();
 			break;
 		case COMMAND_SEARCH_NAME:
+			commandCalled = Command.SEARCH_NAME;
 			searchName(currentCommand);
 			break;
 		case COMMAND_SEARCH_TIME:
+			commandCalled = Command.SEARCH_TIME;
 			searchTime(currentCommand);
 			break;
 		case COMMAND_EXIT:
+			commandCalled = Command.EXIT;
 			exit();
 			break;
 		default:
 		case COMMAND_INVALID:
+			commandCalled = null;
 			invalidCommand(currentCommandString);
 			break;
 		}
+	}
+	
+	/**
+	 * For testing
+	 */
+	public static String getCommandCalled() {
+		return commandCalled;
 	}
 	
 	private static void reinitializeCurrentVariables() {
