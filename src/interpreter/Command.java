@@ -20,6 +20,7 @@ public class Command {
 	public static final String UNDO = "undo";
 	public static final String REDO = "redo";
 	public static final String HELP = "help";
+	public static final String SEARCH = "search";
 	public static final String SEARCH_NAME = "search-name";
 	public static final String SEARCH_TIME = "search-time";
 	public static final String EXIT = "exit";
@@ -27,7 +28,7 @@ public class Command {
 	// list for ease of checking valid commands
 	public static List<String> validCommands = Arrays.asList(Command.ADD,
 			Command.DELETE, Command.UPDATE, Command.VIEW, Command.UNDO,
-			Command.REDO, Command.HELP, Command.SEARCH_NAME,
+			Command.REDO, Command.HELP, Command.SEARCH, Command.SEARCH_NAME,
 			Command.SEARCH_TIME, Command.EXIT);
 
 	String commandType = null;
@@ -50,8 +51,8 @@ public class Command {
 	}
 
 	/**
-	 * Accessor for the type of command, which can be Add, Delete, Update, View
-	 * or Undo.
+	 * Accessor for the type of command, which can be Add, Delete, Update, View,
+	 * Undo or Redo.
 	 * 
 	 * @return commandType the type of command
 	 */
