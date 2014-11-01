@@ -20,6 +20,7 @@ public class Command {
 	public static final String UNDO = "undo";
 	public static final String REDO = "redo";
 	public static final String HELP = "help";
+	public static final String DONE = "done";
 	public static final String SEARCH_NAME = "search-name";
 	public static final String SEARCH_TIME = "search-time";
 	public static final String SEARCH_TAG = "search-tag";
@@ -29,7 +30,7 @@ public class Command {
 	// list for ease of checking valid commands
 	public static List<String> validCommands = Arrays.asList(Command.ADD,
 			Command.DELETE, Command.UPDATE, Command.VIEW, Command.UNDO,
-			Command.REDO, Command.HELP, Command.SEARCH_NAME,
+			Command.REDO, Command.HELP, Command.DONE, Command.SEARCH_NAME,
 			Command.SEARCH_TIME, Command.SEARCH_TAG, Command.SEARCH_LOCATION, Command.EXIT);
 
 	String commandType = null;

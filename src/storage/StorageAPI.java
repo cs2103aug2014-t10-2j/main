@@ -273,4 +273,14 @@ public class StorageAPI {
 		return storage.taskClash(newTask);
 	}
 	
+	public void toggleComplete(Task task) throws IOException{
+		task.toggleComplete();
+		writeFile();
+	}
+	
+	public void toggleDelete(Task task) throws IOException{
+		task.toggleDelete();
+		writeFile();
+	}
+	
 }

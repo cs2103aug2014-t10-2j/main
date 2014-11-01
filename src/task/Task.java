@@ -372,12 +372,28 @@ public class Task implements Comparable<Task> {
 		return !(this.getStartTime().after(otherTask.getEndTime()) || this.getEndTime().before(otherTask.getStartTime()));
 	}
 	
+	/**
+	 * Changes the status of completion in Task
+	 */
+	
+	public void toggleComplete() {
+		completed = !completed;
+	}
+	
 	public boolean isCompleted() {
 		return completed;
 	}
 
 	public void setCompleted(boolean completed) {
 		this.completed = completed;
+	}
+	
+	/**
+	 * Changes the status of deletion in Task
+	 */
+	
+	public void toggleDelete(){
+		deleted = !deleted;
 	}
 
 	public boolean isDeleted() {

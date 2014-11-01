@@ -96,6 +96,12 @@ public class Interpreter {
 					} else {
 						return new CommandHelp(null, userInput, true);
 					}
+				case Command.DONE:
+					if (userInputTokens.length > 1) {
+						return getCommandDone(userInputTokens[1], userInput);
+					} else {
+						return new CommandDone(null, userInput, true);
+					}
 				case Command.SEARCH_NAME:
 					if (userInputTokens.length > 1) {
 						return getCommandSearchName(userInput);
@@ -445,6 +451,36 @@ public class Interpreter {
 
 		} catch (Exception e) { // invalid date
 			return new CommandUpdate(null, null, userInput, true);
+		}
+	}
+	
+	/**
+	 * Creates a CommandDone object from user input
+	 * 
+	 * @param secondWord the second word of the user input
+	 * @param userInput the userinput String
+	 * @return a CommandDone object with integer value of line number, the
+	 *         original input and a boolean value to indicate missing arguments
+	 * @throws Exception for invalid line number or date
+	 */
+	
+	private static CommandDone getCommandDone(String secondWord, String userInput){
+		try {
+			String lineCode = null;
+			secondWord = secondWord.toLowerCase();
+			boolean validSecondWord = secondWord.matches("[" + UPDATE_F
+					+ UPDATE_D + UPDATE_T + "][0-9]+");
+
+			if (validSecondWord) {
+				lineCode = secondWord;
+				return new CommandDone(lineCode, userInput,
+						false);
+			} else {
+				return new CommandDone(null, userInput, true);
+			}
+
+		} catch (Exception e) {
+			return new CommandDone(null, userInput, true);
 		}
 	}
 

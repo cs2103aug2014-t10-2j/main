@@ -15,6 +15,7 @@ import ui.UI;
 import interpreter.Command;
 import interpreter.CommandAdd;
 import interpreter.CommandDelete;
+import interpreter.CommandDone;
 import interpreter.CommandSearchLocation;
 import interpreter.CommandSearchName;
 import interpreter.CommandSearchTag;
@@ -38,6 +39,7 @@ public class ZombieTaskCommandHandler {
 	private final static String COMMAND_UNDO = Command.UNDO;
 	private final static String COMMAND_REDO = Command.REDO;
 	private final static String COMMAND_HELP = Command.HELP;
+	private final static String COMMAND_DONE = Command.DONE;
 	private final static String COMMAND_SEARCH_NAME = Command.SEARCH_NAME;
 	private final static String COMMAND_SEARCH_TIME = Command.SEARCH_TIME;
 	private final static String COMMAND_SEARCH_TAG = Command.SEARCH_TAG;
@@ -73,6 +75,8 @@ public class ZombieTaskCommandHandler {
 	private final static String MESSAGE_DELETE = "Deleted %s from database";
 	private final static String MESSAGE_UPDATE = "Updated %s to %s from database";
 	private final static String MESSAGE_OUTOFBOUNDS = "Warning: input %s is out of bounds";
+	private final static String MESSAGE_DONE = "Marked %s as done";
+	private final static String MESSAGE_UNDONE = "Marked %s as undone";
 	private final static String MESSAGE_CLASH_WARNING = "Warning\n\tTasks %s and %d other task(s) clashes\nClashed Tasks:\n"; //"Warning:\n\tTasks %s and %s clashes";
 	//private final static String MESSAGE_CLASH_MORE_THAN_ONE = "Warning\n\tTasks %s and %d other task(s) clashes";
 	
@@ -149,6 +153,10 @@ public class ZombieTaskCommandHandler {
 		case COMMAND_HELP:
 			commandCalled = Command.HELP;
 			help();
+			break;
+		case COMMAND_DONE:
+			commandCalled = Command.DONE;
+			doneCommand(currentCommand);
 			break;
 		case COMMAND_SEARCH_NAME:
 			commandCalled = Command.SEARCH_NAME;
@@ -546,6 +554,17 @@ public class ZombieTaskCommandHandler {
 	protected static void searchLocation(Command command) throws Exception{
 		CommandSearchLocation searchCommand = (CommandSearchLocation) command;
 		UI.printPerspective(FORMAT.AGENDA, storage.searchLocation(searchCommand.getLocation()));
+	}
+	
+	protected static void doneCommand(Command command) throws Exception{
+		CommandDone doneCommand = (CommandDone) command;
+		currentTask = storage.search(doneCommand.getLineCode());
+		storage.toggleComplete(currentTask);
+		if (currentTask.isCompleted()){
+			showToUser(String.format(MESSAGE_DONE, currentTask.getTaskName()));
+		}else{
+			showToUser(String.format(MESSAGE_UNDONE, currentTask.getTaskName()));
+		}
 	}
 	
 	protected static void exit(){
