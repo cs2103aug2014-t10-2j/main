@@ -137,10 +137,6 @@ public class Storage {
 		//this.taskList.remove(searchTask);
 	}
 	
-	public void removeTask(String index){
-		removeTask(search(index));
-	}
-	
 	public void updateTask(Task originalTask, Task newTask){
 		removeTask(originalTask);
 		addTask(newTask);

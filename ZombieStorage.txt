@@ -1,0 +1,35 @@
+{
+  "floatingTasks": [
+    {
+      "taskName": "veiw agenda",
+      "endTime": null,
+      "startTime": null,
+      "tags": [],
+      "subtasks": [],
+      "location": null,
+      "completed": false,
+      "deleted": false
+    }
+  ],
+  "deadlineTasks": [
+    {
+      "taskName": "a*",
+      "endTime": {
+        "year": 2014,
+        "month": 10,
+        "dayOfMonth": 1,
+        "hourOfDay": 2,
+        "minute": 0,
+        "second": 0
+      },
+      "startTime": null,
+      "tags": [],
+      "subtasks": [],
+      "location": null,
+      "completed": false,
+      "deleted": false
+    }
+  ],
+  "timedTasks": [],
+  "loggingLevel": null
+}
