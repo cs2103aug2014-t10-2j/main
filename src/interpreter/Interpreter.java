@@ -115,6 +115,12 @@ public class Interpreter {
 					} else {
 						return new CommandSearchTag(null, userInput, true);
 					}
+				case Command.SEARCH_LOCATION:
+					if (userInputTokens.length > 1){
+						return getCommandSearchLocation(userInput);
+					} else {
+						return new CommandSearchLocation(null, userInput, true);
+					}
 				case Command.UNDO:
 					return new Command(Command.UNDO, userInput, false);
 				case Command.REDO:
@@ -183,7 +189,12 @@ public class Interpreter {
 		String searchString = userInput.replaceFirst(Command.SEARCH_TAG + " ", "");
 		return new CommandSearchTag(searchString, userInput, false);
 	}
-
+	
+	private static Command getCommandSearchLocation(String userInput){
+		String searchString = userInput.replaceFirst(Command.SEARCH_LOCATION + " ", "");
+		return new CommandSearchLocation(searchString, userInput, false);
+	}
+	
 	/**
 	 * Creates a CommandView object based on user input
 	 * 

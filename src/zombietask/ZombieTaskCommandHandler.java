@@ -15,6 +15,7 @@ import ui.UI;
 import interpreter.Command;
 import interpreter.CommandAdd;
 import interpreter.CommandDelete;
+import interpreter.CommandSearchLocation;
 import interpreter.CommandSearchName;
 import interpreter.CommandSearchTag;
 import interpreter.CommandSearchTime;
@@ -40,6 +41,7 @@ public class ZombieTaskCommandHandler {
 	private final static String COMMAND_SEARCH_NAME = Command.SEARCH_NAME;
 	private final static String COMMAND_SEARCH_TIME = Command.SEARCH_TIME;
 	private final static String COMMAND_SEARCH_TAG = Command.SEARCH_TAG;
+	private final static String COMMAND_SEARCH_LOCATION = Command.SEARCH_LOCATION;
 	private final static String COMMAND_EXIT = Command.EXIT;
 	private final static String COMMAND_INVALID = "invalid command %s";
 	
@@ -159,6 +161,10 @@ public class ZombieTaskCommandHandler {
 		case COMMAND_SEARCH_TAG:
 			commandCalled = Command.SEARCH_TAG;
 			searchTag(currentCommand);
+			break;
+		case COMMAND_SEARCH_LOCATION:
+			commandCalled = Command.SEARCH_LOCATION;
+			searchLocation(currentCommand);
 			break;
 		case COMMAND_EXIT:
 			commandCalled = Command.EXIT;
@@ -533,6 +539,11 @@ public class ZombieTaskCommandHandler {
 	protected static void searchTag(Command command) throws Exception{
 		CommandSearchTag searchCommand = (CommandSearchTag) command;
 		UI.printPerspective(FORMAT.AGENDA, storage.searchTag(searchCommand.getTag()));
+	}
+	
+	protected static void searchLocation(Command command) throws Exception{
+		CommandSearchLocation searchCommand = (CommandSearchLocation) command;
+		UI.printPerspective(FORMAT.AGENDA, storage.searchLocation(searchCommand.getLocation()));
 	}
 	
 	protected static void exit(){

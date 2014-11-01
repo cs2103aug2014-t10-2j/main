@@ -235,6 +235,17 @@ public class StorageAPI {
 	}
 	
 	/**
+	 * search tasks with particular location
+	 * @param location
+	 * @return a TaskUIFormat which contains all task that has a particular location
+	 * @throws Exception
+	 */
+	
+	public TaskUIFormat searchLocation(String location) throws Exception{
+		return storage.searchLocation(location);
+	}
+	
+	/**
 	 * Returns index of task with respect to the data inside
 	 * storage
 	 * 

@@ -333,6 +333,13 @@ public class Task implements Comparable<Task> {
 		return location;
 	}
 	
+	public boolean isLocation(String newLocation){
+		if (location == null){
+			return false;
+		}
+		return location.equalsIgnoreCase(newLocation) || location.equalsIgnoreCase(">" + newLocation);
+	}
+	
 	/**
 	 * 
 	 * Sets task location
