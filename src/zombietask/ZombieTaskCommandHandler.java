@@ -80,8 +80,10 @@ public class ZombieTaskCommandHandler {
 			.fg(Ansi.Color.CYAN).a("delete ").fg(Ansi.Color.RED).a("task number\n").reset().toString();
 	private final static String MESSAGE_HELP_SEARCH = ansi()
 			.fg(Ansi.Color.DEFAULT).a("Search:\n\t")
-			.fg(Ansi.Color.MAGENTA).a("search tasks with task name or time \n\t")
+			.fg(Ansi.Color.MAGENTA).a("search tasks with task name, time or location \n\t")
 			.fg(Ansi.Color.CYAN).a("search-name ").fg(Ansi.Color.RED).a("task name \n\t")
+			.fg(Ansi.Color.CYAN).a("search-name ").fg(Ansi.Color.RED).a("#tag \n\t")
+			.fg(Ansi.Color.CYAN).a("search-name ").fg(Ansi.Color.RED).a(">location \n\t")
 			.fg(Ansi.Color.CYAN).a("search-time ").fg(Ansi.Color.RED).a("start time ").fg(Ansi.Color.GREEN).a("to").fg(Ansi.Color.RED).a(" end time\n").reset().toString();
 	private final static String MESSAGE_HELP_UPDATE = ansi()
 			.fg(Ansi.Color.DEFAULT).a("Update:\n\t")
@@ -101,6 +103,11 @@ public class ZombieTaskCommandHandler {
 			.fg(Ansi.Color.DEFAULT).a("Redo:\n\t")
 			.fg(Ansi.Color.MAGENTA).a("go the the state before the undo action \n\t")
 			.fg(Ansi.Color.CYAN).a("redo ").reset().toString();
+	private final static String MESSAGE_HELP_DONE = ansi()	
+			.fg(Ansi.Color.DEFAULT).a("Done:\n\t")
+			.fg(Ansi.Color.MAGENTA).a("mark a task as completed or uncompleted \n\t")
+			.fg(Ansi.Color.CYAN).a("done ").reset().toString();
+	
 	private final static String MESSAGE_HELP_EXIT = ansi()	
 			.fg(Ansi.Color.DEFAULT).a("Exit:\n\t")
 			.fg(Ansi.Color.MAGENTA).a("exit the program \n\t")
@@ -570,7 +577,7 @@ public class ZombieTaskCommandHandler {
 		String userInput = helpCommand.getHelpCommand();
 		
 		if(userInput == null){
-			showToUser(MESSAGE_HELP_ADD + "\n" + MESSAGE_HELP_DELETE + "\n" + MESSAGE_HELP_UPDATE + "\n" + MESSAGE_HELP_SEARCH + "\n" + MESSAGE_HELP_VIEW+ "\n" + MESSAGE_HELP_UNDO+ "\n" + MESSAGE_HELP_REDO+ "\n" + MESSAGE_HELP_EXIT);
+			showToUser(MESSAGE_HELP_ADD + "\n" + MESSAGE_HELP_DELETE + "\n" + MESSAGE_HELP_UPDATE + "\n" + MESSAGE_HELP_SEARCH + "\n" + MESSAGE_HELP_VIEW+ "\n" + MESSAGE_HELP_UNDO+ "\n" + MESSAGE_HELP_REDO+ "\n" + MESSAGE_HELP_DONE + "\n" + MESSAGE_HELP_EXIT);
 			return;
 		}
 		switch(userInput){
@@ -594,6 +601,9 @@ public class ZombieTaskCommandHandler {
 			break;
 		case COMMAND_REDO:
 			showToUser(MESSAGE_HELP_REDO);
+			break;
+		case COMMAND_DONE:
+			showToUser(MESSAGE_HELP_DONE);
 			break;
 		case COMMAND_EXIT:
 			showToUser(MESSAGE_HELP_EXIT);
