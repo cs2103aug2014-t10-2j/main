@@ -60,19 +60,43 @@ public class ZombieTaskCommandHandler {
 	 */
 	
 	private final static String MESSAGE_INVALID_COMMAND = "Invalid Command:\n%s";
-	private final static String MESSAGE_HELP = ansi()
-			.fg(Ansi.Color.DEFAULT).a("Help\nAdd Tasks:\n\t")
+	private final static String MESSAGE_HELP_ADD = ansi()
+			.fg(Ansi.Color.DEFAULT).a("Add:\n\t")
+			.fg(Ansi.Color.MAGENTA).a("add different kinds of tasks to the task list including floating tasks, deadline tasks and timed tasks \n\t")
 			.fg(Ansi.Color.CYAN).a("add ").fg(Ansi.Color.RED).a("taskname\n\t")
 			.fg(Ansi.Color.CYAN).a("add ").fg(Ansi.Color.RED).a("taskname ").fg(Ansi.Color.GREEN).a("end time\n\t")
-			.fg(Ansi.Color.CYAN).a("add ").fg(Ansi.Color.RED).a("taskname ").fg(Ansi.Color.GREEN).a("start time to end time\n")
+			.fg(Ansi.Color.CYAN).a("add ").fg(Ansi.Color.RED).a("taskname ").fg(Ansi.Color.GREEN).a("start time to end time\n").reset().toString();
+	private final static String MESSAGE_HELP_DELETE = ansi()	
 			.fg(Ansi.Color.DEFAULT).a("Delete:\n\t")
-			.fg(Ansi.Color.CYAN).a("delete ").fg(Ansi.Color.RED).a("task number\n")
+			.fg(Ansi.Color.MAGENTA).a("delete a task with its index \n\t")
+			.fg(Ansi.Color.CYAN).a("delete ").fg(Ansi.Color.RED).a("task number\n").reset().toString();
+	private final static String MESSAGE_HELP_SEARCH = ansi()
 			.fg(Ansi.Color.DEFAULT).a("Search:\n\t")
-			.fg(Ansi.Color.CYAN).a("search-time ").fg(Ansi.Color.RED).a("start time ").fg(Ansi.Color.GREEN).a("to").fg(Ansi.Color.RED).a("end time\n")
+			.fg(Ansi.Color.MAGENTA).a("search tasks with task name or time \n\t")
+			.fg(Ansi.Color.CYAN).a("search-name ").fg(Ansi.Color.RED).a("task name \n\t")
+			.fg(Ansi.Color.CYAN).a("search-time ").fg(Ansi.Color.RED).a("start time ").fg(Ansi.Color.GREEN).a("to").fg(Ansi.Color.RED).a(" end time\n").reset().toString();
+	private final static String MESSAGE_HELP_UPDATE = ansi()
 			.fg(Ansi.Color.DEFAULT).a("Update:\n\t")
-			.fg(Ansi.Color.CYAN).a("add ").fg(Ansi.Color.RED).a("task number ").fg(Ansi.Color.RED).a("start time ").fg(Ansi.Color.GREEN).a("to").fg(Ansi.Color.RED).a("end time\n")
-			.reset()
-			.toString();
+			.fg(Ansi.Color.MAGENTA).a("update the information of the task with its index \n\t")
+			.fg(Ansi.Color.CYAN).a("add ").fg(Ansi.Color.RED).a("task number ").fg(Ansi.Color.RED).a("start time ").fg(Ansi.Color.GREEN).a("to").fg(Ansi.Color.RED).a(" end time\n").reset().toString();
+	private final static String MESSAGE_HELP_VIEW = ansi()
+			.fg(Ansi.Color.DEFAULT).a("View:\n\t")
+			.fg(Ansi.Color.MAGENTA).a("different kinds of views for tasks including agenda, daily and weekly \n\t")
+			.fg(Ansi.Color.CYAN).a("view ").fg(Ansi.Color.RED).a("agenda\n\t")
+			.fg(Ansi.Color.CYAN).a("view ").fg(Ansi.Color.RED).a("daily \n\t")
+			.fg(Ansi.Color.CYAN).a("view ").fg(Ansi.Color.RED).a("weekly \n\t").reset().toString();
+	private final static String MESSAGE_HELP_UNDO = ansi()	
+			.fg(Ansi.Color.DEFAULT).a("Undo:\n\t")
+			.fg(Ansi.Color.MAGENTA).a("reverse the action to the previous state \n\t")
+			.fg(Ansi.Color.CYAN).a("undo ").reset().toString();
+	private final static String MESSAGE_HELP_REDO = ansi()	
+			.fg(Ansi.Color.DEFAULT).a("Redo:\n\t")
+			.fg(Ansi.Color.MAGENTA).a("go the the state before the undo action \n\t")
+			.fg(Ansi.Color.CYAN).a("redo ").reset().toString();
+	private final static String MESSAGE_HELP_EXIT = ansi()	
+			.fg(Ansi.Color.DEFAULT).a("Exit:\n\t")
+			.fg(Ansi.Color.MAGENTA).a("exit the program \n\t")
+			.fg(Ansi.Color.CYAN).a("exit ").reset().toString();
 	private final static String MESSAGE_ADD = "Added %s to database";
 	private final static String MESSAGE_DELETE = "Deleted %s from database";
 	private final static String MESSAGE_UPDATE = "Updated %s to %s from database";
@@ -154,7 +178,7 @@ public class ZombieTaskCommandHandler {
 			break;
 		case COMMAND_HELP:
 			commandCalled = Command.HELP;
-			help();
+			help(currentCommand);
 			break;
 		case COMMAND_DONE:
 			commandCalled = Command.DONE;
@@ -534,8 +558,45 @@ public class ZombieTaskCommandHandler {
 		
 	}
 	
-	protected static void help() {
-		showToUser(MESSAGE_HELP);
+	protected static void help(Command command) {
+		CommandHelp helpCommand = (CommandHelp) command;
+		String userInput = helpCommand.getHelpCommand();
+		
+		if(userInput == null){
+			showToUser(MESSAGE_HELP_ADD + "\n" + MESSAGE_HELP_DELETE + "\n" + MESSAGE_HELP_UPDATE + "\n" + MESSAGE_HELP_SEARCH + "\n" + MESSAGE_HELP_VIEW+ "\n" + MESSAGE_HELP_UNDO+ "\n" + MESSAGE_HELP_REDO+ "\n" + MESSAGE_HELP_EXIT);
+			return;
+		}
+		switch(userInput){
+		case COMMAND_ADD:
+			showToUser(MESSAGE_HELP_ADD);
+			break;
+		case COMMAND_DELETE:
+			showToUser(MESSAGE_HELP_DELETE);
+			break;
+		case COMMAND_UPDATE:
+			showToUser(MESSAGE_HELP_UPDATE);
+			break;
+		case COMMAND_SEARCH:
+			showToUser(MESSAGE_HELP_SEARCH);
+			break;
+		case COMMAND_VIEW:
+			showToUser(MESSAGE_HELP_VIEW);
+			break;
+		case COMMAND_UNDO:
+			showToUser(MESSAGE_HELP_UNDO);
+			break;
+		case COMMAND_REDO:
+			showToUser(MESSAGE_HELP_REDO);
+			break;
+		case COMMAND_EXIT:
+			showToUser(MESSAGE_HELP_EXIT);
+			break;	
+		default:
+			logger.log(Level.INFO,String.format(MESSAGE_INVALID_COMMAND, userInput) );
+			showToUser(String.format(MESSAGE_INVALID_COMMAND, userInput));
+			return;
+			
+		}
 	}
 	
 	protected static void searchName(Command command) throws Exception{
