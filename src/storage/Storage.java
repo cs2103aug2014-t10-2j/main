@@ -238,30 +238,22 @@ public class Storage {
 		ArrayList<Task> searchFloatingList = new ArrayList<Task> ();
 		ArrayList<Task> searchDeadlineList = new ArrayList<Task> ();
 		ArrayList<Task> searchTimedList = new ArrayList<Task> ();
+		System.out.println(tagName);
 		for(Task task: floatingTasks){
-			for(String tagContent : task.getTags()){
-				if(tagContent.equals(tagName)){
-					searchFloatingList.add(task);
-					break;
-				}
+			if(task.hasTag(tagName)){
+				searchFloatingList.add(task);
 			}
 		}
 		
 		for(Task task: deadlineTasks){
-			for(String tagContent : task.getTags()){
-				if(tagContent.equals(tagName)){
-					searchDeadlineList.add(task);
-					break;
-				}
+			if(task.hasTag(tagName)){
+				searchDeadlineList.add(task);
 			}
 		}
 		
 		for(Task task: timedTasks){
-			for(String tagContent : task.getTags()){
-				if(tagContent.equals(tagName)){
-					searchTimedList.add(task);
-					break;
-				}
+			if(task.hasTag(tagName)){
+				searchTimedList.add(task);
 			}
 		}
 		return new TaskUIFormat(searchFloatingList, searchDeadlineList, searchTimedList);

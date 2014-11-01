@@ -225,7 +225,7 @@ public class Task implements Comparable<Task> {
 	
 	public boolean hasTag(String tag) {
 		for (String currentTag : tags){
-			if (currentTag.equalsIgnoreCase(tag)){
+			if (currentTag.equalsIgnoreCase(tag) || currentTag.equalsIgnoreCase("#"+tag)){
 				return true;
 			}
 		}

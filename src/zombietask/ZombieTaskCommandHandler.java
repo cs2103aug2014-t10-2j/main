@@ -387,13 +387,12 @@ public class ZombieTaskCommandHandler {
 			}
 		}
 		
-		currentTask = null;
-		if (startTime == null){
+		if (startTime == null && endTime == null){
 			currentTask = new Task(taskName);
-		}else if((startTime != null) && (endTime != null)){
-			currentTask = new Task(taskName,endTime,startTime);
-		}else {
-			currentTask = new Task(taskName,startTime);
+		}else if(startTime == null){
+			currentTask = new Task(taskName, endTime);
+		}else{
+			currentTask = new Task(taskName, endTime, startTime);
 		}
 		
 		//Add Tags
@@ -526,7 +525,6 @@ public class ZombieTaskCommandHandler {
 	
 	protected static void searchTag(Command command) throws Exception{
 		CommandSearchTag searchCommand = (CommandSearchTag) command;
-		System.out.println(searchCommand.getTag());
 		UI.printPerspective(FORMAT.AGENDA, storage.searchTag(searchCommand.getTag()));
 	}
 	

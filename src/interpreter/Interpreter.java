@@ -181,7 +181,6 @@ public class Interpreter {
 	
 	private static Command getCommandSearchTag(String userInput){
 		String searchString = userInput.replaceFirst(Command.SEARCH_TAG + " ", "");
-		
 		return new CommandSearchTag(searchString, userInput, false);
 	}
 
@@ -419,12 +418,14 @@ public class Interpreter {
 			if (validSecondWord) {
 				lineCode = secondWord;
 				// get third word onwards to parse as an add command
+				
 				int spaceIndex = userInput.indexOf(" ");
 				String userInputTemp = userInput.substring(spaceIndex + 1);
 				spaceIndex = userInputTemp.indexOf(" ");
 				userInputTemp = userInputTemp.substring(spaceIndex + 1);
-
+				
 				CommandAdd updatedTask = (CommandAdd) getCommandAdd(userInputTemp);
+				
 				return new CommandUpdate(lineCode, updatedTask, userInput,
 						false);
 			} else {
