@@ -32,6 +32,8 @@ public class Task implements Comparable<Task> {
 	private ArrayList<String> tags = new ArrayList<String>();
 	private ArrayList<Task> subtasks = new ArrayList<Task>();
 	private String location = null;
+	private boolean completed = false;
+	private boolean deleted = false;
 	
 	/*
 	 * CONSTRUCTORS
@@ -361,6 +363,22 @@ public class Task implements Comparable<Task> {
 		}
 		
 		return this.getStartTime().after(otherTask.getEndTime()) || this.getEndTime().before(otherTask.getStartTime());
+	}
+	
+	public boolean isCompleted() {
+		return completed;
+	}
+
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 	
 	/*
