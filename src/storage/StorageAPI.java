@@ -164,6 +164,10 @@ public class StorageAPI {
 		return newTask;
 	}
 	
+	public TaskUIFormat add(TaskUIFormat newTaskList) throws IOException{
+		storage.addTask(newTaskList);
+		return newTaskList;
+	}
 	/**
 	 * Removes task from file
 	 * 
