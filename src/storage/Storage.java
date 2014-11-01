@@ -50,13 +50,10 @@ public class Storage {
 	 * INSTANCE ATTRIBUTES
 	 */
 	
-	/*
-	 * private ArrayList<Task> taskList;
-	 */
-	
 	private ArrayList<Task> floatingTasks;
 	private ArrayList<Task> deadlineTasks;
 	private ArrayList<Task> timedTasks;
+	private Level loggingLevel;
 	private static Logger logger = ZombieTask.getLogger();
 	
 	/*
@@ -332,6 +329,14 @@ public class Storage {
 		}
 		
 		return clashedTasks;
+	}
+	
+	public Level getLoggingLevel() {
+		return loggingLevel;
+	}
+
+	public void setLoggingLevel(Level loggingLevel) {
+		this.loggingLevel = loggingLevel;
 	}
 
 }
