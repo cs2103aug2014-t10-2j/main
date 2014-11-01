@@ -226,17 +226,17 @@ public class Storage {
 		ArrayList<Task> searchDeadlineList = new ArrayList<Task> ();
 		ArrayList<Task> searchTimedList = new ArrayList<Task> ();
 		for(Task task : floatingTasks){
-			if(task.getTaskName().equals(taskName)){
+			if(task.getTaskName().contains(taskName)){
 				searchFloatingList.add(task);
 			}
 		}
 		for(Task task : deadlineTasks){
-			if(task.getTaskName().equals(taskName)){
+			if(task.getTaskName().contains(taskName)){
 				searchDeadlineList.add(task);
 			}
 		}
 		for(Task task : timedTasks){
-			if(task.getTaskName().equals(taskName)){
+			if(task.getTaskName().contains(taskName)){
 				searchTimedList.add(task);
 			}
 		}
