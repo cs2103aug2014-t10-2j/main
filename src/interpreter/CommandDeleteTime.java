@@ -23,7 +23,7 @@ public class CommandDeleteTime extends Command {
 	 */
 	public CommandDeleteTime(Calendar newTimeStart, Calendar newTimeEnd, 
 			String userInput, boolean hasMissingArgs) {
-		super(Command.SEARCH_TIME, userInput, hasMissingArgs);
+		super(Command.DELETE_TIME, userInput, hasMissingArgs);
 		timeStart = newTimeStart;
 		timeEnd = newTimeEnd;
 	}

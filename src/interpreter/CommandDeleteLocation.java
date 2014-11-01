@@ -20,7 +20,7 @@ String location = null;
 	 */
 	public CommandDeleteLocation(String newLocation, String userInput, 
 			boolean hasMissingArgs) {
-		super(Command.SEARCH_LOCATION, userInput, hasMissingArgs);
+		super(Command.DELETE_LOCATION, userInput, hasMissingArgs);
 		location = newLocation;
 	}
 	

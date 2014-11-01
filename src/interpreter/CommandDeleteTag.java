@@ -11,7 +11,7 @@ public class CommandDeleteTag extends Command {
 
 	public CommandDeleteTag(String newTag, 
 			String userInput, boolean hasMissingArgs) {
-		super(Command.SEARCH_TAG, userInput, hasMissingArgs);
+		super(Command.DELETE_TAG, userInput, hasMissingArgs);
 		tag = newTag;
 	}
 	/**

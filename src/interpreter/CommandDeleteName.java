@@ -19,7 +19,7 @@ public class CommandDeleteName extends Command {
 	 */
 	public CommandDeleteName(String newSearchString, String userInput, 
 			boolean hasMissingArgs) {
-		super(Command.SEARCH_NAME, userInput, hasMissingArgs);
+		super(Command.DELETE_NAME, userInput, hasMissingArgs);
 		searchString = newSearchString;
 	}
 	
