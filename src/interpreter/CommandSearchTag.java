@@ -1,6 +1,4 @@
 package interpreter;
-
-
 import java.util.Calendar;
 
 /**
