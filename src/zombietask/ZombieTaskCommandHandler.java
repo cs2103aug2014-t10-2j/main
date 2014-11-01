@@ -17,6 +17,7 @@ import interpreter.CommandAdd;
 import interpreter.CommandDelete;
 import interpreter.CommandDone;
 import interpreter.CommandSearchLocation;
+import interpreter.CommandHelp;
 import interpreter.CommandSearchName;
 import interpreter.CommandSearchTag;
 import interpreter.CommandSearchTime;
@@ -40,6 +41,7 @@ public class ZombieTaskCommandHandler {
 	private final static String COMMAND_REDO = Command.REDO;
 	private final static String COMMAND_HELP = Command.HELP;
 	private final static String COMMAND_DONE = Command.DONE;
+	private final static String COMMAND_SEARCH = Command.SEARCH;
 	private final static String COMMAND_SEARCH_NAME = Command.SEARCH_NAME;
 	private final static String COMMAND_SEARCH_TIME = Command.SEARCH_TIME;
 	private final static String COMMAND_SEARCH_TAG = Command.SEARCH_TAG;

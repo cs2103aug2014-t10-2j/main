@@ -89,11 +89,12 @@ public class ZombieTask {
 				reinitializeCurrentVariables();
 				currentCommandString = sc.nextLine();
 				currentCommand = Interpreter.getCommand(currentCommandString);
-				if (currentCommand.hasMissingArgs()) {
+				if (currentCommand.hasMissingArgs() && !currentCommand.getCommandType().equals(Command.HELP)) {
 					logger.log(Level.INFO, String.format(
 							MESSAGE_MISSING_ARGUMENTS, currentCommandString));
 					continue;
 				}
+				
 				logger.log(Level.FINER, currentCommandString);
 				ZombieTaskCommandHandler.execute(currentCommand,
 						currentCommandString);
