@@ -6,10 +6,10 @@ package interpreter;
  * @author SP
  *
  */
-public class CommandSearchTag extends Command {
+public class CommandDeleteTag extends Command {
 	String tag = null;
 
-	public CommandSearchTag(String newTag, 
+	public CommandDeleteTag(String newTag, 
 			String userInput, boolean hasMissingArgs) {
 		super(Command.SEARCH_TAG, userInput, hasMissingArgs);
 		tag = newTag;

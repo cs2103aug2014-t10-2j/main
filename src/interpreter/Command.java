@@ -15,6 +15,10 @@ public class Command {
 	// static command types
 	public static final String ADD = "add";
 	public static final String DELETE = "delete";
+	public static final String DELETE_NAME = "delete-name";
+	public static final String DELETE_TIME = "delete-time";
+	public static final String DELETE_TAG = "delete-tag";
+	public static final String DELETE_LOCATION = "delete-location";
 	public static final String UPDATE = "update";
 	public static final String VIEW = "view";
 	public static final String UNDO = "undo";
@@ -30,7 +34,8 @@ public class Command {
 
 	// list for ease of checking valid commands
 	public static List<String> validCommands = Arrays.asList(Command.ADD,
-			Command.DELETE, Command.UPDATE, Command.VIEW, Command.UNDO,
+			Command.DELETE, Command.DELETE_NAME, Command.DELETE_TIME, Command.DELETE_TAG,
+			Command.DELETE_LOCATION, Command.UPDATE, Command.VIEW, Command.UNDO,
 			Command.REDO, Command.HELP, Command.DONE, Command.SEARCH, Command.SEARCH_NAME,
 			Command.SEARCH_TIME, Command.EXIT);
 

@@ -2,23 +2,23 @@ package interpreter;
 
 
 /**
- * Class for Search Location command, which contains a search string and a boolean
+ * Class for Delete Location command, which contains a search string and a boolean
  * variable to indicate missing arguments. 
  * @author SP
  *
  */
-public class CommandSearchLocation extends Command {
-	String location = null;
+public class CommandDeleteLocation extends Command {
+String location = null;
 	
 	/**
-	 * Constructor for the Search Location command object. It is initialised with a
+	 * Constructor for the Delete Location command object. It is initialised with a
 	 * search string and a boolean variable to indicate if there are missing
 	 * arguments.
 	 * @param newLocation the search string which is used to find a task
 	 * @param userInput the original user input
 	 * @param hasMissingArgs boolean variable to indicate missing arguments
 	 */
-	public CommandSearchLocation(String newLocation, String userInput, 
+	public CommandDeleteLocation(String newLocation, String userInput, 
 			boolean hasMissingArgs) {
 		super(Command.SEARCH_LOCATION, userInput, hasMissingArgs);
 		location = newLocation;

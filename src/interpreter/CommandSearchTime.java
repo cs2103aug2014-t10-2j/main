@@ -13,7 +13,7 @@ public class CommandSearchTime extends Command {
 	Calendar timeEnd = null;
 	
 	/**
-	 * Constructor for the Search Name command object. It is initialised with a
+	 * Constructor for the Search Time command object. It is initialised with a
 	 * search string and a boolean variable to indicate if there are missing
 	 * arguments.
 	 * @param newTimeStart to find tasks which are later than this time

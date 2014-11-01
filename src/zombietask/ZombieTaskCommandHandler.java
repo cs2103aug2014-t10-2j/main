@@ -15,6 +15,10 @@ import ui.UI;
 import interpreter.Command;
 import interpreter.CommandAdd;
 import interpreter.CommandDelete;
+import interpreter.CommandDeleteLocation;
+import interpreter.CommandDeleteName;
+import interpreter.CommandDeleteTag;
+import interpreter.CommandDeleteTime;
 import interpreter.CommandDone;
 import interpreter.CommandSearchLocation;
 import interpreter.CommandHelp;
@@ -35,6 +39,10 @@ public class ZombieTaskCommandHandler {
 	
 	private final static String COMMAND_ADD = Command.ADD; //edit out
 	private final static String COMMAND_DELETE = Command.DELETE;
+	private final static String COMMAND_DELETE_NAME = Command.DELETE_NAME;
+	private final static String COMMAND_DELETE_TAG = Command.DELETE_TAG;
+	private final static String COMMAND_DELETE_TIME = Command.DELETE_TIME;
+	private final static String COMMAND_DELETE_LOCATION = Command.DELETE_LOCATION;
 	private final static String COMMAND_UPDATE = Command.UPDATE;
 	private final static String COMMAND_VIEW = Command.VIEW;
 	private final static String COMMAND_UNDO = Command.UNDO;
@@ -151,62 +159,61 @@ public class ZombieTaskCommandHandler {
 	
 	public static void execute() throws Exception {
 		currentCommandDescriptor = currentCommand.getCommandType();
+		commandCalled = currentCommandDescriptor;
 		switch(currentCommandDescriptor){
 		case COMMAND_ADD:
-			commandCalled = Command.ADD;
 			addCommand(currentCommand);
 			break;
 		case COMMAND_DELETE:
-			commandCalled = Command.DELETE;
 			deleteCommand(currentCommand);
 			break;
+		case COMMAND_DELETE_NAME:
+			deleteName(currentCommand);
+			break;
+		case COMMAND_DELETE_TAG:
+			deleteTag(currentCommand);
+			break;
+		case COMMAND_DELETE_TIME:
+			deleteTime(currentCommand);
+			break;
+		case COMMAND_DELETE_LOCATION:
+			deleteLocation(currentCommand);
+			break;
 		case COMMAND_VIEW:
-			commandCalled = Command.VIEW;
 			viewCommand(currentCommand);
 			break;
 		case COMMAND_UPDATE:
-			commandCalled = Command.UPDATE;
 			updateCommand(currentCommand);
 			break;
 		case COMMAND_UNDO:
-			commandCalled = Command.UNDO;
 			undo();
 			break;
 		case COMMAND_REDO:
-			commandCalled = Command.REDO;
 			redo();
 			break;
 		case COMMAND_HELP:
-			commandCalled = Command.HELP;
 			help(currentCommand);
 			break;
 		case COMMAND_DONE:
-			commandCalled = Command.DONE;
 			doneCommand(currentCommand);
 			break;
 		case COMMAND_SEARCH_NAME:
-			commandCalled = Command.SEARCH_NAME;
 			searchName(currentCommand);
 			break;
 		case COMMAND_SEARCH_TIME:
-			commandCalled = Command.SEARCH_TIME;
 			searchTime(currentCommand);
 			break;
 		case COMMAND_SEARCH_TAG:
-			commandCalled = Command.SEARCH_TAG;
 			searchTag(currentCommand);
 			break;
 		case COMMAND_SEARCH_LOCATION:
-			commandCalled = Command.SEARCH_LOCATION;
 			searchLocation(currentCommand);
 			break;
 		case COMMAND_EXIT:
-			commandCalled = Command.EXIT;
 			exit();
 			break;
 		default:
 		case COMMAND_INVALID:
-			commandCalled = null;
 			invalidCommand(currentCommandString);
 			break;
 		}
@@ -604,9 +611,27 @@ public class ZombieTaskCommandHandler {
 		UI.printPerspective(FORMAT.AGENDA, storage.searchName(searchCommand.getSearchString()));
 	}
 	
+	protected static void deleteName(Command command) throws Exception{
+		CommandDeleteName deleteCommand = (CommandDeleteName) command;
+		TaskUIFormat deleteList = storage.searchName(deleteCommand.getSearchString());
+		storage.delete(deleteList);
+		/*
+		 * To be implemented UNDO and REDO
+		 */
+	}
+	
 	protected static void searchTime(Command command) throws Exception{
 		CommandSearchTime searchCommand = (CommandSearchTime) command;
 		UI.printPerspective(FORMAT.AGENDA, storage.search(searchCommand.getTimeStart(), searchCommand.getTimeEnd()));
+	}
+	
+	protected static void deleteTime(Command command) throws Exception{
+		CommandDeleteTime deleteCommand = (CommandDeleteTime) command;
+		TaskUIFormat deleteList = storage.search(deleteCommand.getTimeStart(), deleteCommand.getTimeEnd());
+		storage.delete(deleteList);
+		/*
+		 * To be implemented UNDO and REDO
+		 */
 	}
 	
 	protected static void searchTag(Command command) throws Exception{
@@ -614,9 +639,21 @@ public class ZombieTaskCommandHandler {
 		UI.printPerspective(FORMAT.AGENDA, storage.searchTag(searchCommand.getTag()));
 	}
 	
+	protected static void deleteTag(Command command) throws Exception{
+		CommandDeleteTag deleteCommand = (CommandDeleteTag) command;
+		TaskUIFormat deleteList = storage.searchTag(deleteCommand.getTag());
+		storage.delete(deleteList);
+	}
+	
 	protected static void searchLocation(Command command) throws Exception{
 		CommandSearchLocation searchCommand = (CommandSearchLocation) command;
 		UI.printPerspective(FORMAT.AGENDA, storage.searchLocation(searchCommand.getLocation()));
+	}
+	
+	protected static void deleteLocation(Command command) throws Exception{
+		CommandDeleteLocation deleteCommand = (CommandDeleteLocation) command;
+		TaskUIFormat deleteList = storage.searchLocation(deleteCommand.getLocation());
+		storage.delete(deleteList);
 	}
 	
 	protected static void doneCommand(Command command) throws Exception{
