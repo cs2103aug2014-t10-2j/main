@@ -137,6 +137,19 @@ public class Storage {
 		//this.taskList.remove(searchTask);
 	}
 	
+	public void removeTask(TaskUIFormat deletedTaskList){
+		for(Task task : deletedTaskList.getDeadlineTasks()){
+			this.removeTask(task);
+		}
+		for(Task task : deletedTaskList.getFloatingTasks()){
+			this.removeTask(task);
+		}
+		for(Task task : deletedTaskList.getTimedTasks()){
+			this.removeTask(task);
+		}
+		
+	}
+	
 	public void updateTask(Task originalTask, Task newTask){
 		removeTask(originalTask);
 		addTask(newTask);

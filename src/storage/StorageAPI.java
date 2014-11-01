@@ -179,6 +179,18 @@ public class StorageAPI {
 	}
 	
 	/**
+	 * support to remove many tasks at the same time(remove tasks between two times, remove tasks with the certain tag, location or name)
+	 * 
+	 * @param deletedTaskList
+	 * @return TaskUIFormat
+	 * @throws IOException
+	 */
+	
+	public TaskUIFormat delete(TaskUIFormat deletedTaskList) throws IOException{
+		storage.removeTask(deletedTaskList);
+		return deletedTaskList;
+	}
+	/**
 	 * Returns array list of all tasks
 	 * @return
 	 */
