@@ -15,6 +15,10 @@ import ui.UI;
 import interpreter.Command;
 import interpreter.CommandAdd;
 import interpreter.CommandDelete;
+import interpreter.CommandDeleteLocation;
+import interpreter.CommandDeleteName;
+import interpreter.CommandDeleteTag;
+import interpreter.CommandDeleteTime;
 import interpreter.CommandDone;
 import interpreter.CommandSearchLocation;
 import interpreter.CommandHelp;
@@ -35,6 +39,10 @@ public class ZombieTaskCommandHandler {
 	
 	private final static String COMMAND_ADD = Command.ADD; //edit out
 	private final static String COMMAND_DELETE = Command.DELETE;
+	private final static String COMMAND_DELETE_NAME = Command.DELETE_NAME;
+	private final static String COMMAND_DELETE_TAG = Command.DELETE_TAG;
+	private final static String COMMAND_DELETE_TIME = Command.DELETE_TIME;
+	private final static String COMMAND_DELETE_LOCATION = Command.DELETE_LOCATION;
 	private final static String COMMAND_UPDATE = Command.UPDATE;
 	private final static String COMMAND_VIEW = Command.VIEW;
 	private final static String COMMAND_UNDO = Command.UNDO;
@@ -72,8 +80,10 @@ public class ZombieTaskCommandHandler {
 			.fg(Ansi.Color.CYAN).a("delete ").fg(Ansi.Color.RED).a("task number\n").reset().toString();
 	private final static String MESSAGE_HELP_SEARCH = ansi()
 			.fg(Ansi.Color.DEFAULT).a("Search:\n\t")
-			.fg(Ansi.Color.MAGENTA).a("search tasks with task name or time \n\t")
+			.fg(Ansi.Color.MAGENTA).a("search tasks with task name, time or location \n\t")
 			.fg(Ansi.Color.CYAN).a("search-name ").fg(Ansi.Color.RED).a("task name \n\t")
+			.fg(Ansi.Color.CYAN).a("search-name ").fg(Ansi.Color.RED).a("#tag \n\t")
+			.fg(Ansi.Color.CYAN).a("search-name ").fg(Ansi.Color.RED).a(">location \n\t")
 			.fg(Ansi.Color.CYAN).a("search-time ").fg(Ansi.Color.RED).a("start time ").fg(Ansi.Color.GREEN).a("to").fg(Ansi.Color.RED).a(" end time\n").reset().toString();
 	private final static String MESSAGE_HELP_UPDATE = ansi()
 			.fg(Ansi.Color.DEFAULT).a("Update:\n\t")
@@ -93,6 +103,11 @@ public class ZombieTaskCommandHandler {
 			.fg(Ansi.Color.DEFAULT).a("Redo:\n\t")
 			.fg(Ansi.Color.MAGENTA).a("go the the state before the undo action \n\t")
 			.fg(Ansi.Color.CYAN).a("redo ").reset().toString();
+	private final static String MESSAGE_HELP_DONE = ansi()	
+			.fg(Ansi.Color.DEFAULT).a("Done:\n\t")
+			.fg(Ansi.Color.MAGENTA).a("mark a task as completed or uncompleted \n\t")
+			.fg(Ansi.Color.CYAN).a("done ").reset().toString();
+	
 	private final static String MESSAGE_HELP_EXIT = ansi()	
 			.fg(Ansi.Color.DEFAULT).a("Exit:\n\t")
 			.fg(Ansi.Color.MAGENTA).a("exit the program \n\t")
@@ -151,62 +166,61 @@ public class ZombieTaskCommandHandler {
 	
 	public static void execute() throws Exception {
 		currentCommandDescriptor = currentCommand.getCommandType();
+		commandCalled = currentCommandDescriptor;
 		switch(currentCommandDescriptor){
 		case COMMAND_ADD:
-			commandCalled = Command.ADD;
 			addCommand(currentCommand);
 			break;
 		case COMMAND_DELETE:
-			commandCalled = Command.DELETE;
 			deleteCommand(currentCommand);
 			break;
+		case COMMAND_DELETE_NAME:
+			deleteName(currentCommand);
+			break;
+		case COMMAND_DELETE_TAG:
+			deleteTag(currentCommand);
+			break;
+		case COMMAND_DELETE_TIME:
+			deleteTime(currentCommand);
+			break;
+		case COMMAND_DELETE_LOCATION:
+			deleteLocation(currentCommand);
+			break;
 		case COMMAND_VIEW:
-			commandCalled = Command.VIEW;
 			viewCommand(currentCommand);
 			break;
 		case COMMAND_UPDATE:
-			commandCalled = Command.UPDATE;
 			updateCommand(currentCommand);
 			break;
 		case COMMAND_UNDO:
-			commandCalled = Command.UNDO;
 			undo();
 			break;
 		case COMMAND_REDO:
-			commandCalled = Command.REDO;
 			redo();
 			break;
 		case COMMAND_HELP:
-			commandCalled = Command.HELP;
 			help(currentCommand);
 			break;
 		case COMMAND_DONE:
-			commandCalled = Command.DONE;
 			doneCommand(currentCommand);
 			break;
 		case COMMAND_SEARCH_NAME:
-			commandCalled = Command.SEARCH_NAME;
 			searchName(currentCommand);
 			break;
 		case COMMAND_SEARCH_TIME:
-			commandCalled = Command.SEARCH_TIME;
 			searchTime(currentCommand);
 			break;
 		case COMMAND_SEARCH_TAG:
-			commandCalled = Command.SEARCH_TAG;
 			searchTag(currentCommand);
 			break;
 		case COMMAND_SEARCH_LOCATION:
-			commandCalled = Command.SEARCH_LOCATION;
 			searchLocation(currentCommand);
 			break;
 		case COMMAND_EXIT:
-			commandCalled = Command.EXIT;
 			exit();
 			break;
 		default:
 		case COMMAND_INVALID:
-			commandCalled = null;
 			invalidCommand(currentCommandString);
 			break;
 		}
@@ -563,7 +577,7 @@ public class ZombieTaskCommandHandler {
 		String userInput = helpCommand.getHelpCommand();
 		
 		if(userInput == null){
-			showToUser(MESSAGE_HELP_ADD + "\n" + MESSAGE_HELP_DELETE + "\n" + MESSAGE_HELP_UPDATE + "\n" + MESSAGE_HELP_SEARCH + "\n" + MESSAGE_HELP_VIEW+ "\n" + MESSAGE_HELP_UNDO+ "\n" + MESSAGE_HELP_REDO+ "\n" + MESSAGE_HELP_EXIT);
+			showToUser(MESSAGE_HELP_ADD + "\n" + MESSAGE_HELP_DELETE + "\n" + MESSAGE_HELP_UPDATE + "\n" + MESSAGE_HELP_SEARCH + "\n" + MESSAGE_HELP_VIEW+ "\n" + MESSAGE_HELP_UNDO+ "\n" + MESSAGE_HELP_REDO+ "\n" + MESSAGE_HELP_DONE + "\n" + MESSAGE_HELP_EXIT);
 			return;
 		}
 		switch(userInput){
@@ -588,6 +602,9 @@ public class ZombieTaskCommandHandler {
 		case COMMAND_REDO:
 			showToUser(MESSAGE_HELP_REDO);
 			break;
+		case COMMAND_DONE:
+			showToUser(MESSAGE_HELP_DONE);
+			break;
 		case COMMAND_EXIT:
 			showToUser(MESSAGE_HELP_EXIT);
 			break;	
@@ -604,9 +621,27 @@ public class ZombieTaskCommandHandler {
 		UI.printPerspective(FORMAT.AGENDA, storage.searchName(searchCommand.getSearchString()));
 	}
 	
+	protected static void deleteName(Command command) throws Exception{
+		CommandDeleteName deleteCommand = (CommandDeleteName) command;
+		TaskUIFormat deleteList = storage.searchName(deleteCommand.getSearchString());
+		storage.delete(deleteList);
+		/*
+		 * To be implemented UNDO and REDO
+		 */
+	}
+	
 	protected static void searchTime(Command command) throws Exception{
 		CommandSearchTime searchCommand = (CommandSearchTime) command;
 		UI.printPerspective(FORMAT.AGENDA, storage.search(searchCommand.getTimeStart(), searchCommand.getTimeEnd()));
+	}
+	
+	protected static void deleteTime(Command command) throws Exception{
+		CommandDeleteTime deleteCommand = (CommandDeleteTime) command;
+		TaskUIFormat deleteList = storage.search(deleteCommand.getTimeStart(), deleteCommand.getTimeEnd());
+		storage.delete(deleteList);
+		/*
+		 * To be implemented UNDO and REDO
+		 */
 	}
 	
 	protected static void searchTag(Command command) throws Exception{
@@ -614,9 +649,27 @@ public class ZombieTaskCommandHandler {
 		UI.printPerspective(FORMAT.AGENDA, storage.searchTag(searchCommand.getTag()));
 	}
 	
+	protected static void deleteTag(Command command) throws Exception{
+		CommandDeleteTag deleteCommand = (CommandDeleteTag) command;
+		TaskUIFormat deleteList = storage.searchTag(deleteCommand.getTag());
+		storage.delete(deleteList);
+		/*
+		 * To be implemented UNDO and REDO
+		 */
+	}
+	
 	protected static void searchLocation(Command command) throws Exception{
 		CommandSearchLocation searchCommand = (CommandSearchLocation) command;
 		UI.printPerspective(FORMAT.AGENDA, storage.searchLocation(searchCommand.getLocation()));
+	}
+	
+	protected static void deleteLocation(Command command) throws Exception{
+		CommandDeleteLocation deleteCommand = (CommandDeleteLocation) command;
+		TaskUIFormat deleteList = storage.searchLocation(deleteCommand.getLocation());
+		storage.delete(deleteList);
+		/*
+		 * To be implemented UNDO and REDO
+		 */
 	}
 	
 	protected static void doneCommand(Command command) throws Exception{

@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import ui.FORMAT;
 import ui.UI;
@@ -79,6 +77,31 @@ public class Interpreter {
 						return getCommandDelete(userInputTokens[1], userInput);
 					} else {
 						return new CommandDelete(null, userInput, true);
+					}
+					//Command.DELETE_NAME, Command.DELETE_TIME, Command.DELETE_TAG, Command.DELETE_LOCATION
+				case Command.DELETE_NAME:
+					if (userInputTokens.length > 1) {
+						return getCommandDeleteName(userInput);
+					} else {
+						return new CommandDeleteName(null, userInput, true);
+					}
+				case Command.DELETE_TIME:
+					if (userInputTokens.length > 1) {
+						return getCommandDeleteTime(userInput);
+					} else {
+						return new CommandDeleteTime(null, null, userInput, true);
+					}
+				case Command.DELETE_TAG:
+					if (userInputTokens.length > 1) {
+						return getCommandDeleteTag(userInput);
+					} else {
+						return new CommandDeleteTag(null, userInput, true);
+					}
+				case Command.DELETE_LOCATION:
+					if (userInputTokens.length > 1){
+						return getCommandDeleteLocation(userInput);
+					} else {
+						return new CommandDeleteLocation(null, userInput, true);
 					}
 				case Command.UPDATE:
 					if (userInputTokens.length > 2) {
@@ -178,6 +201,44 @@ public class Interpreter {
 			return new CommandSearchTime(cal2, cal1, userInput, false);
 		}
 	}
+	
+	private static Command getCommandDeleteTime(String userInput){
+		Parser parser = new Parser();
+		List<DateGroup> groups = parser.parse(userInput);
+
+		if (groups.isEmpty()) {
+			logger.log(Level.INFO, "No date found");
+			return new CommandDeleteTime(null, null, userInput, true);
+		} else {
+			// get first date
+			Date date1 = groups.get(0).getDates().get(0);
+			Date date2 = null;
+			Calendar cal1 = Calendar.getInstance();
+			cal1.setTime(date1);
+			Calendar cal2 = Calendar.getInstance();
+			logger.log(Level.INFO, "First date: " + cal1);
+
+			// get second date
+			try {
+				date2 = groups.get(0).getDates().get(1);
+				cal2.setTime(date2);
+				logger.log(Level.INFO, "Second date: " + cal1);
+			} catch (Exception e) {
+				try {
+					date2 = groups.get(1).getDates().get(0);
+					cal2.setTime(date2);
+					logger.log(Level.INFO, "Second date: " + cal1);
+				} catch (Exception e1) { // only 1 date
+					return new CommandDeleteTime(null, null, userInput, true);
+				}
+			}
+
+			if (cal1.compareTo(cal2) < 0) { // date1 before date2
+				return new CommandDeleteTime(cal1, cal2, userInput, false);
+			}
+			return new CommandDeleteTime(cal2, cal1, userInput, false);
+		}
+	}
 
 	/**
 	 * Creates a CommandSearch name object based on user input
@@ -193,18 +254,32 @@ public class Interpreter {
 		return new CommandSearchName(searchString, userInput, false);
 	}
 
-	private static Command getCommandSearchTag(String userInput) {
-		String searchString = userInput.replaceFirst(Command.SEARCH_TAG + " ",
+	private static Command getCommandDeleteName(String userInput){
+		String searchString = userInput.replaceFirst(Command.DELETE_NAME + " ",
 				"");
+		return new CommandDeleteName(searchString, userInput, false);
+	}
+	
+	private static Command getCommandSearchTag(String userInput){
+		String searchString = userInput.replaceFirst(Command.SEARCH_TAG + " ", "");
 		return new CommandSearchTag(searchString, userInput, false);
 	}
-
-	private static Command getCommandSearchLocation(String userInput) {
-		String searchString = userInput.replaceFirst(Command.SEARCH_LOCATION
-				+ " ", "");
+	
+	private static Command getCommandDeleteTag(String userInput){
+		String searchString = userInput.replaceFirst(Command.DELETE_TAG + " ", "");
+		return new CommandDeleteTag(searchString, userInput, false);
+	}
+	
+	private static Command getCommandSearchLocation(String userInput){
+		String searchString = userInput.replaceFirst(Command.SEARCH_LOCATION + " ", "");
 		return new CommandSearchLocation(searchString, userInput, false);
 	}
 
+	private static Command getCommandDeleteLocation(String userInput){
+		String searchString = userInput.replaceFirst(Command.DELETE_LOCATION + " ", "");
+		return new CommandDeleteLocation(searchString, userInput, false);
+	}
+	
 	/**
 	 * Creates a CommandView object based on user input
 	 * 
