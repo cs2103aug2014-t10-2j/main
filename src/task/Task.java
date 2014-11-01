@@ -369,7 +369,7 @@ public class Task implements Comparable<Task> {
 			return otherTask.getStartTime().before(this.getEndTime()) && otherTask.getEndTime().after(this.getEndTime());
 		}
 		
-		return this.getStartTime().after(otherTask.getEndTime()) || this.getEndTime().before(otherTask.getStartTime());
+		return !(this.getStartTime().after(otherTask.getEndTime()) || this.getEndTime().before(otherTask.getStartTime()));
 	}
 	
 	public boolean isCompleted() {

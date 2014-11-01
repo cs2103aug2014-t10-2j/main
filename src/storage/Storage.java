@@ -319,9 +319,9 @@ public class Storage {
 	 * @return boolean value
 	 */
 	
-	public ArrayList<Task> taskClash(Task newTask){
+	public TaskUIFormat taskClash(Task newTask){
 		
-		ArrayList<Task> clashedTasks = new ArrayList<Task>();
+		TaskUIFormat clashedTasks = new TaskUIFormat();
 		
 		if (newTask.isFloatingTask()){
 			return clashedTasks;
@@ -330,7 +330,7 @@ public class Storage {
 		for (Task oldTask: timedTasks){
 			if (!newTask.equals(oldTask)){
 				if (newTask.taskClash(oldTask)){
-					clashedTasks.add(oldTask);
+					clashedTasks.addTask(oldTask);
 				}
 			}
 		}
@@ -338,7 +338,7 @@ public class Storage {
 		for (Task oldTask: deadlineTasks){
 			if (!newTask.equals(oldTask)){
 				if (newTask.taskClash(oldTask)){
-					clashedTasks.add(oldTask);
+					clashedTasks.addTask(oldTask);
 				}
 			}
 		}

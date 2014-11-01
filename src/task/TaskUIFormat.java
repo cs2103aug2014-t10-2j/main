@@ -30,39 +30,28 @@ public class TaskUIFormat {
 	private int deadlineIndex = 0;
 	private int timedIndex = 0;
 	
-	/*
-	 
-	private boolean hasSorted = false;
-	
-	public TaskUIFormat(ArrayList<Task> taskList){
-		
-		for (Task task : taskList){
-			if (task.isFloatingTask()){
-				floatingTasks.add(task);
-				continue;
-			}
-			
-			if (task.hasStartTime()){
-				timedTasks.add(task);
-				continue;
-			}
-			
-			//Only deadlineTasks left
-			if (task.hasEndTime()){
-				deadlineTasks.add(task);
-				continue;
-			}
-		}
-		sortTimedTasks();
-		sortDeadlineTasks();
-	}
-	
-	*/
-	
 	public TaskUIFormat(ArrayList<Task> newFloatingTasks, ArrayList<Task> newDeadlineTasks, ArrayList<Task> newTimedTasks){
 		floatingTasks = newFloatingTasks;
 		deadlineTasks = newDeadlineTasks;
 		timedTasks = newTimedTasks;
+	}
+	
+	public TaskUIFormat(){
+		floatingTasks = new ArrayList<Task>();
+		deadlineTasks = new ArrayList<Task>();
+		timedTasks = new ArrayList<Task>();
+	}
+	
+	public void addTask(Task newTask){
+		if (newTask.isFloatingTask()){
+			floatingTasks.add(newTask);
+		}
+		if (newTask.isDeadlineTask()){
+			deadlineTasks.add(newTask);
+		}
+		if (newTask.isTimedTask()){
+			timedTasks.add(newTask);
+		}
 	}
 	
 	public boolean isEmpty(){

@@ -269,7 +269,7 @@ public class StorageAPI {
 	 * @return boolean value
 	 */
 	
-	public ArrayList<Task> taskClash(Task newTask){
+	public TaskUIFormat taskClash(Task newTask){
 		return storage.taskClash(newTask);
 	}
 	

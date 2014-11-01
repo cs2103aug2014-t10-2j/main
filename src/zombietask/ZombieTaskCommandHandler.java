@@ -73,8 +73,8 @@ public class ZombieTaskCommandHandler {
 	private final static String MESSAGE_DELETE = "Deleted %s from database";
 	private final static String MESSAGE_UPDATE = "Updated %s to %s from database";
 	private final static String MESSAGE_OUTOFBOUNDS = "Warning: input %s is out of bounds";
-	private final static String MESSAGE_CLASH_WARNING = "Warning:\n\tTasks %s and %s clashes";
-	private final static String MESSAGE_CLASH_MORE_THAN_ONE = "Warning\n\tTasks %s and %d other task(s) clashes";
+	private final static String MESSAGE_CLASH_WARNING = "Warning\n\tTasks %s and %d other task(s) clashes\nClashed Tasks:\n"; //"Warning:\n\tTasks %s and %s clashes";
+	//private final static String MESSAGE_CLASH_MORE_THAN_ONE = "Warning\n\tTasks %s and %d other task(s) clashes";
 	
 	private final static String ERROR_EMPTY_UNDO_STACK = "There is nothing to undo!";
 	private final static String ERROR_EMPTY_REDO_STACK = "There is nothing to redo!";
@@ -254,12 +254,14 @@ public class ZombieTaskCommandHandler {
 			storage.add(currentTask);
 			recordCommand();
 			
-			ArrayList<Task> clashedTasks = storage.taskClash(currentTask);
-			if(clashedTasks.size() == 1){
-				showToUser(String.format(MESSAGE_CLASH_WARNING, currentTask.getTaskName(), clashedTasks.get(0).getTaskName()));
-			}else if (clashedTasks.size() > 1){
-				showToUser(String.format(MESSAGE_CLASH_MORE_THAN_ONE, currentTask.getTaskName(), clashedTasks.size()));
+			TaskUIFormat clashedTasks = storage.taskClash(currentTask);
+			
+			
+			if(clashedTasks.size() >= 1){
+				showToUser(String.format(MESSAGE_CLASH_WARNING, currentTask.getTaskName(), clashedTasks.size()));
+				UI.printPerspective(FORMAT.AGENDA, clashedTasks);
 			}
+			
 			showToUser(String.format(MESSAGE_ADD, currentTask.getTaskName()));
 			showToUser(UI.printTask(currentTask, 1, 0));
 		} catch (Exception err){
