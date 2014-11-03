@@ -1,21 +1,22 @@
 package zombietask;
 
 import interpreter.Command;
-import interpreter.CommandAdd;
-import interpreter.CommandDelete;
-import interpreter.CommandUpdate;
-import interpreter.CommandView;
+//import interpreter.CommandAdd;
+//import interpreter.CommandDelete;
+//import interpreter.CommandUpdate;
+//import interpreter.CommandView;
 import interpreter.Interpreter;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.Scanner;
-import java.util.Calendar;
+//import java.io.IOException;
+//import java.util.ArrayList;
+//import java.util.GregorianCalendar;
+//import java.util.Scanner;
+//import java.util.Calendar;
 
 import storage.StorageAPI;
-import task.Task;
-import ui.FORMAT;
+//import task.Task;
+//import ui.FORMAT;
+import ui.GUI;
 import ui.UI;
 
 import java.util.logging.Level;
@@ -44,7 +45,7 @@ public class ZombieTask {
 	 */
 
 	private static StorageAPI storage = new StorageAPI();
-	private static Scanner sc = new Scanner(System.in);
+	//private static Scanner sc = new Scanner(System.in);
 	private static Logger logger = ZombieLogger.getLogger();
 
 	/*
@@ -63,14 +64,13 @@ public class ZombieTask {
 	 * Standard Messages
 	 */
 
-	private final static String MESSAGE_WELCOME = "Welcome to Zombie Task!";
+	//private final static String MESSAGE_WELCOME = "Welcome to Zombie Task!";
 	private final static String MESSAGE_FILE_OPENED = "%s is ready for use";
 	private final static String MESSAGE_MISSING_ARGUMENTS = "Command Missing Arguments:\n%s";
 	private final static String MESSAGE_INVALID_FILENAME = "Invalid FileName: %s";
 	private final static boolean SUCCESS = true;
-	private final static boolean FAILURE = false;
-
-	private static boolean setExit = false;
+	//private final static boolean FAILURE = false;
+	//private static boolean setExit = false;
 
 	/**
 	 * Method that will be invoked when ZombieTask is called.
@@ -78,7 +78,9 @@ public class ZombieTask {
 	 * @param args
 	 * @throws Exception
 	 */
-
+	
+	/*	Main Method substituted for userInput(String str)
+	 * 
 	public static void main(String[] args) throws Exception {
 		showToUser(MESSAGE_WELCOME);
 		initStorage(args);
@@ -103,6 +105,31 @@ public class ZombieTask {
 				showToUser(err.toString());
 			}
 		}
+	}*/
+	public static void userInput(String str) {
+		//showToUser(MESSAGE_WELCOME);
+		initStorage(str);
+		UI.initUIOnce();
+		
+		//while (!str.isEmpty() && !setExit) {
+			try {
+				reinitializeCurrentVariables();
+				currentCommandString = str;
+				currentCommand = Interpreter.getCommand(currentCommandString);
+				if (currentCommand.hasMissingArgs() && !currentCommand.getCommandType().equals(Command.HELP)) {
+					logger.log(Level.INFO, String.format(
+							MESSAGE_MISSING_ARGUMENTS, currentCommandString));
+					//continue;
+				}
+				
+				logger.log(Level.FINER, currentCommandString);
+				ZombieTaskCommandHandler.execute(currentCommand,
+						currentCommandString);
+			} catch (Exception err) {
+				err.printStackTrace();
+				showToUser(err.toString());
+			}
+		//}
 	}
 
 	/**
@@ -111,7 +138,7 @@ public class ZombieTask {
 	 * @param command command to test
 	 */
 	public static void testCommand(String commandStr) {
-		initStorage(new String[] { "ZombieTest" });
+		initStorage("ZombieTest");
 		UI.initUIOnce();
 		try {
 			Command command = Interpreter.getCommand(commandStr);
@@ -128,14 +155,14 @@ public class ZombieTask {
 	 * @param args optional first element of args[] will be set as file accessed
 	 */
 
-	public static void initStorage(String[] args) {
+	public static void initStorage(String args) {
 		try {
-			if (args.length > 0) {
-				storage.setFile(args[0]);
+			if (args.length() > 0) {
+				storage.setFile(args);
 			}
-			storage.createFile();
+			StorageAPI.createFile();
 		} catch (Exception err) {
-			showToUser(String.format(MESSAGE_INVALID_FILENAME, args[0]));
+			showToUser(String.format(MESSAGE_INVALID_FILENAME, args));
 		} finally {
 			ZombieTaskCommandHandler.setStorage(storage);
 			showToUser(String
@@ -206,12 +233,11 @@ public class ZombieTask {
 	 */
 
 	private static void showToUser(String displayString) {
-		System.out.println(displayString);
-		// UI.printResponse(displayString);
+		GUI.modifyUpperLabel(displayString);
 	}
 
 	public static void exitProgram() {
-		System.exit(0);
+		GUI.closeWindow();
 	}
 
 }
