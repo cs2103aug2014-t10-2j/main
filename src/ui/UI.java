@@ -91,6 +91,8 @@ public class UI
 	private static final Format FORMAT_TODAY = new SimpleDateFormat("dd MMMMM yyyy, HH:mm");
 	//private static final Format FORMAT_WEEKNUM = new SimpleDateFormat("ww");
 	
+	private static final String EMPTY_STRING = "";
+	
 	private static final ArrayList<Task> EMPTY_LIST = new ArrayList<Task>();
 	
 	/*
@@ -113,6 +115,7 @@ public class UI
 			throws Exception {
 			if(tasks.isEmpty()) {
 				window.modifyUpperLabel("No tasks within time period." + format);
+				window.modifyLabelText(EMPTY_STRING);
 				return;
 			}
 			String str;
