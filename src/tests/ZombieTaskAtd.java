@@ -95,7 +95,7 @@ public class ZombieTaskAtd {
 	public void filenameTester01() {
 		String[] testInput = new String[1];
 		testInput[0] = EMPTY_STRING;
-		ZombieTask.initStorage(testInput);
+		ZombieTask.initStorage(testInput[0]);
 		assertEquals("filename assignment test failed - empty string", ZombieTask.getStorage().getFileName(), DEFAULT_FILE);
 	}
 	
@@ -103,7 +103,7 @@ public class ZombieTaskAtd {
 	public void filenameTester02() {
 		String[] testInput = new String[1];
 		testInput[0] = TEST1_FILE;
-		ZombieTask.initStorage(testInput);
+		ZombieTask.initStorage(testInput[0]);
 		assertEquals("filename assignment test failed - correct input syntax", ZombieTask.getStorage().getFileName(), TEST1_FILE);
 	}
 	
@@ -111,7 +111,7 @@ public class ZombieTaskAtd {
 	public void filenameTester03() {
 		String[] testInput = new String[1];
 		testInput[0] = TEST2_FILE;
-		ZombieTask.initStorage(testInput);
+		ZombieTask.initStorage(testInput[0]);
 		assertEquals("filename assignment test failed - numeric string input", ZombieTask.getStorage().getFileName(), TEST2_FILE);
 	}
 	
@@ -119,7 +119,7 @@ public class ZombieTaskAtd {
 	public void filenameTester04() {
 		String[] testInput = new String[1];
 		testInput[0] = TEST2_FILE.concat(ESCAPE_CHAR_EMPTY);
-		ZombieTask.initStorage(testInput);
+		ZombieTask.initStorage(testInput[0]);
 		assertEquals("filename assignment test failed - numeric and escape character input", ZombieTask.getStorage().getFileName(), TEST2_FILE);
 	}
 	

@@ -1,4 +1,7 @@
 package interpreter;
+
+import java.util.ArrayList;
+
 /**
  * Class for Done command, which contains a string to 
  * indicate the task to be checked/unchecked as don and
@@ -7,7 +10,7 @@ package interpreter;
  *
  */
 public class CommandDone extends Command {
-	String lineCode = null;
+	ArrayList<String> lineCode = null;
 	
 	/**
 	 * Constructor for the Done command object. It is initialised with a line
@@ -15,17 +18,17 @@ public class CommandDone extends Command {
 	 * @param newLineCode the line code of the task to be updated
 	 * @param hasMissingArgs boolean variable to indicate missing arguments
 	 */
-	public CommandDone(String newLineCode, 
+	public CommandDone(ArrayList<String> newLineCode, 
 			String userInput, boolean hasMissingArgs) {
 		super(Command.DONE, userInput, hasMissingArgs);
 		lineCode = newLineCode;
 	}
 	
 	/**
-	 * Accessor for line code
-	 * @return the line code of the task to be updated
+	 * Accessor for line codes
+	 * @return the line codes of the task to be updated
 	 */
-	public String getLineCode() {
+	public ArrayList<String> getLineCode() {
 		return lineCode;
 	}
 }

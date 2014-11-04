@@ -2,6 +2,7 @@ package interpreter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -26,13 +27,6 @@ import exception.NoTaskNameException;
 public class Interpreter {
 
 	public static final int INVALID_NO = -1;
-	public static final char ESCAPE_CHAR = '*';
-
-	// valid constants for updating floating, deadline and timed task
-	public static final char UPDATE_F = 'f';
-	public static final char UPDATE_D = 'd';
-	public static final char UPDATE_T = 't';
-
 	private static Logger logger = ZombieTask.getLogger();
 
 	/**
@@ -74,11 +68,12 @@ public class Interpreter {
 			switch (commandType) {
 				case Command.DELETE:
 					if (userInputTokens.length > 1) {
-						return getCommandDelete(userInputTokens[1], userInput);
+						return getCommandDelete(userInput);
 					} else {
 						return new CommandDelete(null, userInput, true);
 					}
-					//Command.DELETE_NAME, Command.DELETE_TIME, Command.DELETE_TAG, Command.DELETE_LOCATION
+					// Command.DELETE_NAME, Command.DELETE_TIME,
+					// Command.DELETE_TAG, Command.DELETE_LOCATION
 				case Command.DELETE_NAME:
 					if (userInputTokens.length > 1) {
 						return getCommandDeleteName(userInput);
@@ -89,7 +84,8 @@ public class Interpreter {
 					if (userInputTokens.length > 1) {
 						return getCommandDeleteTime(userInput);
 					} else {
-						return new CommandDeleteTime(null, null, userInput, true);
+						return new CommandDeleteTime(null, null, userInput,
+								true);
 					}
 				case Command.DELETE_TAG:
 					if (userInputTokens.length > 1) {
@@ -98,7 +94,7 @@ public class Interpreter {
 						return new CommandDeleteTag(null, userInput, true);
 					}
 				case Command.DELETE_LOCATION:
-					if (userInputTokens.length > 1){
+					if (userInputTokens.length > 1) {
 						return getCommandDeleteLocation(userInput);
 					} else {
 						return new CommandDeleteLocation(null, userInput, true);
@@ -123,7 +119,7 @@ public class Interpreter {
 					}
 				case Command.DONE:
 					if (userInputTokens.length > 1) {
-						return getCommandDone(userInputTokens[1], userInput);
+						return getCommandDone(userInput);
 					} else {
 						return new CommandDone(null, userInput, true);
 					}
@@ -201,8 +197,8 @@ public class Interpreter {
 			return new CommandSearchTime(cal2, cal1, userInput, false);
 		}
 	}
-	
-	private static Command getCommandDeleteTime(String userInput){
+
+	private static Command getCommandDeleteTime(String userInput) {
 		Parser parser = new Parser();
 		List<DateGroup> groups = parser.parse(userInput);
 
@@ -254,32 +250,36 @@ public class Interpreter {
 		return new CommandSearchName(searchString, userInput, false);
 	}
 
-	private static Command getCommandDeleteName(String userInput){
+	private static Command getCommandDeleteName(String userInput) {
 		String searchString = userInput.replaceFirst(Command.DELETE_NAME + " ",
 				"");
 		return new CommandDeleteName(searchString, userInput, false);
 	}
-	
-	private static Command getCommandSearchTag(String userInput){
-		String searchString = userInput.replaceFirst(Command.SEARCH_TAG + " ", "");
+
+	private static Command getCommandSearchTag(String userInput) {
+		String searchString = userInput.replaceFirst(Command.SEARCH_TAG + " ",
+				"");
 		return new CommandSearchTag(searchString, userInput, false);
 	}
-	
-	private static Command getCommandDeleteTag(String userInput){
-		String searchString = userInput.replaceFirst(Command.DELETE_TAG + " ", "");
+
+	private static Command getCommandDeleteTag(String userInput) {
+		String searchString = userInput.replaceFirst(Command.DELETE_TAG + " ",
+				"");
 		return new CommandDeleteTag(searchString, userInput, false);
 	}
-	
-	private static Command getCommandSearchLocation(String userInput){
-		String searchString = userInput.replaceFirst(Command.SEARCH_LOCATION + " ", "");
+
+	private static Command getCommandSearchLocation(String userInput) {
+		String searchString = userInput.replaceFirst(Command.SEARCH_LOCATION
+				+ " ", "");
 		return new CommandSearchLocation(searchString, userInput, false);
 	}
 
-	private static Command getCommandDeleteLocation(String userInput){
-		String searchString = userInput.replaceFirst(Command.DELETE_LOCATION + " ", "");
+	private static Command getCommandDeleteLocation(String userInput) {
+		String searchString = userInput.replaceFirst(Command.DELETE_LOCATION
+				+ " ", "");
 		return new CommandDeleteLocation(searchString, userInput, false);
 	}
-	
+
 	/**
 	 * Creates a CommandView object based on user input
 	 * 
@@ -336,7 +336,7 @@ public class Interpreter {
 
 		for (String word : userInputWords) {
 			word = word.trim();
-			if (word.length() > 1 && word.charAt(0) == '>') {
+			if (word.length() > 1 && word.charAt(0) == '@') {
 				return word;
 			}
 		}
@@ -354,7 +354,7 @@ public class Interpreter {
 	 * @throws NoTaskNameException no task name specified
 	 */
 	private static String getTaskName(String userInput, List<DateGroup> groups,
-			ArrayList<String> tags, String location) throws NoTaskNameException {
+			ArrayList<String> tags, String location) {
 
 		// remove location
 		if (location != null) {
@@ -372,17 +372,14 @@ public class Interpreter {
 		}
 
 		if (dateKeywords != null && !dateKeywords.isEmpty()) {
-			System.out.println("1:" +  userInput);
 			// search second word onwards for date keyword
-			String userInputTemp = userInput.replaceFirst("\\b" + dateKeywords, "");
-			if (userInputTemp.equals(userInput)) { 
+			String userInputTemp = userInput.replaceFirst("\\b" + dateKeywords,
+					"");
+			if (userInputTemp.equals(userInput)) {
 				// no date keywords removed, so search start of string
 				userInputTemp = userInput.replaceFirst("^" + dateKeywords, "");
 			}
 			userInput = userInputTemp;
-			//userInput = userInput.replaceFirst(" " + dateKeywords, "");
-			//userInput = userInput.replaceFirst(dateKeywords, "");
-			System.out.println("2:" +  userInput);
 		}
 
 		logger.log(Level.INFO, "Task name: " + userInput);
@@ -396,13 +393,12 @@ public class Interpreter {
 
 		logger.log(Level.INFO, "Task name: " + userInput);
 
-		if (userInput.trim() == "") {
-			throw new NoTaskNameException("No task name.");
-		}
-
 		// remove escape characters
-		userInput = userInput.replaceAll("\\s\\" + ESCAPE_CHAR, "");
-		userInput = userInput.replaceAll("^\\" + ESCAPE_CHAR, "");
+		userInput = userInput.replaceAll("\"", "");
+
+		if (userInput.trim().equals("")) {
+			return null;
+		}
 
 		return userInput.trim();
 
@@ -424,81 +420,72 @@ public class Interpreter {
 		String taskName = null;
 		String[] userInputWords = userInput.trim().split(" ");
 
-		// remove escaped numbers and words
-		// word starting with '*'
-		String escapePattern1 = "\\s\\" + ESCAPE_CHAR + "\\S+";
-		// first word starting with '*'
-		String escapePattern2 = "^\\" + ESCAPE_CHAR + "\\S+";
-		String userInputTemp = userInput;
+		// remove escaped numbers and words - in quotations
+		String userInputTemp = userInput.replaceAll("\"(.*)\"", "");
 
-		userInputTemp = userInputTemp.replaceAll(escapePattern1, "");
-		userInputTemp = userInputTemp.replaceAll(escapePattern2, "");
+		// remove location keyword
+		userInputTemp = userInputTemp.replaceAll("@", "");
 
+		// remove tags
+		userInputTemp = userInputTemp.replaceAll("#", "");
+
+		// get dates
 		Parser parser = new Parser();
 		List<DateGroup> groups = parser.parse(userInputTemp);
 
 		tags = getTags(userInputWords);
 		location = getLocation(userInputWords);
 
-		// remove leading and trailing spaces
+		// remove leading and trailing spaces, remove add command
 		userInputTemp = userInput.trim();
 		if (userInputWords[0].toLowerCase().equals(Command.ADD)) {
 			userInputTemp = userInputTemp.substring(4);
 		}
 
-		try {
+		if (groups.isEmpty()) { // floating task
+			taskName = getTaskName(userInputTemp, groups, tags, location);
+			return new CommandAdd(taskName, null, null, tags, location,
+					userInput, taskName == null);
+		} else {
 
-			if (groups.isEmpty()) { // floating task
-				taskName = getTaskName(userInputTemp, groups, tags, location);
-				taskName = taskName.replace(" " + ESCAPE_CHAR, " ");
-				return new CommandAdd(taskName, null, null, tags, location,
-						userInput, false);
-			} else {
+			// get first date
+			Date date1 = groups.get(0).getDates().get(0);
+			assert date1 != null;
 
-				// get first date
-				Date date1 = groups.get(0).getDates().get(0);
-				assert date1 != null;
+			Date date2 = null;
+			Calendar cal1 = Calendar.getInstance();
+			cal1.setTime(date1);
+			Calendar cal2 = Calendar.getInstance();
 
-				Date date2 = null;
-				Calendar cal1 = Calendar.getInstance();
-				cal1.setTime(date1);
-				Calendar cal2 = Calendar.getInstance();
+			// get second date
+			try {
+				date2 = groups.get(0).getDates().get(1);
+				cal2.setTime(date2);
 
-				// get second date
+			} catch (Exception e) {
 				try {
-					date2 = groups.get(0).getDates().get(1);
+					date2 = groups.get(1).getDates().get(0);
 					cal2.setTime(date2);
+				} catch (Exception e1) { // only 1 date: deadline task
+					taskName = getTaskName(userInputTemp, groups, tags,
+							location);
 
-				} catch (Exception e) {
-					try {
-						date2 = groups.get(1).getDates().get(0);
-						cal2.setTime(date2);
-					} catch (Exception e1) { // only 1 date: deadline task
-						taskName = getTaskName(userInputTemp, groups, tags,
-								location);
-						taskName = taskName.replace(" " + ESCAPE_CHAR, " ");
-						assert !taskName.contains(" " + ESCAPE_CHAR);
-
-						return new CommandAdd(taskName, null, cal1, tags,
-								location, userInput, false);
-					}
+					return new CommandAdd(taskName, null, cal1, tags, location,
+							userInput, taskName == null);
 				}
-
-				// this removes the first 2 time-related keywords
-				taskName = getTaskName(userInputTemp, groups, tags, location);
-				ArrayList<String> tagsTemp = new ArrayList<String>();
-				taskName = getTaskName(taskName, groups, tagsTemp, location);
-				taskName = taskName.replace(" " + ESCAPE_CHAR, " ");
-
-				if (cal1.compareTo(cal2) < 0) { // date1 before date2
-					return new CommandAdd(taskName, cal1, cal2, tags, location,
-							userInput, false);
-				}
-				return new CommandAdd(taskName, cal2, cal1, tags, location,
-						userInput, false);
 			}
-		} catch (NoTaskNameException e) {
-			return new CommandAdd(null, null, null, null, null, userInput, true);
+
+			// this removes the first 2 time-related keywords
+			taskName = getTaskName(userInputTemp, groups, tags, location);
+			ArrayList<String> tagsTemp = new ArrayList<String>();
+			taskName = getTaskName(taskName, groups, tagsTemp, location);
+
+			if (cal1.compareTo(cal2) < 0) { // date1 before date2
+				return new CommandAdd(taskName, cal1, cal2, tags, location,
+						userInput, taskName == null);
+			}
+			return new CommandAdd(taskName, cal2, cal1, tags, location,
+					userInput, taskName == null);
 		}
 
 	}
@@ -516,8 +503,7 @@ public class Interpreter {
 		try {
 			String lineCode = null;
 			secondWord = secondWord.toLowerCase();
-			boolean validSecondWord = secondWord.matches("[" + UPDATE_F
-					+ UPDATE_D + UPDATE_T + "][0-9]+");
+			boolean validSecondWord = secondWord.matches("[fdt][0-9]+");
 
 			if (validSecondWord) {
 				lineCode = secondWord;
@@ -551,49 +537,75 @@ public class Interpreter {
 	 * @throws Exception for invalid line number or date
 	 */
 
-	private static CommandDone getCommandDone(String secondWord,
-			String userInput) {
-		try {
-			String lineCode = null;
-			secondWord = secondWord.toLowerCase();
-			boolean validSecondWord = secondWord.matches("[" + UPDATE_F
-					+ UPDATE_D + UPDATE_T + "][0-9]+");
+	private static CommandDone getCommandDone(String userInput) {
+		ArrayList<String> lineCodes = new ArrayList<String>();
+		String userInputTemp = userInput.toLowerCase().replaceFirst(
+				Command.DONE + " ", "");
+		String[] lineCodesTemp = userInputTemp.split(" ");
 
-			if (validSecondWord) {
-				lineCode = secondWord;
-				return new CommandDone(lineCode, userInput, false);
-			} else {
-				return new CommandDone(null, userInput, true);
+		// check whether a range is specified
+		if (lineCodesTemp[0].matches("[fdt][0-9]+-[0-9]")) {
+			lineCodesTemp = lineCodesTemp[0].split("-");
+
+			String firstChar = Character.toString(lineCodesTemp[0].charAt(0));
+			ArrayList<Integer> indices = new ArrayList<Integer>();
+			indices.add(Integer.parseInt(lineCodesTemp[0].substring(1)));
+			indices.add(Integer.parseInt(lineCodesTemp[1]));
+
+			Collections.sort(indices);
+			for (int i = indices.get(0); i <= indices.get(1); i++) {
+				lineCodes.add((firstChar + i));
 			}
-
-		} catch (Exception e) {
+		} else {
+			for (String lineCode : lineCodesTemp) {
+				if (lineCode.trim().matches("[fdt][0-9]+")) {
+					lineCodes.add(lineCode);
+				}
+			}
+		}
+		if (lineCodes.isEmpty()) {
 			return new CommandDone(null, userInput, true);
 		}
+		return new CommandDone(lineCodes, userInput, false);
 	}
 
 	/**
 	 * Creates a CommandDelete object from user input
 	 * 
 	 * @param secondWord the second word of the user input
-	 * @return a CommandDelete object with integer value of line number, the
-	 *         original input and a boolean value to indicate missing arguments
+	 * @return a CommandDelete object with a list of line codes, the original
+	 *         input and a boolean value to indicate missing arguments
 	 */
-	private static CommandDelete getCommandDelete(String secondWord,
-			String userInput) {
-		try {
-			secondWord = secondWord.toLowerCase();
-			boolean validSecondWord = secondWord.matches("[" + UPDATE_F
-					+ UPDATE_D + UPDATE_T + "][0-9]+");
+	private static CommandDelete getCommandDelete(String userInput) {
+		ArrayList<String> lineCodes = new ArrayList<String>();
+		String userInputTemp = userInput.toLowerCase().replaceFirst(
+				Command.DELETE + " ", "");
+		String[] lineCodesTemp = userInputTemp.split(" ");
 
-			if (validSecondWord) {
-				return new CommandDelete(secondWord, userInput, false);
-			} else {
-				return new CommandDelete(null, userInput, true);
+		// check whether a range is specified
+		if (lineCodesTemp[0].matches("[fdt][0-9]+-[0-9]")) {
+			lineCodesTemp = lineCodesTemp[0].split("-");
+
+			String firstChar = Character.toString(lineCodesTemp[0].charAt(0));
+			ArrayList<Integer> indices = new ArrayList<Integer>();
+			indices.add(Integer.parseInt(lineCodesTemp[0].substring(1)));
+			indices.add(Integer.parseInt(lineCodesTemp[1]));
+
+			Collections.sort(indices);
+			for (int i = indices.get(0); i <= indices.get(1); i++) {
+				lineCodes.add((firstChar + i));
 			}
-
-		} catch (Exception e) { // invalid number
+		} else {
+			for (String lineCode : lineCodesTemp) {
+				if (lineCode.trim().matches("[fdt][0-9]+")) {
+					lineCodes.add(lineCode);
+				}
+			}
+		}
+		if (lineCodes.isEmpty()) {
 			return new CommandDelete(null, userInput, true);
 		}
+		return new CommandDelete(lineCodes, userInput, false);
 
 	}
 }

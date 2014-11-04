@@ -26,6 +26,8 @@ public class TaskUIFormat {
 	private ArrayList<Task> floatingTasks;
 	private ArrayList<Task> deadlineTasks;
 	private ArrayList<Task> timedTasks;
+	private Task oldTask;
+	private Task newTask;
 	private int floatingIndex = 0;
 	private int deadlineIndex = 0;
 	private int timedIndex = 0;
@@ -42,7 +44,7 @@ public class TaskUIFormat {
 		timedTasks = new ArrayList<Task>();
 	}
 	
-	public void addTask(Task newTask){
+	public TaskUIFormat addTask(Task newTask){
 		if (newTask.isFloatingTask()){
 			floatingTasks.add(newTask);
 		}
@@ -52,6 +54,7 @@ public class TaskUIFormat {
 		if (newTask.isTimedTask()){
 			timedTasks.add(newTask);
 		}
+		return this;
 	}
 	
 	public boolean isEmpty(){
@@ -139,49 +142,22 @@ public class TaskUIFormat {
 		}
 			return tempTask;
 	}
-	
-	/*
-	
-	private void sortTimedTasks(){
-		Collections.sort(timedTasks, startTimeComparator);
-	}
-	
-	private void sortDeadlineTasks(){
-		Collections.sort(deadlineTasks, endTimeComparator);
-	}
-	
-	public Task getTask(String searchString){
-		
-		logger.log(Level.FINER, searchString);
-		
-		Matcher matcher = VALID_PATTERN.matcher(searchString);
-		if (matcher.groupCount() < 2) {
-			logger.log(Level.SEVERE, String.format(DEBUG_INVALID_IO, searchString),
-					new IOException());
-		}
-		if (!hasSorted) {
-			logger.log(Level.SEVERE, DEBUG_HASNT_SORTED,
-					new IOException());
-		}
-		
-		String taskType = matcher.group(0).toLowerCase();
-		int index = new Integer(matcher.group(1));
-		
-		try {
-			switch (taskType){
-			case FLOATING_ID:
-				return floatingTasks.get(index);
-			case DEADLINE_ID:
-				return deadlineTasks.get(index);
-			case TIMED_ID:
-				return timedTasks.get(index);
-			}
-		}catch (Exception e){
-			logger.log(Level.SEVERE, e.getMessage());
-		}
-		return null;
-	}
-	
-	*/
 
+	public Task getOldTask() {
+		return oldTask;
+	}
+
+	public TaskUIFormat setOldTask(Task oldTask) {
+		this.oldTask = oldTask;
+		return this;
+	}
+
+	public Task getNewTask() {
+		return newTask;
+	}
+
+	public TaskUIFormat setNewTask(Task newTask) {
+		this.newTask = newTask;
+		return this;
+	}
 }

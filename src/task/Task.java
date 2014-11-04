@@ -5,13 +5,10 @@ import java.util.Calendar;
 
 
 /**
- * 
  * Task Class for ZombieTask. Holds information for each class.
- * 
  * @author nil
  * @author ljiy369
  * @author jellymac
- *
  */
 
 public class Task implements Comparable<Task> {	
@@ -403,9 +400,4 @@ public class Task implements Comparable<Task> {
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
-	
-	/*
-	 * REDUNDANT METHODS
-	 */
-	
 }

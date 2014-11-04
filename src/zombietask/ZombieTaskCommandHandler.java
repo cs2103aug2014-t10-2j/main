@@ -114,6 +114,7 @@ public class ZombieTaskCommandHandler {
 			.fg(Ansi.Color.CYAN).a("exit ").reset().toString();
 	private final static String MESSAGE_ADD = "Added %s to database";
 	private final static String MESSAGE_DELETE = "Deleted %s from database";
+	private final static String MESSAGE_DELETE_MULTIPLE = "Deleted %d tasks from database";
 	private final static String MESSAGE_UPDATE = "Updated %s to %s from database";
 	private final static String MESSAGE_OUTOFBOUNDS = "Warning: input %s is out of bounds";
 	private final static String MESSAGE_DONE = "Marked %s as done";
@@ -138,13 +139,14 @@ public class ZombieTaskCommandHandler {
 	private static Task currentTask = null;
 	private static Task oldTask = null;
 	private static TaskUIFormat deleteList = null;
+	private static TaskUIFormat currentList = null;
 	
 	private static ArrayList<String> futureCommandDescriptorList = new ArrayList<String>();
 	private static ArrayList<Command> futureCommandList = new ArrayList<Command>();
-	private static ArrayList<Task> futureTaskList = new ArrayList<Task>();
+	private static ArrayList<TaskUIFormat> futureTaskList = new ArrayList<TaskUIFormat>();
 	private static ArrayList<String> pastCommandDescriptorList = new ArrayList<String>();
 	private static ArrayList<Command> pastCommandList = new ArrayList<Command>();
-	private static ArrayList<Task> pastTaskList = new ArrayList<Task>();
+	private static ArrayList<TaskUIFormat> pastTaskList = new ArrayList<TaskUIFormat>();
 	
 	private static StorageAPI storage;
 	
@@ -225,6 +227,8 @@ public class ZombieTaskCommandHandler {
 			invalidCommand(currentCommandString);
 			break;
 		}
+		if(currentCommandDescriptor != COMMAND_VIEW)
+			ZombieTask.userInput("view agenda");
 	}
 	
 	/**
@@ -239,6 +243,7 @@ public class ZombieTaskCommandHandler {
 		currentCommandDescriptor = null;
 		currentCommandString = null;
 		currentCommand = null;
+		currentList = null;
 		currentTask = null;
 	}
 	
@@ -301,6 +306,8 @@ public class ZombieTaskCommandHandler {
 			
 			//Store Task
 			storage.add(currentTask);
+			
+			currentList = new TaskUIFormat().addTask(currentTask);
 			recordCommand();
 			
 			TaskUIFormat clashedTasks = storage.taskClash(currentTask);
@@ -325,12 +332,21 @@ public class ZombieTaskCommandHandler {
 		try{
 			//Get details from Command Object
 			CommandDelete currentDeleteCommand = (CommandDelete) command;
-			String lineCode = currentDeleteCommand.getLineCode();
-			currentTask = storage.search(lineCode);
-			storage.delete(currentTask);
-			recordCommand();
-			showToUser(String.format(MESSAGE_DELETE, currentTask.getTaskName()));
+			ArrayList<String> lineCodes = currentDeleteCommand.getLineCode();
+			currentList = new TaskUIFormat();
+			for(String lineCode : lineCodes){
+				currentTask = storage.search(lineCode);
+				currentList.addTask(currentTask);
+			}
 			
+			storage.delete(currentList);
+			if (currentList.size() == 1){
+				showToUser(String.format(MESSAGE_DELETE, currentTask.getTaskName()));
+			}else{
+				showToUser(String.format(MESSAGE_DELETE_MULTIPLE, currentList.size()));
+			}
+			
+			recordCommand();
 		} catch (Exception err){
 			showToUser(err.getMessage());
 			err.printStackTrace();
@@ -466,9 +482,10 @@ public class ZombieTaskCommandHandler {
 		
 		//delete old task
 		try {
+			currentList = new TaskUIFormat().setOldTask(oldTask).setNewTask(currentTask);
 			storage.delete(oldTask);
 			storage.add(currentTask);
-			recordCommand();
+			
 		} catch (Exception err){
 			showToUser(err.getMessage());
 			err.printStackTrace();
@@ -494,26 +511,27 @@ public class ZombieTaskCommandHandler {
 			}
 			currentCommandDescriptor = pastCommandDescriptorList.remove(pastCommandDescriptorList.size() - 1);
 			currentCommand = pastCommandList.remove(pastCommandList.size() - 1);
-			currentTask = pastTaskList.remove(pastTaskList.size() - 1);
+			currentList = pastTaskList.remove(pastTaskList.size() - 1);
 			
 			// Execute undo
 			
 			switch (currentCommandDescriptor){
 			case COMMAND_ADD:
-				currentTask = storage.delete(currentTask);
+				currentList = storage.delete(currentList);
 				break;
 			case COMMAND_DELETE:
-				storage.add(currentTask);
-				break;
 			case COMMAND_DELETE_NAME:
 			case COMMAND_DELETE_TAG:
 			case COMMAND_DELETE_TIME:
 			case COMMAND_DELETE_LOCATION:
-				storage.add(deleteList);
+				storage.add(currentList);
 				break;
 			case COMMAND_UPDATE:
-				currentTask = storage.delete(currentTask);
-				storage.add(oldTask);
+				storage.delete(currentList.getNewTask());
+				storage.add(currentList.getOldTask());
+				break;
+			case COMMAND_DONE:
+				storage.toggleComplete(currentList);
 				break;
 			default:
 			case COMMAND_INVALID:
@@ -524,7 +542,7 @@ public class ZombieTaskCommandHandler {
 			// Push items into futureLists
 			futureCommandDescriptorList.add(currentCommandDescriptor);
 			futureCommandList.add(currentCommand);
-			futureTaskList.add(currentTask);
+			futureTaskList.add(currentList);
 			
 			
 		} catch (Exception err) {
@@ -543,29 +561,29 @@ public class ZombieTaskCommandHandler {
 			}
 			currentCommandDescriptor = futureCommandDescriptorList.remove(futureCommandDescriptorList.size() - 1);
 			currentCommand = futureCommandList.remove(futureCommandList.size() - 1);
-			currentTask = futureTaskList.remove(futureTaskList.size() - 1);
+			currentList = futureTaskList.remove(futureTaskList.size() - 1);
 			
 			
 			// Execute redo
 			
 			switch (currentCommandDescriptor){
 			case COMMAND_ADD:
-				storage.add(currentTask);
+				storage.add(currentList);
 				break;
 			case COMMAND_DELETE:
-				storage.delete(currentTask);
-				break;
 			case COMMAND_DELETE_NAME:
 			case COMMAND_DELETE_TAG:
 			case COMMAND_DELETE_TIME:
 			case COMMAND_DELETE_LOCATION:
-				storage.delete(deleteList);
+				storage.delete(currentList);
 				break;
 			case COMMAND_UPDATE:
-				storage.add(currentTask);
-				storage.delete(oldTask);
+				storage.delete(currentList.getOldTask());
+				storage.add(currentList.getNewTask());
 				break;
-				
+			case COMMAND_DONE:
+				storage.toggleComplete(currentList);
+				break;
 			default:
 			case COMMAND_INVALID:
 				logger.log(Level.INFO, ERROR_INVALID_UNDO_REDO);
@@ -576,7 +594,7 @@ public class ZombieTaskCommandHandler {
 			
 			pastCommandDescriptorList.add(currentCommandDescriptor);
 			pastCommandList.add(currentCommand);
-			pastTaskList.add(currentTask);
+			pastTaskList.add(currentList);
 			
 		} catch (Exception err) {
 			showToUser(err.getMessage());
@@ -639,10 +657,6 @@ public class ZombieTaskCommandHandler {
 		deleteList = storage.searchName(deleteCommand.getSearchString());
 		storage.delete(deleteList);
 		recordCommand();
-		
-		/*
-		 * To be implemented UNDO and REDO
-		 */
 	}
 	
 	protected static void searchTime(Command command) throws Exception{
@@ -692,13 +706,20 @@ public class ZombieTaskCommandHandler {
 	
 	protected static void doneCommand(Command command) throws Exception{
 		CommandDone doneCommand = (CommandDone) command;
-		currentTask = storage.search(doneCommand.getLineCode());
-		storage.toggleComplete(currentTask);
-		if (currentTask.isCompleted()){
-			showToUser(String.format(MESSAGE_DONE, currentTask.getTaskName()));
-		}else{
-			showToUser(String.format(MESSAGE_UNDONE, currentTask.getTaskName()));
+		ArrayList<String> lineCodes = doneCommand.getLineCode();
+		currentList = new TaskUIFormat();
+		for(String lineCode : lineCodes){
+			currentTask = storage.search(lineCode);			
+			currentList.addTask(currentTask);
+			storage.toggleComplete(currentTask);
+			if (currentTask.isCompleted()){
+				showToUser(String.format(MESSAGE_DONE, currentTask.getTaskName()));
+			}else{
+				showToUser(String.format(MESSAGE_UNDONE, currentTask.getTaskName()));
+			}
 		}
+		
+		recordCommand();
 	}
 	
 	protected static void exit(){
@@ -712,7 +733,7 @@ public class ZombieTaskCommandHandler {
 	private static boolean recordCommand(){
 		pastCommandDescriptorList.add(currentCommandDescriptor);
 		pastCommandList.add(currentCommand);
-		pastTaskList.add(currentTask);
+		pastTaskList.add(currentList);
 		clearFutureLists();
 		return true;
 	}
@@ -788,21 +809,21 @@ public class ZombieTaskCommandHandler {
 		return futureCommandDescriptorList;
 	}
 	
-	static boolean setPastTaskList(ArrayList<Task> newTaskList){
+	static boolean setPastTaskList(ArrayList<TaskUIFormat> newTaskList){
 		pastTaskList = newTaskList;
 		return SUCCESS;
 	}
 	
-	static ArrayList<Task> getPastTaskList(){
+	static ArrayList<TaskUIFormat> getPastTaskList(){
 		return pastTaskList;
 	}
 	
-	static boolean setFutureTaskList(ArrayList<Task> newTaskList){
+	static boolean setFutureTaskList(ArrayList<TaskUIFormat> newTaskList){
 		futureTaskList = newTaskList;
 		return SUCCESS;
 	}
 	
-	static ArrayList<Task> getFutureTaskList(){
+	static ArrayList<TaskUIFormat> getFutureTaskList(){
 		return futureTaskList;
 	}
 	
