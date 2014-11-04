@@ -453,6 +453,7 @@ public class ZombieTaskCommandHandler {
 		String taskName = currentAddCommand.getTaskName();
 		Calendar startTime = currentAddCommand.getStartDate();
 		Calendar endTime = currentAddCommand.getEndDate();
+		String location = currentAddCommand.getLocation();
 		ArrayList<String> tags = currentAddCommand.getTags();
 
 		// Get old task
@@ -476,6 +477,9 @@ public class ZombieTaskCommandHandler {
 		}
 		if (tags.isEmpty()) {
 			tags = oldTags;
+		}
+		if (location == null) {
+			location = oldTask.getLocation();
 		}
 
 		/*
@@ -505,6 +509,11 @@ public class ZombieTaskCommandHandler {
 		// Add Tags
 		for (String tag : tags) {
 			currentTask.addTag(tag);
+		}
+		
+		// Add location
+		if (location != null){
+			currentTask.setLocation(location);
 		}
 
 		// delete old task
