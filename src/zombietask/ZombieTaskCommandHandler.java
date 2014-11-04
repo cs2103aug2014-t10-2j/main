@@ -500,6 +500,7 @@ public class ZombieTaskCommandHandler {
 		showToUser(String.format(MESSAGE_UPDATE, oldTask.getTaskName(), currentTask.getTaskName()));
 		
 		recordCommand();
+
 	}
 
 	protected static void invalidCommand(String commandString) {
