@@ -86,10 +86,7 @@ public class UI
 	
 	private static final Format FORMAT_DATETIME = new SimpleDateFormat("dd/MM/yy HH:mm");
 	private static final Format FORMAT_TIMEONLY = new SimpleDateFormat("HH:mm");
-	//private static final Format FORMAT_DATEONLY = new SimpleDateFormat("dd/MM/yy");
-	//private static final Format FORMAT_DAYDATE = new SimpleDateFormat("EEEEE, dd MMMMM yyyy");
 	private static final Format FORMAT_TODAY = new SimpleDateFormat("dd MMMMM yyyy, HH:mm");
-	//private static final Format FORMAT_WEEKNUM = new SimpleDateFormat("ww");
 	
 	private static final String EMPTY_STRING = "";
 	
