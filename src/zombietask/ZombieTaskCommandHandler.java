@@ -312,14 +312,20 @@ public class ZombieTaskCommandHandler {
 			
 			TaskUIFormat clashedTasks = storage.taskClash(currentTask);
 			
+			String reply = "";
 			
 			if(clashedTasks.size() >= 1){
-				showToUser(String.format(MESSAGE_CLASH_WARNING, currentTask.getTaskName(), clashedTasks.size()));
-				UI.printPerspective(FORMAT.AGENDA, clashedTasks);
+				
+				reply += String.format(MESSAGE_CLASH_WARNING, currentTask.getTaskName(), clashedTasks.size());
+				//UI.printPerspective(FORMAT.AGENDA, clashedTasks);
+				reply += "<br>";
 			}
 			
-			showToUser(String.format(MESSAGE_ADD, currentTask.getTaskName()));
-			showToUser(UI.printTask(currentTask, 1, 0));
+			reply += String.format(MESSAGE_ADD, currentTask.getTaskName());
+			reply += "<br>";
+			reply += UI.printTask(currentTask, 1, 0);
+			showToUser(reply);
+			
 		} catch (Exception err){
 			err.printStackTrace();
 			showToUser(err.getMessage());
@@ -493,7 +499,7 @@ public class ZombieTaskCommandHandler {
 		
 		showToUser(String.format(MESSAGE_UPDATE, oldTask.getTaskName(), currentTask.getTaskName()));
 		
-		
+		recordCommand();
 	}
 
 	protected static void invalidCommand(String commandString) {
