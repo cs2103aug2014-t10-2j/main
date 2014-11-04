@@ -119,7 +119,7 @@ public class Interpreter {
 					}
 				case Command.DONE:
 					if (userInputTokens.length > 1) {
-						return getCommandDone(userInputTokens[1], userInput);
+						return getCommandDone(userInput);
 					} else {
 						return new CommandDone(null, userInput, true);
 					}
@@ -392,15 +392,14 @@ public class Interpreter {
 		}
 
 		logger.log(Level.INFO, "Task name: " + userInput);
-		
+
 		// remove escape characters
 		userInput = userInput.replaceAll("\"", "");
-		
 
 		if (userInput.trim().equals("")) {
 			return null;
 		}
-		
+
 		return userInput.trim();
 
 	}
@@ -538,23 +537,36 @@ public class Interpreter {
 	 * @throws Exception for invalid line number or date
 	 */
 
-	private static CommandDone getCommandDone(String secondWord,
-			String userInput) {
-		try {
-			String lineCode = null;
-			secondWord = secondWord.toLowerCase();
-			boolean validSecondWord = secondWord.matches("[fdt][0-9]+");
+	private static CommandDone getCommandDone(String userInput) {
+		ArrayList<String> lineCodes = new ArrayList<String>();
+		String userInputTemp = userInput.toLowerCase().replaceFirst(
+				Command.DONE + " ", "");
+		String[] lineCodesTemp = userInputTemp.split(" ");
 
-			if (validSecondWord) {
-				lineCode = secondWord;
-				return new CommandDone(lineCode, userInput, false);
-			} else {
-				return new CommandDone(null, userInput, true);
+		// check whether a range is specified
+		if (lineCodesTemp[0].matches("[fdt][0-9]+-[0-9]")) {
+			lineCodesTemp = lineCodesTemp[0].split("-");
+
+			String firstChar = Character.toString(lineCodesTemp[0].charAt(0));
+			ArrayList<Integer> indices = new ArrayList<Integer>();
+			indices.add(Integer.parseInt(lineCodesTemp[0].substring(1)));
+			indices.add(Integer.parseInt(lineCodesTemp[1]));
+
+			Collections.sort(indices);
+			for (int i = indices.get(0); i <= indices.get(1); i++) {
+				lineCodes.add((firstChar + i));
 			}
-
-		} catch (Exception e) {
+		} else {
+			for (String lineCode : lineCodesTemp) {
+				if (lineCode.trim().matches("[fdt][0-9]+")) {
+					lineCodes.add(lineCode);
+				}
+			}
+		}
+		if (lineCodes.isEmpty()) {
 			return new CommandDone(null, userInput, true);
 		}
+		return new CommandDone(lineCodes, userInput, false);
 	}
 
 	/**
@@ -571,13 +583,13 @@ public class Interpreter {
 		String[] lineCodesTemp = userInputTemp.split(" ");
 
 		// check whether a range is specified
-		if (lineCodesTemp[0].matches("[fdt][0-9]+-[fdt][0-9]")) {
+		if (lineCodesTemp[0].matches("[fdt][0-9]+-[0-9]")) {
 			lineCodesTemp = lineCodesTemp[0].split("-");
 
 			String firstChar = Character.toString(lineCodesTemp[0].charAt(0));
 			ArrayList<Integer> indices = new ArrayList<Integer>();
 			indices.add(Integer.parseInt(lineCodesTemp[0].substring(1)));
-			indices.add(Integer.parseInt(lineCodesTemp[1].substring(1)));
+			indices.add(Integer.parseInt(lineCodesTemp[1]));
 
 			Collections.sort(indices);
 			for (int i = indices.get(0); i <= indices.get(1); i++) {

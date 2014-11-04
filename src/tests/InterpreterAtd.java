@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import interpreter.Command;
 import interpreter.CommandAdd;
 import interpreter.CommandDelete;
+import interpreter.CommandDone;
 import interpreter.CommandHelp;
 import interpreter.CommandSearchName;
 import interpreter.CommandSearchTime;
@@ -355,24 +356,24 @@ public class InterpreterAtd {
 		assertEquals("DELETE F5", delete.getUserInput());
 
 		// Test 3: delete range
-		command = Interpreter.getCommand("delete t5-t8");
+		command = Interpreter.getCommand("delete t5-8");
 		assertEquals(Command.DELETE, command.getCommandType());
 		delete = (CommandDelete) command;
 		assertEquals("t5", delete.getLineCode().get(0));
 		assertEquals("t6", delete.getLineCode().get(1));
 		assertEquals("t7", delete.getLineCode().get(2));
 		assertEquals("t8", delete.getLineCode().get(3));
-		assertEquals("delete t5-t8", delete.getUserInput());
+		assertEquals("delete t5-8", delete.getUserInput());
 
 		// reverse order
-		command = Interpreter.getCommand("delete f4-f1");
+		command = Interpreter.getCommand("delete f4-1");
 		assertEquals(Command.DELETE, command.getCommandType());
 		delete = (CommandDelete) command;
 		assertEquals("f1", delete.getLineCode().get(0));
 		assertEquals("f2", delete.getLineCode().get(1));
 		assertEquals("f3", delete.getLineCode().get(2));
 		assertEquals("f4", delete.getLineCode().get(3));
-		assertEquals("delete f4-f1", delete.getUserInput());
+		assertEquals("delete f4-1", delete.getUserInput());
 
 		// Test 4: delete multiple
 		command = Interpreter.getCommand("delete t4 t1");
@@ -396,6 +397,67 @@ public class InterpreterAtd {
 		assertNull(delete.getLineCode());
 		assertTrue(delete.hasMissingArgs());
 		assertEquals("delete", delete.getUserInput());
+	}
+	
+	@Test
+	public void testGetCommandDone() throws Exception {
+		// Test 1: Basic function
+		Command command = Interpreter.getCommand("done d5 f2");
+		assertEquals(Command.DONE, command.getCommandType());
+		CommandDone done = (CommandDone) command;
+		assertEquals("d5", done.getLineCode().get(0));
+		assertEquals("f2", done.getLineCode().get(1));
+		assertEquals("done d5 f2", done.getUserInput());
+
+		// Test 2: case-insensitivity
+		command = Interpreter.getCommand("DONE F5");
+		assertEquals(Command.DONE, command.getCommandType());
+		done = (CommandDone) command;
+		assertEquals("f5", done.getLineCode().get(0));
+		assertEquals("DONE F5", done.getUserInput());
+
+		// Test 3: done range
+		command = Interpreter.getCommand("done t5-8");
+		assertEquals(Command.DONE, command.getCommandType());
+		done = (CommandDone) command;
+		assertEquals("t5", done.getLineCode().get(0));
+		assertEquals("t6", done.getLineCode().get(1));
+		assertEquals("t7", done.getLineCode().get(2));
+		assertEquals("t8", done.getLineCode().get(3));
+		assertEquals("done t5-8", done.getUserInput());
+
+		// reverse order
+		command = Interpreter.getCommand("done f4-1");
+		assertEquals(Command.DONE, command.getCommandType());
+		done = (CommandDone) command;
+		assertEquals("f1", done.getLineCode().get(0));
+		assertEquals("f2", done.getLineCode().get(1));
+		assertEquals("f3", done.getLineCode().get(2));
+		assertEquals("f4", done.getLineCode().get(3));
+		assertEquals("done f4-1", done.getUserInput());
+
+		// Test 4: done multiple
+		command = Interpreter.getCommand("done t4 t1");
+		assertEquals(Command.DONE, command.getCommandType());
+		done = (CommandDone) command;
+		assertEquals("t4", done.getLineCode().get(0));
+		assertEquals("t1", done.getLineCode().get(1));
+		assertEquals("done t4 t1", done.getUserInput());
+
+		// Test 4: invalid arguments
+		command = Interpreter.getCommand("done me");
+		assertEquals(Command.DONE, command.getCommandType());
+		done = (CommandDone) command;
+		assertNull(done.getLineCode());
+		assertTrue(done.hasMissingArgs());
+		assertEquals("done me", done.getUserInput());
+
+		command = Interpreter.getCommand("done");
+		assertEquals(Command.DONE, command.getCommandType());
+		done = (CommandDone) command;
+		assertNull(done.getLineCode());
+		assertTrue(done.hasMissingArgs());
+		assertEquals("done", done.getUserInput());
 	}
 
 	@Test
