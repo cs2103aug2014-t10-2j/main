@@ -11,6 +11,7 @@ import storage.StorageAPI;
 import task.Task;
 import task.TaskUIFormat;
 import ui.FORMAT;
+import ui.GUI;
 import ui.UI;
 import interpreter.Command;
 import interpreter.CommandAdd;
@@ -149,6 +150,8 @@ public class ZombieTaskCommandHandler {
 	private static ArrayList<TaskUIFormat> pastTaskList = new ArrayList<TaskUIFormat>();
 	
 	private static StorageAPI storage;
+	
+	private static GUI window;
 	
 	/*
 	 * Command Handlers
@@ -842,6 +845,14 @@ public class ZombieTaskCommandHandler {
 	private static void showToUser(String displayString) {
 		//System.out.println(displayString);
 		UI.printResponse(displayString);
+	}
+
+	public static GUI getWindow() {
+		return window;
+	}
+
+	public static void setWindow(GUI window) {
+		ZombieTaskCommandHandler.window = window;
 	}
 
 }
