@@ -23,6 +23,7 @@ public class TaskPrinter {
 	public static final String YELLOW = "<font color='YELLOW'>";
 	
 	private static final Format FORMAT_DATETIME = new SimpleDateFormat("dd/MM/yy HH:mm");
+	private static final Format FORMAT_TIMEONLY = new SimpleDateFormat("HH:mm");
 	public static final int VERBOSITY_DECREMENT = 2;
 	public static final int TAB_INCREMENT = 1;
 	
@@ -41,7 +42,7 @@ public class TaskPrinter {
 	 * 
 	 * Verbosity increases the amount of information printed out.
 	 * 	0 for name line only
-	 * 	1 for name + tags + time only
+	 * 	1 for name + tags + location + time only
 	 * 
 	 * Tab is used for subTask pretty printing.
 	 * 
@@ -66,12 +67,51 @@ public class TaskPrinter {
 		case 1:
 			response += printColoredName(task, tabs);
 			response += printColoredTags(task);
+			response += printColoredLocation(task);
 			response = response.concat(HEADER_LINE_SINGLE);
 			response += printDatesOfTask(task, tabs);
 			return response;
 		default:	return ".....";
 		}
 	}
+	
+	/**
+	 * Returns a pretty printing version of Task for printing.
+	 * 
+	 * Verbosity increases the amount of information printed out.
+	 * 	0 for name line only
+	 * 	1 for name + tags + location + time only
+	 * 
+	 * Tab is used for subTask pretty printing.
+	 * 
+	 * @param task
+	 * @param verbosity integer
+	 * @param tab integer
+	 * @param int 0 for start time, 1 for end time
+	 * @return String
+	 */
+	
+	public static String printTaskSingleLine(Task task, int verbosity, int tabs, int time) {
+		String response = "";
+		
+		// Exit Condition for recursive call
+		if (task == null || verbosity < 0)	{	return response;	}
+		logger.log(Level.FINE, task.toString());
+		
+		switch(verbosity) {
+		case 0:
+			response += printColoredName(task, tabs);
+			return response;
+		case 1:
+			response += printColoredName(task, tabs);
+			response += printColoredTags(task);
+			response = response.concat(HEADER_LINE_SINGLE);
+			response += printDatesOfTask(task, tabs);
+			return response;
+		default:	return ".....";
+		}
+	}
+	
 	// Accessory Methods
 	public static String printColoredName(Task task, int tabs) {
 		return generateTabs(tabs) + GRAY + "[" + storage.indexOf(task) + "] " + getTaskColor(task) + task.getTaskName();
@@ -98,6 +138,14 @@ public class TaskPrinter {
 		}
 		return response.concat(HEADER_LINE_SINGLE);
 	}
+	
+	public static String printColoredLocation(Task task){
+		String response = " ";
+		if (task.getLocation() != null){
+			response = response.concat(MAGENTA).concat(task.getLocation());
+		}
+		return response;
+	}
 
 	private static String generateTabs(int tabs) {
 		return(tabs > 0) ? "\t" + generateTabs(tabs - 1) : "";
@@ -105,8 +153,8 @@ public class TaskPrinter {
 
 	public static String printColoredDate(Task task, char dateType) {
 		switch(dateType) {
-		case 'S':	return CYAN + "Start: " + FORMAT_DATETIME.format(task.getStartTime().getTime());
-		case 'E':	return CYAN + "End: " + FORMAT_DATETIME.format(task.getEndTime().getTime());
+		case 'S':	return CYAN + "Start: " + FORMAT_TIMEONLY.format(task.getStartTime().getTime());
+		case 'E':	return CYAN + "End: " + FORMAT_TIMEONLY.format(task.getEndTime().getTime());
 		default:	return "";
 		}
 	}

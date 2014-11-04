@@ -70,7 +70,7 @@ public class ZombieTask {
 	private final static String MESSAGE_FILE_OPENED = "%s is ready for use";
 	private final static String MESSAGE_MISSING_ARGUMENTS = "Command Missing Arguments:\n%s";
 	private final static String MESSAGE_INVALID_FILENAME = "Invalid FileName: %s";
-	private final static String DEFAULT_FILENAME = "ZombieTask.txt";
+	private final static String DEFAULT_FILENAME = "ZombieStorage.txt";
 	private final static boolean SUCCESS = true;
 	//private final static boolean FAILURE = false;
 	//private static boolean setExit = false;

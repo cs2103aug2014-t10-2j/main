@@ -20,17 +20,10 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 
 public class GUI {
+	
+	private static final String EMPTY_STRING = "";
 
 	private JFrame frmZombietask;
-	
-	public JFrame getFrmZombietask() {
-		return frmZombietask;
-	}
-
-	public void setFrmZombietask(JFrame frmZombietask) {
-		this.frmZombietask = frmZombietask;
-	}
-
 	private JTextField textField;
 	private JLabel label;
 	private JLabel lblNewLabel;
@@ -65,6 +58,7 @@ public class GUI {
 			@Override
 			public void actionPerformed(ActionEvent e){
 				ZombieTask.userInput(textField.getText());
+				textField.setText(EMPTY_STRING);
 			}
 		});
 		
@@ -104,5 +98,13 @@ public class GUI {
 	
 	public static void closeWindow() {
 		System.exit(0);
+	}
+	
+	public JFrame getFrmZombietask() {
+		return frmZombietask;
+	}
+
+	public void setFrmZombietask(JFrame frmZombietask) {
+		this.frmZombietask = frmZombietask;
 	}
 }

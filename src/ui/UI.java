@@ -58,14 +58,14 @@ public class UI
 	public static final String HEADER_MONTHLY = "(Monthly)<br><br>";
 	public static final String HEADER_ANNUAL = "(Annual)<br><br>";
 	public static final String HEADER_TODAY = "Current Time: ";
-	public static final String HEADER_OVERDUE = "Overdue Tasks\n";
-	public static final String HEADER_FLOATING_TASKS = "Floating Tasks\n";
-	public static final String HEADER_SCHEDULED_TASKS = "Scheduled Tasks\n";
-	public static final String HEADER_LINE_DOUBLE = "\n\n";
-	public static final String HEADER_LINE_SINGLE = "\n";
+	public static final String HEADER_OVERDUE = "Overdue Tasks<br>";
+	public static final String HEADER_FLOATING_TASKS = "Floating Tasks<br>";
+	public static final String HEADER_SCHEDULED_TASKS = "Scheduled Tasks<br>";
+	public static final String HEADER_LINE_DOUBLE = "<br><br>";
+	public static final String HEADER_LINE_SINGLE = "<br>";
 	
-	public static final String FORMAT_NAME_DATE = "%s%s[%s] %s%s%s%s\n"; // Tabs | Color | TaskID | Color | TaskName | Date | Color_Reset
-	public static final String FORMAT_TAGS = "%s%sTags: [%s]%s\n"; // Tabs | Color | Tags | Color_Reset
+	public static final String FORMAT_NAME_DATE = "%s%s[%s] %s%s%s%s<br>"; // Tabs | Color | TaskID | Color | TaskName | Date | Color_Reset
+	public static final String FORMAT_TAGS = "%s%sTags: [%s]%s<br>"; // Tabs | Color | Tags | Color_Reset
 	public static final String TAG_SEPARATOR = "; ";
 	public static final String BORDER = "----------------------------------------";
 	
@@ -85,6 +85,7 @@ public class UI
 	public static final FORMAT INVALID = FORMAT.INVALID;
 	
 	private static final Format FORMAT_DATETIME = new SimpleDateFormat("dd/MM/yy HH:mm");
+	private static final Format FORMAT_TIMEONLY = new SimpleDateFormat("HH:mm");
 	//private static final Format FORMAT_DATEONLY = new SimpleDateFormat("dd/MM/yy");
 	//private static final Format FORMAT_DAYDATE = new SimpleDateFormat("EEEEE, dd MMMMM yyyy");
 	private static final Format FORMAT_TODAY = new SimpleDateFormat("dd MMMMM yyyy, HH:mm");
@@ -192,12 +193,12 @@ public class UI
 		Calendar start = delimitTime(Calendar.getInstance());
 		Calendar end = delimitTime(Calendar.getInstance());
 		end.add(Calendar.HOUR_OF_DAY, 1);
-		System.out.println(FORMAT_DATETIME.format(start.getTime()));
+		//System.out.println(FORMAT_DATETIME.format(start.getTime()));
 		for(int i = 0; i < 24; i++) {
 			str += "|- " + FORMAT_DATETIME.format(start.getTime()) + " : ";
 			for(Task task : processedTasks.getDeadlineTasks()) {
 				if(!task.isOverdue() && withinTimePeriod(task.getEndTime(), start, end))
-					str += task.getTaskName();
+					str += task.getTaskName() + " ";
 			}
 			start.add(Calendar.HOUR_OF_DAY, 1);
 			end.add(Calendar.HOUR_OF_DAY, 1);
@@ -219,7 +220,7 @@ public class UI
 			str += "|- " + FORMAT_DATETIME.format(start.getTime()) + " : ";
 			for(Task task : processedTasks.getDeadlineTasks()) {
 				if(!task.isOverdue() && withinTimePeriod(task.getEndTime(), start, end))
-					str += task.getTaskName();
+					str += task.getTaskName() + " ";
 			}
 			start.add(Calendar.HOUR_OF_DAY, 6);
 			end.add(Calendar.HOUR_OF_DAY, 6);
@@ -254,63 +255,6 @@ public class UI
 		return new TaskUIFormat(EMPTY_LIST, searchDeadlineList, searchTimedList);
 	}
 	
-	/*
-	private static String printMonthly(ArrayList<Task> tasks) throws Exception {
-		String str;
-		str = "(Monthly)\n";
-		ArrayList<Task> processedTasks = processTasks(tasks);
-		for(Task task : processedTasks) {
-			if(task.isOverdue())	str += task.getTaskName() + "\n";
-		}
-		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
-		Calendar begin = delimitTime(Calendar.getInstance());
-		Calendar end = delimitTime(Calendar.getInstance());
-		begin.set(Calendar.HOUR_OF_DAY, 0);
-		end.set(Calendar.HOUR_OF_DAY, 0);
-		end.add(Calendar.DATE, 1);
-		ArrayList<String> daily = new ArrayList<String>();
-		for(int i = 0; i < MONTHLY_LIMIT; i++) {
-			daily.add(String.format("|- %s:", FORMAT_DATEONLY.format(begin.getTime())));
-			for(Task task : processedTasks) {
-				if(withinTimePeriod(task.getEndTime(), begin, end))
-					daily.set(daily.size() - 1, daily.get(daily.size() - 1) + " " + task.getTaskName());
-			}
-			begin.add(Calendar.DATE, 1);
-			end.add(Calendar.DATE, 1);
-		}
-		for(String string : daily)	str += string + "\n";
-		return str;
-	}
-	private static String printAnnual(ArrayList<Task> tasks) throws Exception
-	{
-		String str;
-		str = "(Annual)\n";
-		ArrayList<Task> processedTasks = processTasks(tasks);
-		for(Task task : processedTasks) {
-			if(task.isOverdue())	str += task.getTaskName() + "\n";
-		}
-		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
-		Calendar begin = delimitTime(Calendar.getInstance());
-		Calendar end = delimitTime(Calendar.getInstance());
-		begin.set(Calendar.HOUR_OF_DAY, 0);
-		end.set(Calendar.HOUR_OF_DAY, 0);
-		begin.add(Calendar.DATE, 1 - begin.get(Calendar.DAY_OF_WEEK));
-		end.add(Calendar.DATE, 8 - begin.get(Calendar.DAY_OF_WEEK));
-		ArrayList<String> daily = new ArrayList<String>();
-		for(int i = 0; i < ANNUAL_LIMIT; i++) {
-			daily.add(String.format("|- Week %s:", FORMAT_WEEKNUM.format(begin.getTime())));
-			for(Task task : processedTasks) {
-				if(withinTimePeriod(task.getEndTime(), begin, end))
-					daily.set(daily.size() - 1, daily.get(daily.size() - 1) + " " + task.getTaskName());
-			}
-			begin.add(Calendar.DATE, 7);
-			end.add(Calendar.DATE, 7);
-		}
-		for(String string : daily)	str += string + "\n";
-		return str;
-	}
-	
-	*/
 	
 	/*
 	 *  MISCELLENEOUS METHODS
@@ -374,58 +318,7 @@ public class UI
 	 * DEPRECIATED
 	 */
 	
-	/*
-	public static String printTask(Task task, int verbosity, int tabs) {
-		
-		String response = "";
-		String tags = " ";
-		
-		// Exit Condition for recursive call
-		if (task == null || verbosity < 0)	{	return response;	}
-		logger.log(Level.FINE, task.toString());
-		
-		// Print task name first
-		response = response.concat(ansi().a(generateTabs(tabs)).fg(COLOR_WHITE).a("[")
-				.a(storage.indexOf(task)).a("] ").fg(getTaskColor(task)).a(task.getTaskName())
-				.reset().toString());
-		// End method if verbosity == 0
-		if(verbosity == 0)	return response;
-		
-		//Print tags
-		for(String tag : task.getTags()) {
-			tags += tag;
-			if (task.getTags().indexOf(tag) != task.getTags().size() - 1) {
-				tags += TAG_SEPARATOR;
-			}
-		}
-		response = response.concat(ansi().fg(COLOR_WHITE).a(tags).reset().toString());
-		response = response.concat(HEADER_LINE_SINGLE);
-		
-		// Print Dates		
-		if(task.isDeadlineTask()) {
-			response = response.concat(ansi().fg(COLOR_CYAN).a(generateTabs(tabs + TAB_INCREMENT))
-					.a("End: " + FORMAT_DATETIME.format(task.getEndTime().getTime())).reset().toString());
-		}
-		
-		if(task.isTimedTask()) {
-			response = response.concat(ansi().fg(COLOR_CYAN).a(generateTabs(tabs + TAB_INCREMENT))
-					.a("Start: " + FORMAT_DATETIME.format(task.getStartTime().getTime())).reset().toString());
-			response = response.concat(HEADER_LINE_SINGLE);
-			response = response.concat(ansi().fg(COLOR_CYAN).a(generateTabs(tabs + TAB_INCREMENT))
-					.a("End: " + FORMAT_DATETIME.format(task.getEndTime().getTime())).reset().toString());
-		}
-		response = response.concat(HEADER_LINE_SINGLE);
-		// End method if verbosity == 1
-		if(verbosity == 1)	return response;
-		
-		for (Task subtask : task.getSubtask()) {
-			response =  response.concat(HEADER_LINE_SINGLE).concat(
-				printTask(subtask, verbosity - VERBOSITY_DECREMENT, tabs + TAB_INCREMENT));
-		}	
-		assert(response != null);
-		return response;
-	}
-	*/
+	
 	public static boolean withinTimePeriod(Calendar time, Calendar begin, Calendar end)
 	{
 		if(time == null)	return false;
