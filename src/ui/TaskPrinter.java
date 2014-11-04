@@ -21,6 +21,7 @@ public class TaskPrinter {
 	public static final String ORANGE = "<font color='ORANGE'>";
 	public static final String RED = "<font color='RED'>";
 	public static final String YELLOW = "<font color='YELLOW'>";
+	public static final String DONE = "<font color='GRAY'>{D}";
 	
 	//private static final Format FORMAT_DATETIME = new SimpleDateFormat("dd/MM/yy HH:mm");
 	private static final Format FORMAT_TIMEONLY = new SimpleDateFormat("HH:mm");
@@ -160,6 +161,7 @@ public class TaskPrinter {
 	}
 
 	private static String getTaskColor(Task task){
+		if (task.isCompleted())		{	return DONE;	}
 		if (task.isOverdue())		{	return RED;	}
 		if (task.isFloatingTask())	{	return GREEN;	}
 		if (task.isDeadlineTask())	{	return YELLOW;	}
