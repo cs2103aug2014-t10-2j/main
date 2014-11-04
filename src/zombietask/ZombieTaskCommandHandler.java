@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 //import storage.Storage;
 import storage.StorageAPI;
 import task.Task;
@@ -68,7 +69,12 @@ public class ZombieTaskCommandHandler {
 
 	public static final String TAB = "&nbsp&nbsp&nbsp&nbsp&nbsp";
 	private final static String MESSAGE_INVALID_COMMAND = "Invalid Command:\n%s";
-	private final static String MESSAGE_HELP_ADD = "HELP<br><br>" + TaskPrinter.MAGENTA;
+	private final static String MESSAGE_HELP_ADD = "HELP<br><br>Add:<br>".concat(TAB)
+			.concat(TaskPrinter.MAGENTA).concat("add different kinds of tasks to the task list including floating tasks,<br>")
+			.concat(TAB).concat("deadline tasks and timed tasks<br>").concat(TAB)
+			.concat(TaskPrinter.CYAN).concat("add ").concat(TaskPrinter.RED).concat("taskname<br>").concat(TAB)
+			.concat(TaskPrinter.CYAN).concat("add ").concat(TaskPrinter.RED).concat("taskname ").concat(TaskPrinter.GREEN).concat("end time<br>").concat(TAB)
+			.concat(TaskPrinter.CYAN).concat("add ").concat(TaskPrinter.RED).concat("taskname ").concat(TaskPrinter.GREEN).concat("start time to end time<br>");
 	private final static String MESSAGE_HELP_DELETE = "Delete:<br>".concat(TAB)
 			.concat(TaskPrinter.MAGENTA).concat("delete a task with its index <br>").concat(TAB)
 			.concat(TaskPrinter.CYAN).concat("delete ").concat(TaskPrinter.RED)
@@ -613,37 +619,40 @@ public class ZombieTaskCommandHandler {
 		CommandHelp helpCommand = (CommandHelp) command;
 		String userInput = helpCommand.getHelpCommand();
 		
+		String response = "";
+		
 		if(userInput == null){
-			window.modifyLabelText(MESSAGE_HELP_ADD + "\n" + MESSAGE_HELP_DELETE + "\n" + MESSAGE_HELP_UPDATE + "\n" + MESSAGE_HELP_SEARCH + "\n" + MESSAGE_HELP_VIEW+ "\n" + MESSAGE_HELP_UNDO+ "\n" + MESSAGE_HELP_REDO+ "\n" + MESSAGE_HELP_DONE + "\n" + MESSAGE_HELP_EXIT);
+			response += MESSAGE_HELP_ADD + "\n" + MESSAGE_HELP_DELETE + "\n" + MESSAGE_HELP_UPDATE + "\n" + MESSAGE_HELP_SEARCH + "\n" + MESSAGE_HELP_VIEW+ "\n" + MESSAGE_HELP_UNDO+ "\n" + MESSAGE_HELP_REDO+ "\n" + MESSAGE_HELP_DONE + "\n" + MESSAGE_HELP_EXIT;
+			window.modifyLabelText(String.format(UI.LABEL_FORMAT, response));
 			return;
 		}
 		switch(userInput){
 		case COMMAND_ADD:
-			window.modifyLabelText(MESSAGE_HELP_ADD);
+			response += (MESSAGE_HELP_ADD);
 			break;
 		case COMMAND_DELETE:
-			window.modifyLabelText(MESSAGE_HELP_DELETE);
+			response += (MESSAGE_HELP_DELETE);
 			break;
 		case COMMAND_UPDATE:
-			window.modifyLabelText(MESSAGE_HELP_UPDATE);
+			response += (MESSAGE_HELP_UPDATE);
 			break;
 		case COMMAND_SEARCH:
-			window.modifyLabelText(MESSAGE_HELP_SEARCH);
+			response += (MESSAGE_HELP_SEARCH);
 			break;
 		case COMMAND_VIEW:
-			window.modifyLabelText(MESSAGE_HELP_VIEW);
+			response += (MESSAGE_HELP_VIEW);
 			break;
 		case COMMAND_UNDO:
-			window.modifyLabelText(MESSAGE_HELP_UNDO);
+			response += (MESSAGE_HELP_UNDO);
 			break;
 		case COMMAND_REDO:
-			window.modifyLabelText(MESSAGE_HELP_REDO);
+			response += (MESSAGE_HELP_REDO);
 			break;
 		case COMMAND_DONE:
-			window.modifyLabelText(MESSAGE_HELP_DONE);
+			response += (MESSAGE_HELP_DONE);
 			break;
 		case COMMAND_EXIT:
-			window.modifyLabelText(MESSAGE_HELP_EXIT);
+			response += (MESSAGE_HELP_EXIT);
 			break;	
 		default:
 			logger.log(Level.INFO,String.format(MESSAGE_INVALID_COMMAND, userInput) );
@@ -651,6 +660,8 @@ public class ZombieTaskCommandHandler {
 			return;
 			
 		}
+		
+		window.modifyLabelText(String.format(UI.LABEL_FORMAT, response));
 	}
 	
 	protected static void searchName(Command command) throws Exception{
@@ -660,8 +671,8 @@ public class ZombieTaskCommandHandler {
 	
 	protected static void deleteName(Command command) throws Exception{
 		CommandDeleteName deleteCommand = (CommandDeleteName) command;
-		deleteList = storage.searchName(deleteCommand.getSearchString());
-		storage.delete(deleteList);
+		currentList = storage.searchName(deleteCommand.getSearchString());
+		storage.delete(currentList);
 		recordCommand();
 	}
 	
@@ -672,8 +683,8 @@ public class ZombieTaskCommandHandler {
 	
 	protected static void deleteTime(Command command) throws Exception{
 		CommandDeleteTime deleteCommand = (CommandDeleteTime) command;
-		deleteList = storage.search(deleteCommand.getTimeStart(), deleteCommand.getTimeEnd());
-		storage.delete(deleteList);
+		currentList = storage.search(deleteCommand.getTimeStart(), deleteCommand.getTimeEnd());
+		storage.delete(currentList);
 		recordCommand();
 		/*
 		 * To be implemented UNDO and REDO
@@ -687,8 +698,8 @@ public class ZombieTaskCommandHandler {
 	
 	protected static void deleteTag(Command command) throws Exception{
 		CommandDeleteTag deleteCommand = (CommandDeleteTag) command;
-		deleteList = storage.searchTag(deleteCommand.getTag());
-		storage.delete(deleteList);
+		currentList = storage.searchTag(deleteCommand.getTag());
+		storage.delete(currentList);
 		recordCommand();
 		/*
 		 * To be implemented UNDO and REDO
