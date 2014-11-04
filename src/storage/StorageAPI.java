@@ -294,6 +294,11 @@ public class StorageAPI {
 		writeFile();
 	}
 	
+	public void toggleComplete(TaskUIFormat taskList) throws IOException{
+		storage.toggleComplete(taskList);
+		writeFile();
+	}
+	
 	public void toggleDelete(Task task) throws IOException{
 		task.toggleDelete();
 		writeFile();

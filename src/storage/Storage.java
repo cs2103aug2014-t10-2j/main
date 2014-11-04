@@ -158,7 +158,18 @@ public class Storage {
 		for(Task task : deletedTaskList.getTimedTasks()){
 			this.removeTask(task);
 		}
-		
+	}
+	
+	public void toggleComplete(TaskUIFormat taskList){
+		for(Task task : taskList.getDeadlineTasks()){
+			task.toggleComplete();
+		}
+		for(Task task : taskList.getFloatingTasks()){
+			task.toggleComplete();
+		}
+		for(Task task : taskList.getTimedTasks()){
+			task.toggleComplete();
+		}
 	}
 	
 	public void updateTask(Task originalTask, Task newTask){

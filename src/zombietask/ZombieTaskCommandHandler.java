@@ -535,6 +535,8 @@ public class ZombieTaskCommandHandler {
 				storage.delete(currentList.getNewTask());
 				storage.add(currentList.getOldTask());
 				break;
+			case COMMAND_DONE:
+				storage.toggleComplete(currentList);
 			default:
 			case COMMAND_INVALID:
 				logger.log(Level.INFO, ERROR_INVALID_UNDO_REDO);
@@ -583,6 +585,8 @@ public class ZombieTaskCommandHandler {
 				storage.delete(currentList.getOldTask());
 				storage.add(currentList.getNewTask());
 				break;
+			case COMMAND_DONE:
+				storage.toggleComplete(currentList);
 			default:
 			case COMMAND_INVALID:
 				logger.log(Level.INFO, ERROR_INVALID_UNDO_REDO);
@@ -705,13 +709,19 @@ public class ZombieTaskCommandHandler {
 	
 	protected static void doneCommand(Command command) throws Exception{
 		CommandDone doneCommand = (CommandDone) command;
-		currentTask = storage.search(doneCommand.getLineCode());
-		storage.toggleComplete(currentTask);
-		if (currentTask.isCompleted()){
-			showToUser(String.format(MESSAGE_DONE, currentTask.getTaskName()));
-		}else{
-			showToUser(String.format(MESSAGE_UNDONE, currentTask.getTaskName()));
+		ArrayList<String> lineCodes = doneCommand.getLineCode();
+		currentList = new TaskUIFormat();
+		for(String lineCode : lineCodes){
+			currentTask = storage.search(lineCode);			
+			currentList.addTask(currentTask);
+			storage.toggleComplete(currentTask);
+			if (currentTask.isCompleted()){
+				showToUser(String.format(MESSAGE_DONE, currentTask.getTaskName()));
+			}else{
+				showToUser(String.format(MESSAGE_UNDONE, currentTask.getTaskName()));
+			}
 		}
+		recordCommand();
 	}
 	
 	protected static void exit(){
