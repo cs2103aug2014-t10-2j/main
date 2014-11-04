@@ -71,7 +71,7 @@ public class ZombieTaskCommandHandler {
 	private final static String MESSAGE_INVALID_COMMAND = "Invalid Command:\n%s";
 	private final static String MESSAGE_HELP_ADD = "HELP<br><br>Add:<br>".concat(TAB)
 			.concat(TaskPrinter.MAGENTA).concat("add different kinds of tasks to the task list including floating tasks,<br>")
-			.concat(TAB).concat("deadline tasks and timed tasks<br>").concat(TAB)
+			.concat(TAB).concat(" deadline tasks and timed tasks<br>").concat(TAB)
 			.concat(TaskPrinter.CYAN).concat("add ").concat(TaskPrinter.RED).concat("taskname<br>").concat(TAB)
 			.concat(TaskPrinter.CYAN).concat("add ").concat(TaskPrinter.RED).concat("taskname ").concat(TaskPrinter.GREEN).concat("end time<br>").concat(TAB)
 			.concat(TaskPrinter.CYAN).concat("add ").concat(TaskPrinter.RED).concat("taskname ").concat(TaskPrinter.GREEN).concat("start time to end time<br>");
@@ -120,7 +120,7 @@ public class ZombieTaskCommandHandler {
 	//private final static String MESSAGE_OUTOFBOUNDS = "Warning: input %s is out of bounds";
 	private final static String MESSAGE_DONE = "Marked %s as done";
 	private final static String MESSAGE_UNDONE = "Marked %s as undone";
-	private final static String MESSAGE_CLASH_WARNING = "Warning<br>&nbsp&nbsp&nbsp&nbsp&nbspTasks"
+	private final static String MESSAGE_CLASH_WARNING = "Warning<br>&nbsp&nbsp&nbsp&nbsp&nbsp Tasks"
 			+ " %s and %d other task(s) clashes<br>Clashed Tasks:<br>"; //"Warning:\n\tTasks %s and %s clashes";
 	//private final static String MESSAGE_CLASH_MORE_THAN_ONE = "Warning\n\tTasks %s and %d other task(s) clashes";
 	
@@ -322,8 +322,11 @@ public class ZombieTaskCommandHandler {
 			if(clashedTasks.size() >= 1){
 				
 				reply += String.format(MESSAGE_CLASH_WARNING, currentTask.getTaskName(), clashedTasks.size());
-				//UI.printPerspective(FORMAT.AGENDA, clashedTasks);
-				reply += "<br>";
+				
+				for(int i = 0; i < clashedTasks.size(); i++){
+					reply += TaskPrinter.printTask(clashedTasks.nextTask(),1,0);
+					reply += "<br>";
+				}
 			}
 			
 			reply += String.format(MESSAGE_ADD, currentTask.getTaskName());
@@ -453,6 +456,7 @@ public class ZombieTaskCommandHandler {
 		String taskName = currentAddCommand.getTaskName();
 		Calendar startTime = currentAddCommand.getStartDate();
 		Calendar endTime = currentAddCommand.getEndDate();
+		String location = currentAddCommand.getLocation();
 		ArrayList<String> tags = currentAddCommand.getTags();
 
 		// Get old task
@@ -476,6 +480,9 @@ public class ZombieTaskCommandHandler {
 		}
 		if (tags.isEmpty()) {
 			tags = oldTags;
+		}
+		if (location == null) {
+			location = oldTask.getLocation();
 		}
 
 		/*
@@ -506,6 +513,11 @@ public class ZombieTaskCommandHandler {
 		for (String tag : tags) {
 			currentTask.addTag(tag);
 		}
+		
+		// Add location
+		if (location != null){
+			currentTask.setLocation(location);
+		}
 
 		// delete old task
 		try {
@@ -521,6 +533,8 @@ public class ZombieTaskCommandHandler {
 
 		showToUser(String.format(MESSAGE_UPDATE, oldTask.getTaskName(),
 				currentTask.getTaskName()));
+		
+		recordCommand();
 
 	}
 	

@@ -148,9 +148,11 @@ public class UI
 	private static String printAgenda(TaskUIFormat tasks) throws Exception {
 		
 		String str = new String(HEADER_AGENDA);
+		
 		/*
 		 * Add overdue Tasks
 		 */
+		
 		TaskUIFormat overdueTasks = getOverdueTasks(tasks);
 		if (!overdueTasks.isEmpty()){
 			str = str.concat(HEADER_OVERDUE);
