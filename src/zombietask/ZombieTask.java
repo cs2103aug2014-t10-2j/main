@@ -94,6 +94,8 @@ public class ZombieTask {
 			}
 		});
 		
+		ZombieTaskCommandHandler.setWindow(window);
+		
 		showToUser(MESSAGE_WELCOME);
 		if (args.length > 2){
 			initStorage(args[1]);

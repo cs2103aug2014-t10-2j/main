@@ -11,6 +11,8 @@ import storage.StorageAPI;
 import task.Task;
 import task.TaskUIFormat;
 import ui.FORMAT;
+import ui.GUI;
+import ui.TaskPrinter;
 import ui.UI;
 import interpreter.Command;
 import interpreter.CommandAdd;
@@ -68,12 +70,14 @@ public class ZombieTaskCommandHandler {
 	 */
 	
 	private final static String MESSAGE_INVALID_COMMAND = "Invalid Command:\n%s";
-	private final static String MESSAGE_HELP_ADD = ansi()
+	private final static String MESSAGE_HELP_ADD = "HELP<br><br>" + TaskPrinter.MAGENTA;
+	/*ansi()
 			.fg(Ansi.Color.DEFAULT).a("Add:\n\t")
 			.fg(Ansi.Color.MAGENTA).a("add different kinds of tasks to the task list including floating tasks, deadline tasks and timed tasks \n\t")
 			.fg(Ansi.Color.CYAN).a("add ").fg(Ansi.Color.RED).a("taskname\n\t")
 			.fg(Ansi.Color.CYAN).a("add ").fg(Ansi.Color.RED).a("taskname ").fg(Ansi.Color.GREEN).a("end time\n\t")
 			.fg(Ansi.Color.CYAN).a("add ").fg(Ansi.Color.RED).a("taskname ").fg(Ansi.Color.GREEN).a("start time to end time\n").reset().toString();
+	*/
 	private final static String MESSAGE_HELP_DELETE = ansi()	
 			.fg(Ansi.Color.DEFAULT).a("Delete:\n\t")
 			.fg(Ansi.Color.MAGENTA).a("delete a task with its index \n\t")
@@ -149,6 +153,8 @@ public class ZombieTaskCommandHandler {
 	private static ArrayList<TaskUIFormat> pastTaskList = new ArrayList<TaskUIFormat>();
 	
 	private static StorageAPI storage;
+	
+	private static GUI window;
 	
 	/*
 	 * Command Handlers
@@ -227,7 +233,8 @@ public class ZombieTaskCommandHandler {
 			invalidCommand(currentCommandString);
 			break;
 		}
-		if(currentCommandDescriptor != COMMAND_VIEW)
+		if(currentCommandDescriptor != COMMAND_VIEW && !currentCommandDescriptor.contains(COMMAND_SEARCH) 
+				&& currentCommandDescriptor != COMMAND_HELP)
 			ZombieTask.userInput("view agenda");
 	}
 	
@@ -608,36 +615,36 @@ public class ZombieTaskCommandHandler {
 		String userInput = helpCommand.getHelpCommand();
 		
 		if(userInput == null){
-			showToUser(MESSAGE_HELP_ADD + "\n" + MESSAGE_HELP_DELETE + "\n" + MESSAGE_HELP_UPDATE + "\n" + MESSAGE_HELP_SEARCH + "\n" + MESSAGE_HELP_VIEW+ "\n" + MESSAGE_HELP_UNDO+ "\n" + MESSAGE_HELP_REDO+ "\n" + MESSAGE_HELP_DONE + "\n" + MESSAGE_HELP_EXIT);
+			window.modifyLabelText(MESSAGE_HELP_ADD + "\n" + MESSAGE_HELP_DELETE + "\n" + MESSAGE_HELP_UPDATE + "\n" + MESSAGE_HELP_SEARCH + "\n" + MESSAGE_HELP_VIEW+ "\n" + MESSAGE_HELP_UNDO+ "\n" + MESSAGE_HELP_REDO+ "\n" + MESSAGE_HELP_DONE + "\n" + MESSAGE_HELP_EXIT);
 			return;
 		}
 		switch(userInput){
 		case COMMAND_ADD:
-			showToUser(MESSAGE_HELP_ADD);
+			window.modifyLabelText(MESSAGE_HELP_ADD);
 			break;
 		case COMMAND_DELETE:
-			showToUser(MESSAGE_HELP_DELETE);
+			window.modifyLabelText(MESSAGE_HELP_DELETE);
 			break;
 		case COMMAND_UPDATE:
-			showToUser(MESSAGE_HELP_UPDATE);
+			window.modifyLabelText(MESSAGE_HELP_UPDATE);
 			break;
 		case COMMAND_SEARCH:
-			showToUser(MESSAGE_HELP_SEARCH);
+			window.modifyLabelText(MESSAGE_HELP_SEARCH);
 			break;
 		case COMMAND_VIEW:
-			showToUser(MESSAGE_HELP_VIEW);
+			window.modifyLabelText(MESSAGE_HELP_VIEW);
 			break;
 		case COMMAND_UNDO:
-			showToUser(MESSAGE_HELP_UNDO);
+			window.modifyLabelText(MESSAGE_HELP_UNDO);
 			break;
 		case COMMAND_REDO:
-			showToUser(MESSAGE_HELP_REDO);
+			window.modifyLabelText(MESSAGE_HELP_REDO);
 			break;
 		case COMMAND_DONE:
-			showToUser(MESSAGE_HELP_DONE);
+			window.modifyLabelText(MESSAGE_HELP_DONE);
 			break;
 		case COMMAND_EXIT:
-			showToUser(MESSAGE_HELP_EXIT);
+			window.modifyLabelText(MESSAGE_HELP_EXIT);
 			break;	
 		default:
 			logger.log(Level.INFO,String.format(MESSAGE_INVALID_COMMAND, userInput) );
@@ -842,6 +849,14 @@ public class ZombieTaskCommandHandler {
 	private static void showToUser(String displayString) {
 		//System.out.println(displayString);
 		UI.printResponse(displayString);
+	}
+
+	public static GUI getWindow() {
+		return window;
+	}
+
+	public static void setWindow(GUI window) {
+		ZombieTaskCommandHandler.window = window;
 	}
 
 }
