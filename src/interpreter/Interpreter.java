@@ -544,7 +544,7 @@ public class Interpreter {
 		String[] lineCodesTemp = userInputTemp.split(" ");
 
 		// check whether a range is specified
-		if (lineCodesTemp[0].matches("[fdt][0-9]+-[0-9]")) {
+		if (lineCodesTemp[0].matches("[fdt][0-9]+-[0-9]+")) {
 			lineCodesTemp = lineCodesTemp[0].split("-");
 
 			String firstChar = Character.toString(lineCodesTemp[0].charAt(0));
@@ -583,7 +583,7 @@ public class Interpreter {
 		String[] lineCodesTemp = userInputTemp.split(" ");
 
 		// check whether a range is specified
-		if (lineCodesTemp[0].matches("[fdt][0-9]+-[0-9]")) {
+		if (lineCodesTemp[0].matches("[fdt][0-9]+-[0-9]+")) {
 			lineCodesTemp = lineCodesTemp[0].split("-");
 
 			String firstChar = Character.toString(lineCodesTemp[0].charAt(0));
