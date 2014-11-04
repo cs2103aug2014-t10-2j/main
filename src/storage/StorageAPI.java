@@ -166,6 +166,7 @@ public class StorageAPI {
 	
 	public TaskUIFormat add(TaskUIFormat newTaskList) throws IOException{
 		storage.addTask(newTaskList);
+		writeFile();
 		return newTaskList;
 	}
 	/**
@@ -192,6 +193,7 @@ public class StorageAPI {
 	
 	public TaskUIFormat delete(TaskUIFormat deletedTaskList) throws IOException{
 		storage.removeTask(deletedTaskList);
+		writeFile();
 		return deletedTaskList;
 	}
 	/**
