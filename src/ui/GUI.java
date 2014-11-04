@@ -1,20 +1,13 @@
 package ui;
 
-import java.awt.EventQueue;
-
-import javafx.scene.input.KeyEvent;
-
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
-
 import zombietask.ZombieTask;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
 import java.awt.Font;
 
 import javax.swing.SwingConstants;
@@ -80,13 +73,6 @@ public class GUI {
 		scrollPane_1.setViewportView(lblNewLabel);
 		lblNewLabel.setFont(new Font("Courier New", Font.BOLD, 12));
 	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		
-	}
 	
 	public void modifyLabelText(String str) {
 		label.setText(str);
@@ -96,7 +82,7 @@ public class GUI {
 		lblNewLabel.setText(str);
 	}
 	
-	public static void closeWindow() {
+	public void closeWindow() {
 		System.exit(0);
 	}
 	
