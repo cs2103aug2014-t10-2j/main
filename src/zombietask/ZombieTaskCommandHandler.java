@@ -515,11 +515,6 @@ public class ZombieTaskCommandHandler {
 			
 			// Execute undo
 			
-			System.out.println("WTF0: " + currentList);
-			System.out.println("WTF2: " + currentList.getFloatingTasks().size());
-			System.out.println("WTF1: " + currentList.getDeadlineTasks().size());
-			System.out.println("WTF3: " + currentList.getTimedTasks().size());
-			
 			switch (currentCommandDescriptor){
 			case COMMAND_ADD:
 				currentList = storage.delete(currentList);
@@ -537,6 +532,7 @@ public class ZombieTaskCommandHandler {
 				break;
 			case COMMAND_DONE:
 				storage.toggleComplete(currentList);
+				break;
 			default:
 			case COMMAND_INVALID:
 				logger.log(Level.INFO, ERROR_INVALID_UNDO_REDO);
@@ -587,6 +583,7 @@ public class ZombieTaskCommandHandler {
 				break;
 			case COMMAND_DONE:
 				storage.toggleComplete(currentList);
+				break;
 			default:
 			case COMMAND_INVALID:
 				logger.log(Level.INFO, ERROR_INVALID_UNDO_REDO);
@@ -721,6 +718,7 @@ public class ZombieTaskCommandHandler {
 				showToUser(String.format(MESSAGE_UNDONE, currentTask.getTaskName()));
 			}
 		}
+		
 		recordCommand();
 	}
 	
