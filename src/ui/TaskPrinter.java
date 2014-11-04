@@ -129,12 +129,12 @@ public class TaskPrinter {
 	public static String printDatesOfTask(Task task, int tabs) {
 		String response = "";
 		if(task.isDeadlineTask())
-			response += generateTabs(tabs + TAB_INCREMENT).concat(printColoredDate(task, 'E'));
+			response += generateTabs(tabs + TAB_INCREMENT).concat(printColoredDateTime(task, 'E'));
 		
 		if(task.isTimedTask()) {
-			response += generateTabs(tabs + TAB_INCREMENT).concat(printColoredDate(task, 'S'));
+			response += generateTabs(tabs + TAB_INCREMENT).concat(printColoredDateTime(task, 'S'));
 			response = response.concat(HEADER_LINE_SINGLE);
-			response += generateTabs(tabs + TAB_INCREMENT).concat(printColoredDate(task, 'E'));
+			response += generateTabs(tabs + TAB_INCREMENT).concat(printColoredDateTime(task, 'E'));
 		}
 		return response.concat(HEADER_LINE_SINGLE);
 	}
@@ -149,6 +149,14 @@ public class TaskPrinter {
 
 	private static String generateTabs(int tabs) {
 		return(tabs > 0) ? "\t" + generateTabs(tabs - 1) : "";
+	}
+	
+	public static String printColoredDateTime(Task task, char dateType) {
+		switch(dateType) {
+		case 'S':	return CYAN + "Start: " + FORMAT_DATETIME.format(task.getStartTime().getTime());
+		case 'E':	return CYAN + "End: " + FORMAT_DATETIME.format(task.getEndTime().getTime());
+		default:	return "";
+		}
 	}
 
 	public static String printColoredDate(Task task, char dateType) {
