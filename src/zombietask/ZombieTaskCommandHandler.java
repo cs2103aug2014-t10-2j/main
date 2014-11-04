@@ -227,6 +227,8 @@ public class ZombieTaskCommandHandler {
 			invalidCommand(currentCommandString);
 			break;
 		}
+		if(currentCommandDescriptor != COMMAND_VIEW)
+			ZombieTask.userInput("view agenda");
 	}
 	
 	/**

@@ -22,7 +22,7 @@ public class TaskPrinter {
 	public static final String RED = "<font color='RED'>";
 	public static final String YELLOW = "<font color='YELLOW'>";
 	
-	private static final Format FORMAT_DATETIME = new SimpleDateFormat("dd/MM/yy HH:mm");
+	//private static final Format FORMAT_DATETIME = new SimpleDateFormat("dd/MM/yy HH:mm");
 	private static final Format FORMAT_TIMEONLY = new SimpleDateFormat("HH:mm");
 	public static final int VERBOSITY_DECREMENT = 2;
 	public static final int TAB_INCREMENT = 1;

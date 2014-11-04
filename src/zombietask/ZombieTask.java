@@ -82,7 +82,6 @@ public class ZombieTask {
 	 * @throws Exception
 	 */
 	
-	
 	public static void main(String[] args) throws Exception {
 		EventQueue.invokeAndWait(new Runnable() {
 			public void run() {
@@ -102,7 +101,7 @@ public class ZombieTask {
 			initStorage(DEFAULT_FILENAME);
 		}
 		UI.initUIOnce();
-		
+		userInput("view agenda");
 	}
 	
 	
@@ -125,8 +124,6 @@ public class ZombieTask {
 			showToUser(err.toString());
 		}
 	}
-	
-	
 
 	/**
 	 * Helper method to test 1 command
