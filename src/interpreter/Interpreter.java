@@ -424,10 +424,10 @@ public class Interpreter {
 		String userInputTemp = userInput.replaceAll("\"(.*)\"", "");
 
 		// remove location keyword
-		userInputTemp = userInputTemp.replaceAll("@", "");
+		userInputTemp = userInputTemp.replaceAll("@[\\S]+[ ]*", "");
 
 		// remove tags
-		userInputTemp = userInputTemp.replaceAll("#", "");
+		userInputTemp = userInputTemp.replaceAll("#[\\S]+[ ]*", "");
 
 		// get dates
 		Parser parser = new Parser();
