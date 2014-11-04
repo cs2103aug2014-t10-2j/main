@@ -521,6 +521,8 @@ public class ZombieTaskCommandHandler {
 
 		showToUser(String.format(MESSAGE_UPDATE, oldTask.getTaskName(),
 				currentTask.getTaskName()));
+		
+		recordCommand();
 
 	}
 	
