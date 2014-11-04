@@ -436,71 +436,88 @@ public class ZombieTaskCommandHandler {
 		}
 	}
 
-
 	protected static void updateCommand(Command command) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 		CommandUpdate currentUpdateCommand = (CommandUpdate) command;
-		
+
 		// Create New Task
-		
+
 		CommandAdd currentAddCommand = currentUpdateCommand.getUpdatedTask();
 		String taskName = currentAddCommand.getTaskName();
 		Calendar startTime = currentAddCommand.getStartDate();
 		Calendar endTime = currentAddCommand.getEndDate();
 		ArrayList<String> tags = currentAddCommand.getTags();
-		
+
+		// Get old task
+		/*
+		 * Note old method depriciated.
+		 */
+		oldTask = storage.search(currentUpdateCommand.getLineCode());
+		String oldTaskName = oldTask.getTaskName();
+		Calendar oldStartTime = oldTask.getStartTime();
+		Calendar oldEndTime = oldTask.getEndTime();
+		ArrayList<String> oldTags = oldTask.getTags();
+
+		if (taskName == null) {
+			taskName = oldTaskName;
+		}
+		if (startTime == null) {
+			startTime = oldStartTime;
+		}
+		if (endTime == null) {
+			endTime = oldEndTime;
+		}
+		if (tags.isEmpty()) {
+			tags = oldTags;
+		}
+
 		/*
 		 * Temp fix for SP's code
 		 */
-		
-		if (startTime != null && endTime == null){
+
+		if (startTime != null && endTime == null) {
 			Calendar tempTime = startTime;
 			startTime = endTime;
 			endTime = tempTime;
-		} else if (startTime != null && endTime != null){
-			if (startTime.after(endTime)){
+		} else if (startTime != null && endTime != null) {
+			if (startTime.after(endTime)) {
 				Calendar tempTime = startTime;
 				startTime = endTime;
 				endTime = tempTime;
 			}
 		}
-		
-		if (startTime == null && endTime == null){
+
+		if (startTime == null && endTime == null) {
 			currentTask = new Task(taskName);
-		}else if(startTime == null){
+		} else if (startTime == null) {
 			currentTask = new Task(taskName, endTime);
-		}else{
+		} else {
 			currentTask = new Task(taskName, endTime, startTime);
 		}
-		
-		//Add Tags
-		for (String tag : tags){
+
+		// Add Tags
+		for (String tag : tags) {
 			currentTask.addTag(tag);
 		}
-		
-		//Get old task
-		/*
-		 * Note old method depriciated.
-		 */
-		oldTask = storage.search(currentUpdateCommand.getLineCode());
-		
-		//delete old task
+
+		// delete old task
 		try {
-			currentList = new TaskUIFormat().setOldTask(oldTask).setNewTask(currentTask);
+			currentList = new TaskUIFormat().setOldTask(oldTask).setNewTask(
+					currentTask);
 			storage.delete(oldTask);
 			storage.add(currentTask);
-			
-		} catch (Exception err){
+
+		} catch (Exception err) {
 			showToUser(err.getMessage());
 			err.printStackTrace();
 		}
-		
-		showToUser(String.format(MESSAGE_UPDATE, oldTask.getTaskName(), currentTask.getTaskName()));
-		
-		recordCommand();
+
+		showToUser(String.format(MESSAGE_UPDATE, oldTask.getTaskName(),
+				currentTask.getTaskName()));
 
 	}
+	
 
 	protected static void invalidCommand(String commandString) {
 		showToUser(String.format(MESSAGE_INVALID_COMMAND, commandString));
