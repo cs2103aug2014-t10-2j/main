@@ -31,6 +31,7 @@ public class TaskPrinter {
 	public static final String FORMAT_NAME_DATE = "%s%s[%s] %s%s%s%s<br>"; // Tabs | Color | TaskID | Color | TaskName | Date | Color_Reset
 	public static final String FORMAT_TAGS = "%s%sTags: [%s]%s<br>"; // Tabs | Color | Tags | Color_Reset
 	public static final String TAG_SEPARATOR = "; ";
+	public static final String TAB = "&nbsp&nbsp&nbsp&nbsp&nbsp";
 	public static final String HEADER_LINE_DOUBLE = "<br><br>";
 	public static final String HEADER_LINE_SINGLE = "<br>";
 	
@@ -149,7 +150,7 @@ public class TaskPrinter {
 	}
 
 	private static String generateTabs(int tabs) {
-		return(tabs > 0) ? "&nbsp&nbsp&nbsp&nbsp&nbsp" + generateTabs(tabs - 1) : "";
+		return(tabs > 0) ? TAB + generateTabs(tabs - 1) : "";
 	}
 	
 	public static String printColoredDateTime(Task task, char dateType) {

@@ -6,7 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import storage.Storage;
+//import storage.Storage;
 import storage.StorageAPI;
 import task.Task;
 import task.TaskUIFormat;
@@ -29,9 +29,6 @@ import interpreter.CommandSearchTag;
 import interpreter.CommandSearchTime;
 import interpreter.CommandUpdate;
 import interpreter.CommandView;
-import ext.jansi.Ansi;
-import ext.jansi.AnsiConsole;
-import static ext.jansi.Ansi.ansi;
 
 public class ZombieTaskCommandHandler {
 	
@@ -60,7 +57,7 @@ public class ZombieTaskCommandHandler {
 	private final static String COMMAND_INVALID = "invalid command %s";
 	
 	private final static boolean SUCCESS = true;
-	private final static boolean FAILURE = false;
+	//private final static boolean FAILURE = false;
 	
 	// for testing
 	private static String commandCalled = null;
@@ -68,55 +65,57 @@ public class ZombieTaskCommandHandler {
 	/*
 	 * Messages
 	 */
-	
+
+	public static final String TAB = "&nbsp&nbsp&nbsp&nbsp&nbsp";
 	private final static String MESSAGE_INVALID_COMMAND = "Invalid Command:\n%s";
 	private final static String MESSAGE_HELP_ADD = "HELP<br><br>" + TaskPrinter.MAGENTA;
-	private final static String MESSAGE_HELP_DELETE = ansi()	
-			.fg(Ansi.Color.DEFAULT).a("Delete:\n\t")
-			.fg(Ansi.Color.MAGENTA).a("delete a task with its index \n\t")
-			.fg(Ansi.Color.CYAN).a("delete ").fg(Ansi.Color.RED).a("task number\n").reset().toString();
-	private final static String MESSAGE_HELP_SEARCH = ansi()
-			.fg(Ansi.Color.DEFAULT).a("Search:\n\t")
-			.fg(Ansi.Color.MAGENTA).a("search tasks with task name, time or location \n\t")
-			.fg(Ansi.Color.CYAN).a("search-name ").fg(Ansi.Color.RED).a("task name \n\t")
-			.fg(Ansi.Color.CYAN).a("search-name ").fg(Ansi.Color.RED).a("#tag \n\t")
-			.fg(Ansi.Color.CYAN).a("search-name ").fg(Ansi.Color.RED).a(">location \n\t")
-			.fg(Ansi.Color.CYAN).a("search-time ").fg(Ansi.Color.RED).a("start time ").fg(Ansi.Color.GREEN).a("to").fg(Ansi.Color.RED).a(" end time\n").reset().toString();
-	private final static String MESSAGE_HELP_UPDATE = ansi()
-			.fg(Ansi.Color.DEFAULT).a("Update:\n\t")
-			.fg(Ansi.Color.MAGENTA).a("update the information of the task with its index \n\t")
-			.fg(Ansi.Color.CYAN).a("add ").fg(Ansi.Color.RED).a("task number ").fg(Ansi.Color.RED).a("start time ").fg(Ansi.Color.GREEN).a("to").fg(Ansi.Color.RED).a(" end time\n").reset().toString();
-	private final static String MESSAGE_HELP_VIEW = ansi()
-			.fg(Ansi.Color.DEFAULT).a("View:\n\t")
-			.fg(Ansi.Color.MAGENTA).a("different kinds of views for tasks including agenda, daily and weekly \n\t")
-			.fg(Ansi.Color.CYAN).a("view ").fg(Ansi.Color.RED).a("agenda\n\t")
-			.fg(Ansi.Color.CYAN).a("view ").fg(Ansi.Color.RED).a("daily \n\t")
-			.fg(Ansi.Color.CYAN).a("view ").fg(Ansi.Color.RED).a("weekly \n\t").reset().toString();
-	private final static String MESSAGE_HELP_UNDO = ansi()	
-			.fg(Ansi.Color.DEFAULT).a("Undo:\n\t")
-			.fg(Ansi.Color.MAGENTA).a("reverse the action to the previous state \n\t")
-			.fg(Ansi.Color.CYAN).a("undo ").reset().toString();
-	private final static String MESSAGE_HELP_REDO = ansi()	
-			.fg(Ansi.Color.DEFAULT).a("Redo:\n\t")
-			.fg(Ansi.Color.MAGENTA).a("go the the state before the undo action \n\t")
-			.fg(Ansi.Color.CYAN).a("redo ").reset().toString();
-	private final static String MESSAGE_HELP_DONE = ansi()	
-			.fg(Ansi.Color.DEFAULT).a("Done:\n\t")
-			.fg(Ansi.Color.MAGENTA).a("mark a task as completed or uncompleted \n\t")
-			.fg(Ansi.Color.CYAN).a("done ").reset().toString();
+	private final static String MESSAGE_HELP_DELETE = "Delete:<br>".concat(TAB)
+			.concat(TaskPrinter.MAGENTA).concat("delete a task with its index <br>").concat(TAB)
+			.concat(TaskPrinter.CYAN).concat("delete ").concat(TaskPrinter.RED)
+			.concat("task number<br>");
+	private final static String MESSAGE_HELP_SEARCH = "Search:<br>".concat(TAB)
+			.concat(TaskPrinter.MAGENTA).concat("search tasks with task name, time or location <br>")
+			.concat(TAB).concat(TaskPrinter.CYAN).concat("search-name ").concat(TaskPrinter.RED)
+			.concat("task name <br>").concat(TAB).concat(TaskPrinter.CYAN).concat("search-name ")
+			.concat(TaskPrinter.RED).concat("#tag <br>").concat(TAB).concat(TaskPrinter.CYAN)
+			.concat("search-name ").concat(TaskPrinter.RED).concat(">location <br>").concat(TAB)
+			.concat(TaskPrinter.CYAN).concat("search-time ").concat(TaskPrinter.RED)
+			.concat("start time ").concat(TaskPrinter.GREEN).concat("to").concat(TaskPrinter.RED)
+			.concat(" end time <br>");
+	private final static String MESSAGE_HELP_UPDATE = "Update:<br>".concat(TAB)
+			.concat(TaskPrinter.MAGENTA)
+			.concat("update the information of the task with its index <br>").concat(TAB)
+			.concat(TaskPrinter.CYAN).concat("add ").concat(TaskPrinter.RED).concat("task number ")
+			.concat(TaskPrinter.RED).concat("start time ").concat(TaskPrinter.GREEN).concat("to")
+			.concat(TaskPrinter.RED).concat(" end time<br>");
+	private final static String MESSAGE_HELP_VIEW = "View:<br>".concat(TAB).concat(TaskPrinter.MAGENTA)
+			.concat("different kinds of views for tasks including agenda, daily and weekly <br>")
+			.concat(TAB).concat(TaskPrinter.CYAN).concat("view ").concat(TaskPrinter.RED)
+			.concat("agenda<br>").concat(TAB).concat(TaskPrinter.CYAN).concat("view ")
+			.concat(TaskPrinter.RED).concat("daily <br>").concat(TAB).concat(TaskPrinter.CYAN)
+			.concat("view ").concat(TaskPrinter.RED).concat("weekly <br>").concat(TAB);
+	private final static String MESSAGE_HELP_UNDO = "Undo:<br>".concat(TAB).concat(TaskPrinter.MAGENTA)
+			.concat("reverse the action to the previous state <br>").concat(TAB)
+			.concat(TaskPrinter.CYAN).concat("undo ");
+	private final static String MESSAGE_HELP_REDO = "Redo:<br>".concat(TAB)
+			.concat(TaskPrinter.MAGENTA).concat("go the the state before the undo action <br>")
+			.concat(TAB).concat(TaskPrinter.CYAN).concat("redo ");
+	private final static String MESSAGE_HELP_DONE = "".concat(TaskPrinter.MAGENTA).concat("Done:<br>")
+			.concat(TAB).concat(TaskPrinter.MAGENTA).concat("mark a task as completed or uncompleted <br>")
+			.concat(TAB).concat(TaskPrinter.CYAN).concat("done ");
 	
-	private final static String MESSAGE_HELP_EXIT = ansi()	
-			.fg(Ansi.Color.DEFAULT).a("Exit:\n\t")
-			.fg(Ansi.Color.MAGENTA).a("exit the program \n\t")
-			.fg(Ansi.Color.CYAN).a("exit ").reset().toString();
+	private final static String MESSAGE_HELP_EXIT = "Exit:<br>".concat(TAB)
+			.concat(TaskPrinter.MAGENTA).concat("exit the program <br>").concat(TAB)
+			.concat(TaskPrinter.CYAN).concat("exit ");
 	private final static String MESSAGE_ADD = "Added %s to database";
 	private final static String MESSAGE_DELETE = "Deleted %s from database";
 	private final static String MESSAGE_DELETE_MULTIPLE = "Deleted %d tasks from database";
 	private final static String MESSAGE_UPDATE = "Updated %s to %s from database";
-	private final static String MESSAGE_OUTOFBOUNDS = "Warning: input %s is out of bounds";
+	//private final static String MESSAGE_OUTOFBOUNDS = "Warning: input %s is out of bounds";
 	private final static String MESSAGE_DONE = "Marked %s as done";
 	private final static String MESSAGE_UNDONE = "Marked %s as undone";
-	private final static String MESSAGE_CLASH_WARNING = "Warning\n\tTasks %s and %d other task(s) clashes\nClashed Tasks:\n"; //"Warning:\n\tTasks %s and %s clashes";
+	private final static String MESSAGE_CLASH_WARNING = "Warning<br>&nbsp&nbsp&nbsp&nbsp&nbspTasks"
+			+ " %s and %d other task(s) clashes<br>Clashed Tasks:<br>"; //"Warning:\n\tTasks %s and %s clashes";
 	//private final static String MESSAGE_CLASH_MORE_THAN_ONE = "Warning\n\tTasks %s and %d other task(s) clashes";
 	
 	private final static String ERROR_EMPTY_UNDO_STACK = "There is nothing to undo!";
@@ -753,14 +752,14 @@ public class ZombieTaskCommandHandler {
 			futureTaskList.clear();
 		}
 	}
-	
+	/*
 	private static void clearPastLists() {
 		if (pastCommandList.size() > 0){
 			pastCommandDescriptorList.clear();
 			pastCommandList.clear();
 			pastTaskList.clear();
 		}
-	}
+	}*/
 	
 	/*
 	 * Stub method for Commands
