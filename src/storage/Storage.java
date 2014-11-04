@@ -114,6 +114,17 @@ public class Storage {
 		sortDeadlineTasks();
 		//this.taskList.add(newTask);
 	}
+	public void addTask(TaskUIFormat newTaskList){
+		for(Task task : newTaskList.getDeadlineTasks()){
+			this.deadlineTasks.add(task);
+		}
+		for(Task task : newTaskList.getFloatingTasks()){
+			this.floatingTasks.add(task);
+		}
+		for(Task task : newTaskList.getTimedTasks()){
+			this.timedTasks.add(task);
+		}
+	}
 	
 	private void sortTimedTasks(){
 		Collections.sort(timedTasks, startTimeComparator);

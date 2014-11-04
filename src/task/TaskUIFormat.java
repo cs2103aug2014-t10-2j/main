@@ -139,49 +139,4 @@ public class TaskUIFormat {
 		}
 			return tempTask;
 	}
-	
-	/*
-	
-	private void sortTimedTasks(){
-		Collections.sort(timedTasks, startTimeComparator);
-	}
-	
-	private void sortDeadlineTasks(){
-		Collections.sort(deadlineTasks, endTimeComparator);
-	}
-	
-	public Task getTask(String searchString){
-		
-		logger.log(Level.FINER, searchString);
-		
-		Matcher matcher = VALID_PATTERN.matcher(searchString);
-		if (matcher.groupCount() < 2) {
-			logger.log(Level.SEVERE, String.format(DEBUG_INVALID_IO, searchString),
-					new IOException());
-		}
-		if (!hasSorted) {
-			logger.log(Level.SEVERE, DEBUG_HASNT_SORTED,
-					new IOException());
-		}
-		
-		String taskType = matcher.group(0).toLowerCase();
-		int index = new Integer(matcher.group(1));
-		
-		try {
-			switch (taskType){
-			case FLOATING_ID:
-				return floatingTasks.get(index);
-			case DEADLINE_ID:
-				return deadlineTasks.get(index);
-			case TIMED_ID:
-				return timedTasks.get(index);
-			}
-		}catch (Exception e){
-			logger.log(Level.SEVERE, e.getMessage());
-		}
-		return null;
-	}
-	
-	*/
-
 }

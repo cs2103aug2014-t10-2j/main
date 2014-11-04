@@ -19,19 +19,12 @@ package ui;
  * 2. Implemented ANSI Console color output
  */
 
-import static ext.jansi.Ansi.ansi;
-
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import logger.ZombieLogger;
 import task.Task;
 import task.TaskUIFormat;
-import ext.jansi.Ansi;
 import ext.jansi.AnsiConsole;
 
 public class UI
@@ -56,20 +49,12 @@ public class UI
 	 * 
 	 * Purple - all
 	 */
-	public static final Ansi.Color COLOR_BLACK = Ansi.Color.BLACK;
-	public static final Ansi.Color COLOR_RED = Ansi.Color.RED;
-	public static final Ansi.Color COLOR_GREEN = Ansi.Color.GREEN;
-	public static final Ansi.Color COLOR_YELLOW = Ansi.Color.YELLOW;
-	public static final Ansi.Color COLOR_BLUE = Ansi.Color.BLUE;
-	public static final Ansi.Color COLOR_MAGENTA = Ansi.Color.MAGENTA;
-	public static final Ansi.Color COLOR_CYAN = Ansi.Color.CYAN;
-	public static final Ansi.Color COLOR_WHITE = Ansi.Color.WHITE;
 	
-	public static final String HEADER_AGENDA = "(Agenda)\n\n";
-	public static final String HEADER_DAILY = "(Daily)\n";
-	public static final String HEADER_WEEKLY = "(Weekly)\n";
-	public static final String HEADER_MONTHLY = "(Monthly)\n";
-	public static final String HEADER_ANNUAL = "(Annual)\n";
+	public static final String HEADER_AGENDA = "(Agenda)<br><br>";
+	public static final String HEADER_DAILY = "(Daily)<br><br>";
+	public static final String HEADER_WEEKLY = "(Weekly)<br><br>";
+	public static final String HEADER_MONTHLY = "(Monthly)<br><br>";
+	public static final String HEADER_ANNUAL = "(Annual)<br><br>";
 	public static final String HEADER_TODAY = "Current Time: ";
 	public static final String HEADER_OVERDUE = "Overdue Tasks\n";
 	public static final String HEADER_FLOATING_TASKS = "Floating Tasks\n";
@@ -81,6 +66,8 @@ public class UI
 	public static final String FORMAT_TAGS = "%s%sTags: [%s]%s\n"; // Tabs | Color | Tags | Color_Reset
 	public static final String TAG_SEPARATOR = "; ";
 	public static final String BORDER = "----------------------------------------";
+	
+	public static final String LABEL_FORMAT = "<html><font>%s</font></html>";
 	
 	public static final int VERBOSITY_NAME_ONLY = 0;
 	public static final int VERBOSITY_TAG_INCLUSIVE = 1;
@@ -115,13 +102,13 @@ public class UI
 	 */
 	
 	public static void printResponse(String response) {
-		System.out.println(response);
+		GUI.modifyUpperLabel(String.format(LABEL_FORMAT, response));
 	}
 	
 	public static void printPerspective(FORMAT format, TaskUIFormat tasks)
 			throws Exception {
 			if(tasks.isEmpty()) {
-				System.out.println("No tasks within time period." + format);
+				GUI.modifyUpperLabel("No tasks within time period." + format);
 				return;
 			}
 			String str;
@@ -137,7 +124,7 @@ public class UI
 				*/
 				default:	return;
 			}
-			System.out.println(str);
+			GUI.modifyLabelText(String.format(LABEL_FORMAT, str));
 		}
 	
 	/*
@@ -265,64 +252,6 @@ public class UI
 	}
 	
 	/*
-	
-	private static String printAgenda(ArrayList<Task> tasks) throws Exception {
-		String str;
-		str = "(Agenda)\n";
-		ArrayList<Task> processedTasks = processTasks(tasks);
-		for(Task task : processedTasks) {
-			if(task.isOverdue())	str += task.getTaskName() + "\n";
-		}
-		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
-		Calendar begin = delimitTime(Calendar.getInstance());
-		begin.set(Calendar.HOUR_OF_DAY, 0);
-		Calendar end = delimitTime(Calendar.getInstance());
-		end.set(Calendar.HOUR_OF_DAY, 0);
-		end.add(Calendar.DATE, 1);
-		ArrayList<String> floatingStrings = new ArrayList<String>();
-		for(Task task : processedTasks) {
-			if(task.isDeadline() && task.isOverdue() == false) {
-				while(withinTimePeriod(task.getEndTime(), begin, end) == false) {
-					begin.add(Calendar.DATE, 1);
-					end.add(Calendar.DATE, 1);
-					str += FORMAT_DAYDATE.format(begin.getTime()) + "\n";
-				}
-				str += task.getTaskName() + "\n";
-			}
-			if(task.isFloatingTask())	floatingStrings.add(task.getTaskName());
-		}
-		if(floatingStrings.isEmpty() == false)
-		{
-			str += "<<<<< Floating Tasks >>>>>\n";
-			for(String string : floatingStrings)	str += string + "\n";
-		}
-		return str;
-	}
-	
-	private static String printWeekly(ArrayList<Task> tasks) throws Exception {
-		String str;
-		str = "(Weekly)\n";
-		ArrayList<Task> processedTasks = processTasks(tasks);
-		for(Task task : processedTasks) {
-			if(task.isOverdue())	str += task.getTaskName() + "\n";
-		}
-		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + "\n";
-		Calendar begin = delimitTime(Calendar.getInstance());
-		Calendar end = delimitTime(Calendar.getInstance());
-		end.add(Calendar.HOUR_OF_DAY, 6);
-		ArrayList<String> daily = new ArrayList<String>();
-		for(int i = 0; i < WEEKLY_LIMIT; i++) {
-			daily.add(String.format("|- %sh:", FORMAT_DATETIME.format(begin.getTime())));
-			for(Task task : processedTasks) {
-				if(withinTimePeriod(task.getEndTime(), begin, end))
-					daily.set(daily.size() - 1, daily.get(daily.size() - 1) + " " + task.getTaskName());
-			}
-			begin.add(Calendar.HOUR_OF_DAY, 6);
-			end.add(Calendar.HOUR_OF_DAY, 6);
-		}
-		for(String string : daily)	str += string + "\n";
-		return str;
-	}
 	private static String printMonthly(ArrayList<Task> tasks) throws Exception {
 		String str;
 		str = "(Monthly)\n";

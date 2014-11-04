@@ -137,6 +137,7 @@ public class ZombieTaskCommandHandler {
 	private static Command currentCommand = null;
 	private static Task currentTask = null;
 	private static Task oldTask = null;
+	private static TaskUIFormat deleteList = null;
 	
 	private static ArrayList<String> futureCommandDescriptorList = new ArrayList<String>();
 	private static ArrayList<Command> futureCommandList = new ArrayList<Command>();
@@ -504,6 +505,12 @@ public class ZombieTaskCommandHandler {
 			case COMMAND_DELETE:
 				storage.add(currentTask);
 				break;
+			case COMMAND_DELETE_NAME:
+			case COMMAND_DELETE_TAG:
+			case COMMAND_DELETE_TIME:
+			case COMMAND_DELETE_LOCATION:
+				storage.add(deleteList);
+				break;
 			case COMMAND_UPDATE:
 				currentTask = storage.delete(currentTask);
 				storage.add(oldTask);
@@ -547,6 +554,12 @@ public class ZombieTaskCommandHandler {
 				break;
 			case COMMAND_DELETE:
 				storage.delete(currentTask);
+				break;
+			case COMMAND_DELETE_NAME:
+			case COMMAND_DELETE_TAG:
+			case COMMAND_DELETE_TIME:
+			case COMMAND_DELETE_LOCATION:
+				storage.delete(deleteList);
 				break;
 			case COMMAND_UPDATE:
 				storage.add(currentTask);
@@ -623,8 +636,10 @@ public class ZombieTaskCommandHandler {
 	
 	protected static void deleteName(Command command) throws Exception{
 		CommandDeleteName deleteCommand = (CommandDeleteName) command;
-		TaskUIFormat deleteList = storage.searchName(deleteCommand.getSearchString());
+		deleteList = storage.searchName(deleteCommand.getSearchString());
 		storage.delete(deleteList);
+		recordCommand();
+		
 		/*
 		 * To be implemented UNDO and REDO
 		 */
@@ -637,8 +652,9 @@ public class ZombieTaskCommandHandler {
 	
 	protected static void deleteTime(Command command) throws Exception{
 		CommandDeleteTime deleteCommand = (CommandDeleteTime) command;
-		TaskUIFormat deleteList = storage.search(deleteCommand.getTimeStart(), deleteCommand.getTimeEnd());
+		deleteList = storage.search(deleteCommand.getTimeStart(), deleteCommand.getTimeEnd());
 		storage.delete(deleteList);
+		recordCommand();
 		/*
 		 * To be implemented UNDO and REDO
 		 */
@@ -651,8 +667,9 @@ public class ZombieTaskCommandHandler {
 	
 	protected static void deleteTag(Command command) throws Exception{
 		CommandDeleteTag deleteCommand = (CommandDeleteTag) command;
-		TaskUIFormat deleteList = storage.searchTag(deleteCommand.getTag());
+		deleteList = storage.searchTag(deleteCommand.getTag());
 		storage.delete(deleteList);
+		recordCommand();
 		/*
 		 * To be implemented UNDO and REDO
 		 */
@@ -665,8 +682,9 @@ public class ZombieTaskCommandHandler {
 	
 	protected static void deleteLocation(Command command) throws Exception{
 		CommandDeleteLocation deleteCommand = (CommandDeleteLocation) command;
-		TaskUIFormat deleteList = storage.searchLocation(deleteCommand.getLocation());
+		deleteList = storage.searchLocation(deleteCommand.getLocation());
 		storage.delete(deleteList);
+		recordCommand();
 		/*
 		 * To be implemented UNDO and REDO
 		 */
