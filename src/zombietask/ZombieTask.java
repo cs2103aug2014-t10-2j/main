@@ -19,6 +19,7 @@ import storage.StorageAPI;
 import ui.GUI;
 import ui.UI;
 
+import java.awt.EventQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,7 +55,8 @@ public class ZombieTask {
 
 	private static String currentCommandString = null;
 	private static Command currentCommand = null;
-
+	private static GUI window = null;
+	
 	/*
 	 * Trick to obtain last day of month/year
 	 * http://stackoverflow.com/questions/19488658/get-last-day-of-month
@@ -64,10 +66,11 @@ public class ZombieTask {
 	 * Standard Messages
 	 */
 
-	//private final static String MESSAGE_WELCOME = "Welcome to Zombie Task!";
+	private final static String MESSAGE_WELCOME = "Welcome to Zombie Task!";
 	private final static String MESSAGE_FILE_OPENED = "%s is ready for use";
 	private final static String MESSAGE_MISSING_ARGUMENTS = "Command Missing Arguments:\n%s";
 	private final static String MESSAGE_INVALID_FILENAME = "Invalid FileName: %s";
+	private final static String DEFAULT_FILENAME = "ZombieTask.txt";
 	private final static boolean SUCCESS = true;
 	//private final static boolean FAILURE = false;
 	//private static boolean setExit = false;
@@ -79,58 +82,51 @@ public class ZombieTask {
 	 * @throws Exception
 	 */
 	
-	/*	Main Method substituted for userInput(String str)
-	 * 
+	
 	public static void main(String[] args) throws Exception {
-		showToUser(MESSAGE_WELCOME);
-		initStorage(args);
-		UI.initUIOnce();
-
-		while (sc.hasNext() && !setExit) {
-			try {
-				reinitializeCurrentVariables();
-				currentCommandString = sc.nextLine();
-				currentCommand = Interpreter.getCommand(currentCommandString);
-				if (currentCommand.hasMissingArgs() && !currentCommand.getCommandType().equals(Command.HELP)) {
-					logger.log(Level.INFO, String.format(
-							MESSAGE_MISSING_ARGUMENTS, currentCommandString));
-					continue;
+		EventQueue.invokeAndWait(new Runnable() {
+			public void run() {
+				try {
+					window = new GUI();
+					window.getFrmZombietask().setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				
-				logger.log(Level.FINER, currentCommandString);
-				ZombieTaskCommandHandler.execute(currentCommand,
-						currentCommandString);
-			} catch (Exception err) {
-				err.printStackTrace();
-				showToUser(err.toString());
 			}
+		});
+		
+		showToUser(MESSAGE_WELCOME);
+		if (args.length > 2){
+			initStorage(args[1]);
+		}else{
+			initStorage(DEFAULT_FILENAME);
 		}
-	}*/
-	public static void userInput(String str) {
-		//showToUser(MESSAGE_WELCOME);
-		initStorage(str);
 		UI.initUIOnce();
 		
-		//while (!str.isEmpty() && !setExit) {
-			try {
-				reinitializeCurrentVariables();
-				currentCommandString = str;
-				currentCommand = Interpreter.getCommand(currentCommandString);
-				if (currentCommand.hasMissingArgs() && !currentCommand.getCommandType().equals(Command.HELP)) {
-					logger.log(Level.INFO, String.format(
-							MESSAGE_MISSING_ARGUMENTS, currentCommandString));
-					//continue;
-				}
-				
-				logger.log(Level.FINER, currentCommandString);
-				ZombieTaskCommandHandler.execute(currentCommand,
-						currentCommandString);
-			} catch (Exception err) {
-				err.printStackTrace();
-				showToUser(err.toString());
-			}
-		//}
 	}
+	
+	
+	public static void userInput(String str) {
+		try {
+			reinitializeCurrentVariables();
+			currentCommandString = str;
+			currentCommand = Interpreter.getCommand(currentCommandString);
+			if (currentCommand.hasMissingArgs() && !currentCommand.getCommandType().equals(Command.HELP)) {
+				logger.log(Level.INFO, String.format(
+						MESSAGE_MISSING_ARGUMENTS, currentCommandString));
+				//continue;
+			}
+			
+			logger.log(Level.FINER, currentCommandString);
+			ZombieTaskCommandHandler.execute(currentCommand,
+					currentCommandString);
+		} catch (Exception err) {
+			err.printStackTrace();
+			showToUser(err.toString());
+		}
+	}
+	
+	
 
 	/**
 	 * Helper method to test 1 command
@@ -147,6 +143,10 @@ public class ZombieTask {
 			err.printStackTrace();
 			showToUser(err.toString());
 		}
+	}
+	
+	public static GUI getGUI(){
+		return window;
 	}
 
 	/**
@@ -233,11 +233,11 @@ public class ZombieTask {
 	 */
 
 	private static void showToUser(String displayString) {
-		GUI.modifyUpperLabel(displayString);
+		window.modifyUpperLabel(displayString);
 	}
 
 	public static void exitProgram() {
-		GUI.closeWindow();
+		window.closeWindow();
 	}
 
 }

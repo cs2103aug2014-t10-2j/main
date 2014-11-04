@@ -325,12 +325,14 @@ public class ZombieTaskCommandHandler {
 		try{
 			//Get details from Command Object
 			CommandDelete currentDeleteCommand = (CommandDelete) command;
-			String lineCode = currentDeleteCommand.getLineCode();
-			currentTask = storage.search(lineCode);
-			storage.delete(currentTask);
-			recordCommand();
-			showToUser(String.format(MESSAGE_DELETE, currentTask.getTaskName()));
+			ArrayList<String> lineCodes = currentDeleteCommand.getLineCode();
+			for(String lineCode : lineCodes){
+				currentTask = storage.search(lineCode);
+				storage.delete(currentTask);
+				showToUser(String.format(MESSAGE_DELETE, currentTask.getTaskName()));
+			}
 			
+			recordCommand();
 		} catch (Exception err){
 			showToUser(err.getMessage());
 			err.printStackTrace();

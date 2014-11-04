@@ -23,8 +23,10 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+
 import task.Task;
 import task.TaskUIFormat;
+import zombietask.ZombieTask;
 import ext.jansi.AnsiConsole;
 
 public class UI
@@ -96,19 +98,20 @@ public class UI
 	
 	//private static Logger logger = ZombieLogger.getLogger();
 	private static boolean uiInit = false;
+	private static GUI window = null;
 	
 	/*
 	 *  PRIMARY METHODS
 	 */
 	
 	public static void printResponse(String response) {
-		GUI.modifyUpperLabel(String.format(LABEL_FORMAT, response));
+		window.modifyUpperLabel(String.format(LABEL_FORMAT, response));
 	}
 	
 	public static void printPerspective(FORMAT format, TaskUIFormat tasks)
 			throws Exception {
 			if(tasks.isEmpty()) {
-				GUI.modifyUpperLabel("No tasks within time period." + format);
+				window.modifyUpperLabel("No tasks within time period." + format);
 				return;
 			}
 			String str;
@@ -124,7 +127,7 @@ public class UI
 				*/
 				default:	return;
 			}
-			GUI.modifyLabelText(String.format(LABEL_FORMAT, str));
+			window.modifyLabelText(String.format(LABEL_FORMAT, str));
 		}
 	
 	/*
@@ -327,7 +330,10 @@ public class UI
 	}
 	
 	public static void initUIOnce() {
-		if (!uiInit)	initUI();
+		if (!uiInit){
+			initUI();
+			window = ZombieTask.getGUI();
+		}
 	}
 	
 	private static void initUI(){

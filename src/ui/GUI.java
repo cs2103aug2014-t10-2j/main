@@ -2,6 +2,8 @@ package ui;
 
 import java.awt.EventQueue;
 
+import javafx.scene.input.KeyEvent;
+
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -12,45 +14,34 @@ import zombietask.ZombieTask;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.Font;
+
 import javax.swing.SwingConstants;
 
 public class GUI {
 
 	private JFrame frmZombietask;
+	
+	public JFrame getFrmZombietask() {
+		return frmZombietask;
+	}
+
+	public void setFrmZombietask(JFrame frmZombietask) {
+		this.frmZombietask = frmZombietask;
+	}
+
 	private JTextField textField;
-	private static JLabel label;
-	private static JLabel lblNewLabel;
+	private JLabel label;
+	private JLabel lblNewLabel;
 	private JScrollPane scrollPane;
 	private JScrollPane scrollPane_1;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GUI window = new GUI();
-					window.frmZombietask.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+		
 
 	/**
 	 * Create the application.
 	 */
 	public GUI() {
-		initialize();
-	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
 		frmZombietask = new JFrame();
 		frmZombietask.setTitle("ZombieTask");
 		frmZombietask.setBounds(100, 100, 560, 350);
@@ -70,6 +61,12 @@ public class GUI {
 		textField.setBounds(10, 280, 425, 20);
 		frmZombietask.getContentPane().add(textField);
 		textField.setColumns(10);
+		textField.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e){
+				ZombieTask.userInput(textField.getText());
+			}
+		});
 		
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 67, 522, 208);
@@ -89,12 +86,19 @@ public class GUI {
 		scrollPane_1.setViewportView(lblNewLabel);
 		lblNewLabel.setFont(new Font("Courier New", Font.BOLD, 12));
 	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		
+	}
 	
-	public static void modifyLabelText(String str) {
+	public void modifyLabelText(String str) {
 		label.setText(str);
 	}
 	
-	public static void modifyUpperLabel(String str) {
+	public void modifyUpperLabel(String str) {
 		lblNewLabel.setText(str);
 	}
 	
