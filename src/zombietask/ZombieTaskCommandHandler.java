@@ -6,7 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import storage.Storage;
+//import storage.Storage;
 import storage.StorageAPI;
 import task.Task;
 import task.TaskUIFormat;
@@ -29,17 +29,14 @@ import interpreter.CommandSearchTag;
 import interpreter.CommandSearchTime;
 import interpreter.CommandUpdate;
 import interpreter.CommandView;
-import ext.jansi.Ansi;
-import ext.jansi.AnsiConsole;
-import static ext.jansi.Ansi.ansi;
 
 public class ZombieTaskCommandHandler {
-
+	
 	/*
 	 * Class constants
 	 */
-
-	private final static String COMMAND_ADD = Command.ADD; // edit out
+	
+	private final static String COMMAND_ADD = Command.ADD; //edit out
 	private final static String COMMAND_DELETE = Command.DELETE;
 	private final static String COMMAND_DELETE_NAME = Command.DELETE_NAME;
 	private final static String COMMAND_DELETE_TAG = Command.DELETE_TAG;
@@ -58,88 +55,80 @@ public class ZombieTaskCommandHandler {
 	private final static String COMMAND_SEARCH_LOCATION = Command.SEARCH_LOCATION;
 	private final static String COMMAND_EXIT = Command.EXIT;
 	private final static String COMMAND_INVALID = "invalid command %s";
-
+	
 	private final static boolean SUCCESS = true;
-	private final static boolean FAILURE = false;
-
+	//private final static boolean FAILURE = false;
+	
 	// for testing
 	private static String commandCalled = null;
-
+	
 	/*
 	 * Messages
 	 */
 
+	public static final String TAB = "&nbsp&nbsp&nbsp&nbsp&nbsp";
 	private final static String MESSAGE_INVALID_COMMAND = "Invalid Command:\n%s";
-	private final static String MESSAGE_HELP_ADD = "HELP<br><br>"
-			+ TaskPrinter.MAGENTA;
-	private final static String MESSAGE_HELP_DELETE = ansi()
-			.fg(Ansi.Color.DEFAULT).a("Delete:\n\t").fg(Ansi.Color.MAGENTA)
-			.a("delete a task with its index \n\t").fg(Ansi.Color.CYAN)
-			.a("delete ").fg(Ansi.Color.RED).a("task number\n").reset()
-			.toString();
-	private final static String MESSAGE_HELP_SEARCH = ansi()
-			.fg(Ansi.Color.DEFAULT).a("Search:\n\t").fg(Ansi.Color.MAGENTA)
-			.a("search tasks with task name, time or location \n\t")
-			.fg(Ansi.Color.CYAN).a("search-name ").fg(Ansi.Color.RED)
-			.a("task name \n\t").fg(Ansi.Color.CYAN).a("search-name ")
-			.fg(Ansi.Color.RED).a("#tag \n\t").fg(Ansi.Color.CYAN)
-			.a("search-name ").fg(Ansi.Color.RED).a(">location \n\t")
-			.fg(Ansi.Color.CYAN).a("search-time ").fg(Ansi.Color.RED)
-			.a("start time ").fg(Ansi.Color.GREEN).a("to").fg(Ansi.Color.RED)
-			.a(" end time\n").reset().toString();
-	private final static String MESSAGE_HELP_UPDATE = ansi()
-			.fg(Ansi.Color.DEFAULT).a("Update:\n\t").fg(Ansi.Color.MAGENTA)
-			.a("update the information of the task with its index \n\t")
-			.fg(Ansi.Color.CYAN).a("add ").fg(Ansi.Color.RED).a("task number ")
-			.fg(Ansi.Color.RED).a("start time ").fg(Ansi.Color.GREEN).a("to")
-			.fg(Ansi.Color.RED).a(" end time\n").reset().toString();
-	private final static String MESSAGE_HELP_VIEW = ansi()
-			.fg(Ansi.Color.DEFAULT)
-			.a("View:\n\t")
-			.fg(Ansi.Color.MAGENTA)
-			.a("different kinds of views for tasks including agenda, daily and weekly \n\t")
-			.fg(Ansi.Color.CYAN).a("view ").fg(Ansi.Color.RED).a("agenda\n\t")
-			.fg(Ansi.Color.CYAN).a("view ").fg(Ansi.Color.RED).a("daily \n\t")
-			.fg(Ansi.Color.CYAN).a("view ").fg(Ansi.Color.RED).a("weekly \n\t")
-			.reset().toString();
-	private final static String MESSAGE_HELP_UNDO = ansi()
-			.fg(Ansi.Color.DEFAULT).a("Undo:\n\t").fg(Ansi.Color.MAGENTA)
-			.a("reverse the action to the previous state \n\t")
-			.fg(Ansi.Color.CYAN).a("undo ").reset().toString();
-	private final static String MESSAGE_HELP_REDO = ansi()
-			.fg(Ansi.Color.DEFAULT).a("Redo:\n\t").fg(Ansi.Color.MAGENTA)
-			.a("go the the state before the undo action \n\t")
-			.fg(Ansi.Color.CYAN).a("redo ").reset().toString();
-	private final static String MESSAGE_HELP_DONE = ansi()
-			.fg(Ansi.Color.DEFAULT).a("Done:\n\t").fg(Ansi.Color.MAGENTA)
-			.a("mark a task as completed or uncompleted \n\t")
-			.fg(Ansi.Color.CYAN).a("done ").reset().toString();
-
-	private final static String MESSAGE_HELP_EXIT = ansi()
-			.fg(Ansi.Color.DEFAULT).a("Exit:\n\t").fg(Ansi.Color.MAGENTA)
-			.a("exit the program \n\t").fg(Ansi.Color.CYAN).a("exit ").reset()
-			.toString();
+	private final static String MESSAGE_HELP_ADD = "HELP<br><br>" + TaskPrinter.MAGENTA;
+	private final static String MESSAGE_HELP_DELETE = "Delete:<br>".concat(TAB)
+			.concat(TaskPrinter.MAGENTA).concat("delete a task with its index <br>").concat(TAB)
+			.concat(TaskPrinter.CYAN).concat("delete ").concat(TaskPrinter.RED)
+			.concat("task number<br>");
+	private final static String MESSAGE_HELP_SEARCH = "Search:<br>".concat(TAB)
+			.concat(TaskPrinter.MAGENTA).concat("search tasks with task name, time or location <br>")
+			.concat(TAB).concat(TaskPrinter.CYAN).concat("search-name ").concat(TaskPrinter.RED)
+			.concat("task name <br>").concat(TAB).concat(TaskPrinter.CYAN).concat("search-name ")
+			.concat(TaskPrinter.RED).concat("#tag <br>").concat(TAB).concat(TaskPrinter.CYAN)
+			.concat("search-name ").concat(TaskPrinter.RED).concat(">location <br>").concat(TAB)
+			.concat(TaskPrinter.CYAN).concat("search-time ").concat(TaskPrinter.RED)
+			.concat("start time ").concat(TaskPrinter.GREEN).concat("to").concat(TaskPrinter.RED)
+			.concat(" end time <br>");
+	private final static String MESSAGE_HELP_UPDATE = "Update:<br>".concat(TAB)
+			.concat(TaskPrinter.MAGENTA)
+			.concat("update the information of the task with its index <br>").concat(TAB)
+			.concat(TaskPrinter.CYAN).concat("add ").concat(TaskPrinter.RED).concat("task number ")
+			.concat(TaskPrinter.RED).concat("start time ").concat(TaskPrinter.GREEN).concat("to")
+			.concat(TaskPrinter.RED).concat(" end time<br>");
+	private final static String MESSAGE_HELP_VIEW = "View:<br>".concat(TAB).concat(TaskPrinter.MAGENTA)
+			.concat("different kinds of views for tasks including agenda, daily and weekly <br>")
+			.concat(TAB).concat(TaskPrinter.CYAN).concat("view ").concat(TaskPrinter.RED)
+			.concat("agenda<br>").concat(TAB).concat(TaskPrinter.CYAN).concat("view ")
+			.concat(TaskPrinter.RED).concat("daily <br>").concat(TAB).concat(TaskPrinter.CYAN)
+			.concat("view ").concat(TaskPrinter.RED).concat("weekly <br>").concat(TAB);
+	private final static String MESSAGE_HELP_UNDO = "Undo:<br>".concat(TAB).concat(TaskPrinter.MAGENTA)
+			.concat("reverse the action to the previous state <br>").concat(TAB)
+			.concat(TaskPrinter.CYAN).concat("undo ");
+	private final static String MESSAGE_HELP_REDO = "Redo:<br>".concat(TAB)
+			.concat(TaskPrinter.MAGENTA).concat("go the the state before the undo action <br>")
+			.concat(TAB).concat(TaskPrinter.CYAN).concat("redo ");
+	private final static String MESSAGE_HELP_DONE = "".concat(TaskPrinter.MAGENTA).concat("Done:<br>")
+			.concat(TAB).concat(TaskPrinter.MAGENTA).concat("mark a task as completed or uncompleted <br>")
+			.concat(TAB).concat(TaskPrinter.CYAN).concat("done ");
+	
+	private final static String MESSAGE_HELP_EXIT = "Exit:<br>".concat(TAB)
+			.concat(TaskPrinter.MAGENTA).concat("exit the program <br>").concat(TAB)
+			.concat(TaskPrinter.CYAN).concat("exit ");
 	private final static String MESSAGE_ADD = "Added %s to database";
 	private final static String MESSAGE_DELETE = "Deleted %s from database";
 	private final static String MESSAGE_DELETE_MULTIPLE = "Deleted %d tasks from database";
 	private final static String MESSAGE_UPDATE = "Updated %s to %s from database";
-	private final static String MESSAGE_OUTOFBOUNDS = "Warning: input %s is out of bounds";
+	//private final static String MESSAGE_OUTOFBOUNDS = "Warning: input %s is out of bounds";
 	private final static String MESSAGE_DONE = "Marked %s as done";
 	private final static String MESSAGE_UNDONE = "Marked %s as undone";
-	private final static String MESSAGE_CLASH_WARNING = "Warning\n\tTasks %s and %d other task(s) clashes\nClashed Tasks:\n"; // "Warning:\n\tTasks %s and %s clashes";
-	// private final static String MESSAGE_CLASH_MORE_THAN_ONE =
-	// "Warning\n\tTasks %s and %d other task(s) clashes";
-
+	private final static String MESSAGE_CLASH_WARNING = "Warning<br>&nbsp&nbsp&nbsp&nbsp&nbspTasks"
+			+ " %s and %d other task(s) clashes<br>Clashed Tasks:<br>"; //"Warning:\n\tTasks %s and %s clashes";
+	//private final static String MESSAGE_CLASH_MORE_THAN_ONE = "Warning\n\tTasks %s and %d other task(s) clashes";
+	
 	private final static String ERROR_EMPTY_UNDO_STACK = "There is nothing to undo!";
 	private final static String ERROR_EMPTY_REDO_STACK = "There is nothing to redo!";
 	private final static String ERROR_INVALID_UNDO_REDO = "Invalid command on undo stack";
-
+	
+	
 	/*
 	 * Class variables
 	 */
-
+	
 	private static Logger logger = ZombieTask.getLogger();
-
+	
 	private static String currentCommandDescriptor = null;
 	private static String currentCommandString = null;
 	private static Command currentCommand = null;
@@ -147,110 +136,108 @@ public class ZombieTaskCommandHandler {
 	private static Task oldTask = null;
 	private static TaskUIFormat deleteList = null;
 	private static TaskUIFormat currentList = null;
-
+	
 	private static ArrayList<String> futureCommandDescriptorList = new ArrayList<String>();
 	private static ArrayList<Command> futureCommandList = new ArrayList<Command>();
 	private static ArrayList<TaskUIFormat> futureTaskList = new ArrayList<TaskUIFormat>();
 	private static ArrayList<String> pastCommandDescriptorList = new ArrayList<String>();
 	private static ArrayList<Command> pastCommandList = new ArrayList<Command>();
 	private static ArrayList<TaskUIFormat> pastTaskList = new ArrayList<TaskUIFormat>();
-
+	
 	private static StorageAPI storage;
-
+	
 	private static GUI window;
-
+	
 	/*
 	 * Command Handlers
 	 */
-
-	public static void execute(Command newCommand, String newCommandString)
-			throws Exception {
+	
+	public static void execute(Command newCommand, String newCommandString) throws Exception {
 		reinitializeCurrentVariables();
 		currentCommand = newCommand;
 		currentCommandString = newCommandString;
 		execute();
 	}
-
+	
 	/**
 	 * Executes Command
 	 * 
 	 * @throws Exception
 	 */
-
+	
 	public static void execute() throws Exception {
 		currentCommandDescriptor = currentCommand.getCommandType();
 		commandCalled = currentCommandDescriptor;
-		switch (currentCommandDescriptor) {
-			case COMMAND_ADD:
-				addCommand(currentCommand);
-				break;
-			case COMMAND_DELETE:
-				deleteCommand(currentCommand);
-				break;
-			case COMMAND_DELETE_NAME:
-				deleteName(currentCommand);
-				break;
-			case COMMAND_DELETE_TAG:
-				deleteTag(currentCommand);
-				break;
-			case COMMAND_DELETE_TIME:
-				deleteTime(currentCommand);
-				break;
-			case COMMAND_DELETE_LOCATION:
-				deleteLocation(currentCommand);
-				break;
-			case COMMAND_VIEW:
-				viewCommand(currentCommand);
-				break;
-			case COMMAND_UPDATE:
-				updateCommand(currentCommand);
-				break;
-			case COMMAND_UNDO:
-				undo();
-				break;
-			case COMMAND_REDO:
-				redo();
-				break;
-			case COMMAND_HELP:
-				help(currentCommand);
-				break;
-			case COMMAND_DONE:
-				doneCommand(currentCommand);
-				break;
-			case COMMAND_SEARCH_NAME:
-				searchName(currentCommand);
-				break;
-			case COMMAND_SEARCH_TIME:
-				searchTime(currentCommand);
-				break;
-			case COMMAND_SEARCH_TAG:
-				searchTag(currentCommand);
-				break;
-			case COMMAND_SEARCH_LOCATION:
-				searchLocation(currentCommand);
-				break;
-			case COMMAND_EXIT:
-				exit();
-				break;
-			default:
-			case COMMAND_INVALID:
-				invalidCommand(currentCommandString);
-				break;
+		switch(currentCommandDescriptor){
+		case COMMAND_ADD:
+			addCommand(currentCommand);
+			break;
+		case COMMAND_DELETE:
+			deleteCommand(currentCommand);
+			break;
+		case COMMAND_DELETE_NAME:
+			deleteName(currentCommand);
+			break;
+		case COMMAND_DELETE_TAG:
+			deleteTag(currentCommand);
+			break;
+		case COMMAND_DELETE_TIME:
+			deleteTime(currentCommand);
+			break;
+		case COMMAND_DELETE_LOCATION:
+			deleteLocation(currentCommand);
+			break;
+		case COMMAND_VIEW:
+			viewCommand(currentCommand);
+			break;
+		case COMMAND_UPDATE:
+			updateCommand(currentCommand);
+			break;
+		case COMMAND_UNDO:
+			undo();
+			break;
+		case COMMAND_REDO:
+			redo();
+			break;
+		case COMMAND_HELP:
+			help(currentCommand);
+			break;
+		case COMMAND_DONE:
+			doneCommand(currentCommand);
+			break;
+		case COMMAND_SEARCH_NAME:
+			searchName(currentCommand);
+			break;
+		case COMMAND_SEARCH_TIME:
+			searchTime(currentCommand);
+			break;
+		case COMMAND_SEARCH_TAG:
+			searchTag(currentCommand);
+			break;
+		case COMMAND_SEARCH_LOCATION:
+			searchLocation(currentCommand);
+			break;
+		case COMMAND_EXIT:
+			exit();
+			break;
+		default:
+		case COMMAND_INVALID:
+			invalidCommand(currentCommandString);
+			break;
 		}
-		if (currentCommandDescriptor != COMMAND_VIEW
-				&& !currentCommandDescriptor.contains(COMMAND_SEARCH)
+		if(currentCommandDescriptor != COMMAND_VIEW && !currentCommandDescriptor.contains(COMMAND_SEARCH) 
 				&& currentCommandDescriptor != COMMAND_HELP)
 			ZombieTask.userInput("view agenda");
 	}
-
+	
 	/**
 	 * For testing
 	 */
-
+	
 	public static String getCommandCalled() {
 		return commandCalled;
 	}
-
+	
 	private static void reinitializeCurrentVariables() {
 		currentCommandDescriptor = null;
 		currentCommandString = null;
@@ -258,80 +245,87 @@ public class ZombieTaskCommandHandler {
 		currentList = null;
 		currentTask = null;
 	}
-
+	
 	protected static void addCommand(Command command) {
-
-		try {
-			// Get Details from Command Object
+		
+		try{
+			//Get Details from Command Object
 			CommandAdd currentAddCommand = (CommandAdd) command;
 			String taskName = currentAddCommand.getTaskName();
 			Calendar startTime = currentAddCommand.getStartDate();
 			Calendar endTime = currentAddCommand.getEndDate();
 			String location = currentAddCommand.getLocation();
 			ArrayList<String> tags = currentAddCommand.getTags();
-
-			/*
-			 * Temp fix Start time and end time has issues. At interpreter end.
+			
+			/* 
+			 * Temp fix
+			 * Start time and end time has issues. At interpreter end.
 			 * 
 			 * Case 1: starttime is not null
 			 * 
 			 * Case 2: starttime is before endtime
 			 */
-
-			if (startTime != null && endTime == null) {
+			
+			if (startTime != null && endTime == null){
 				Calendar tempTime = startTime;
 				startTime = endTime;
 				endTime = tempTime;
-			} else if (startTime != null && endTime != null) {
-				if (startTime.after(endTime)) {
+			} else if (startTime != null && endTime != null){
+				if (startTime.after(endTime)){
 					Calendar tempTime = startTime;
 					startTime = endTime;
 					endTime = tempTime;
 				}
 			}
-
+			
 			/*
 			 * End of fix
 			 */
-
-			// Create Task
+			
+			//Create Task
 			currentTask = null;
-
-			if (startTime == null && endTime == null) {
+			
+			if (startTime == null && endTime == null){
 				currentTask = new Task(taskName);
-			} else if (startTime == null) {
+			}else if(startTime == null){
 				currentTask = new Task(taskName, endTime);
-			} else {
+			}else{
 				currentTask = new Task(taskName, endTime, startTime);
 			}
-
-			// Add Tags
-			for (String tag : tags) {
+			
+			//Add Tags
+			for (String tag : tags){
 				currentTask.addTag(tag);
 			}
-
-			// Add location
-			if (location != null) {
+			
+			//Add location
+			if (location != null){
 				currentTask.setLocation(location);
 			}
-
-			// Store Task
+			
+			//Store Task
 			storage.add(currentTask);
-
+			
 			currentList = new TaskUIFormat().addTask(currentTask);
 			recordCommand();
-
+			
 			TaskUIFormat clashedTasks = storage.taskClash(currentTask);
-
-			if (clashedTasks.size() >= 1) {
-				showToUser(String.format(MESSAGE_CLASH_WARNING,
-						currentTask.getTaskName(), clashedTasks.size()));
-				UI.printPerspective(FORMAT.AGENDA, clashedTasks);
+			
+			String reply = "";
+			
+			if(clashedTasks.size() >= 1){
+				
+				reply += String.format(MESSAGE_CLASH_WARNING, currentTask.getTaskName(), clashedTasks.size());
+				//UI.printPerspective(FORMAT.AGENDA, clashedTasks);
+				reply += "<br>";
 			}
-
-			showToUser(String.format(MESSAGE_ADD, currentTask.getTaskName()));
-			showToUser(UI.printTask(currentTask, 1, 0));
-		} catch (Exception err) {
+			
+			reply += String.format(MESSAGE_ADD, currentTask.getTaskName());
+			reply += "<br>";
+			reply += UI.printTask(currentTask, 1, 0);
+			showToUser(reply);
+			
+		} catch (Exception err){
 			err.printStackTrace();
 			showToUser(err.getMessage());
 		}
@@ -339,196 +333,172 @@ public class ZombieTaskCommandHandler {
 
 	protected static void deleteCommand(Command command) {
 		// TODO Auto-generated method stub
-
-		try {
-			// Get details from Command Object
+		
+		try{
+			//Get details from Command Object
 			CommandDelete currentDeleteCommand = (CommandDelete) command;
 			ArrayList<String> lineCodes = currentDeleteCommand.getLineCode();
 			currentList = new TaskUIFormat();
-			for (String lineCode : lineCodes) {
+			for(String lineCode : lineCodes){
 				currentTask = storage.search(lineCode);
 				currentList.addTask(currentTask);
 			}
-
+			
 			storage.delete(currentList);
-			if (currentList.size() == 1) {
-				showToUser(String.format(MESSAGE_DELETE,
-						currentTask.getTaskName()));
-			} else {
-				showToUser(String.format(MESSAGE_DELETE_MULTIPLE,
-						currentList.size()));
+			if (currentList.size() == 1){
+				showToUser(String.format(MESSAGE_DELETE, currentTask.getTaskName()));
+			}else{
+				showToUser(String.format(MESSAGE_DELETE_MULTIPLE, currentList.size()));
 			}
-
+			
 			recordCommand();
-		} catch (Exception err) {
+		} catch (Exception err){
 			showToUser(err.getMessage());
 			err.printStackTrace();
 		}
-
+		
 	}
 
 	protected static void viewCommand(Command command) {
 		// TODO Auto-generated method stub
-		try {
+		try{
 			CommandView currentViewCommand = (CommandView) command;
 			FORMAT viewFormat = currentViewCommand.getViewType();
 			TaskUIFormat allTasks = storage.getAllTasks();
-
-			switch (viewFormat) {
-				case AGENDA:
-					UI.printPerspective(viewFormat, allTasks);
-					break;
-				case DAILY:
-					Calendar startDay = new GregorianCalendar();
-					setMinimumCalendarField(startDay, Calendar.HOUR_OF_DAY);
-					setMinimumCalendarField(startDay, Calendar.MINUTE);
-					setMinimumCalendarField(startDay, Calendar.SECOND);
-					Calendar endDay = new GregorianCalendar();
-					setMaximumCalendarField(endDay, Calendar.HOUR_OF_DAY);
-					setMaximumCalendarField(endDay, Calendar.MINUTE);
-					setMaximumCalendarField(endDay, Calendar.SECOND);
-					UI.printPerspective(viewFormat,
-							storage.search(startDay, endDay));
-					break;
-				case WEEKLY:
-					Calendar startWeek = new GregorianCalendar();
-					setMinimumCalendarField(startWeek, Calendar.DAY_OF_WEEK);
-					setMinimumCalendarField(startWeek, Calendar.HOUR_OF_DAY);
-					setMinimumCalendarField(startWeek, Calendar.MINUTE);
-					setMinimumCalendarField(startWeek, Calendar.SECOND);
-					Calendar endWeek = new GregorianCalendar();
-					setMaximumCalendarField(endWeek, Calendar.DAY_OF_WEEK);
-					setMaximumCalendarField(endWeek, Calendar.HOUR_OF_DAY);
-					setMaximumCalendarField(endWeek, Calendar.MINUTE);
-					setMaximumCalendarField(endWeek, Calendar.SECOND);
-					UI.printPerspective(viewFormat,
-							storage.search(startWeek, endWeek));
-					break;
-				case MONTHLY:
-					Calendar startMonth = new GregorianCalendar();
-					setMinimumCalendarField(startMonth, Calendar.DAY_OF_MONTH);
-					setMinimumCalendarField(startMonth, Calendar.HOUR_OF_DAY);
-					setMinimumCalendarField(startMonth, Calendar.MINUTE);
-					setMinimumCalendarField(startMonth, Calendar.SECOND);
-					Calendar endMonth = new GregorianCalendar();
-					setMaximumCalendarField(endMonth, Calendar.DAY_OF_MONTH);
-					setMaximumCalendarField(endMonth, Calendar.HOUR_OF_DAY);
-					setMaximumCalendarField(endMonth, Calendar.MINUTE);
-					setMaximumCalendarField(endMonth, Calendar.SECOND);
-					UI.printPerspective(viewFormat,
-							storage.search(startMonth, endMonth));
-					break;
-				case ANNUAL:
-					Calendar startYear = new GregorianCalendar();
-					setMinimumCalendarField(startYear, Calendar.DAY_OF_YEAR);
-					setMinimumCalendarField(startYear, Calendar.HOUR_OF_DAY);
-					setMinimumCalendarField(startYear, Calendar.MINUTE);
-					setMinimumCalendarField(startYear, Calendar.SECOND);
-					Calendar endYear = new GregorianCalendar();
-					setMaximumCalendarField(endYear, Calendar.DAY_OF_YEAR);
-					setMaximumCalendarField(endYear, Calendar.HOUR_OF_DAY);
-					setMaximumCalendarField(endYear, Calendar.MINUTE);
-					setMaximumCalendarField(endYear, Calendar.SECOND);
-					UI.printPerspective(viewFormat,
-							storage.search(startYear, endYear));
-					break;
-				case CALENDAR:
-					Calendar startCalendar = null;
-					Calendar endCalendar = null;
-					UI.printPerspective(viewFormat,
-							storage.search(startCalendar, endCalendar));
-					break;
-				default:
-				case INVALID:
-					showToUser(String.format(COMMAND_INVALID,
-							currentViewCommand.getViewType()));
-					break;
+			
+			switch (viewFormat){
+			case AGENDA:
+				UI.printPerspective(viewFormat, allTasks);
+				break;
+			case DAILY:
+				Calendar startDay = new GregorianCalendar();
+				setMinimumCalendarField(startDay, Calendar.HOUR_OF_DAY);
+				setMinimumCalendarField(startDay, Calendar.MINUTE);
+				setMinimumCalendarField(startDay, Calendar.SECOND);
+				Calendar endDay = new GregorianCalendar();
+				setMaximumCalendarField(endDay, Calendar.HOUR_OF_DAY);
+				setMaximumCalendarField(endDay, Calendar.MINUTE);
+				setMaximumCalendarField(endDay, Calendar.SECOND);
+				UI.printPerspective(viewFormat, storage.search(startDay, endDay));
+				break;
+			case WEEKLY:
+				Calendar startWeek = new GregorianCalendar();
+				setMinimumCalendarField(startWeek, Calendar.DAY_OF_WEEK);
+				setMinimumCalendarField(startWeek, Calendar.HOUR_OF_DAY);
+				setMinimumCalendarField(startWeek, Calendar.MINUTE);
+				setMinimumCalendarField(startWeek, Calendar.SECOND);
+				Calendar endWeek = new GregorianCalendar();
+				setMaximumCalendarField(endWeek, Calendar.DAY_OF_WEEK);
+				setMaximumCalendarField(endWeek, Calendar.HOUR_OF_DAY);
+				setMaximumCalendarField(endWeek, Calendar.MINUTE);
+				setMaximumCalendarField(endWeek, Calendar.SECOND);
+				UI.printPerspective(viewFormat, storage.search(startWeek, endWeek));
+				break;
+			case MONTHLY:
+				Calendar startMonth = new GregorianCalendar();
+				setMinimumCalendarField(startMonth, Calendar.DAY_OF_MONTH);
+				setMinimumCalendarField(startMonth, Calendar.HOUR_OF_DAY);
+				setMinimumCalendarField(startMonth, Calendar.MINUTE);
+				setMinimumCalendarField(startMonth, Calendar.SECOND);
+				Calendar endMonth = new GregorianCalendar();
+				setMaximumCalendarField(endMonth, Calendar.DAY_OF_MONTH);
+				setMaximumCalendarField(endMonth, Calendar.HOUR_OF_DAY);
+				setMaximumCalendarField(endMonth, Calendar.MINUTE);
+				setMaximumCalendarField(endMonth, Calendar.SECOND);
+				UI.printPerspective(viewFormat, storage.search(startMonth, endMonth));
+				break;
+			case ANNUAL:
+				Calendar startYear = new GregorianCalendar();
+				setMinimumCalendarField(startYear, Calendar.DAY_OF_YEAR);
+				setMinimumCalendarField(startYear, Calendar.HOUR_OF_DAY);
+				setMinimumCalendarField(startYear, Calendar.MINUTE);
+				setMinimumCalendarField(startYear, Calendar.SECOND);
+				Calendar endYear = new GregorianCalendar();
+				setMaximumCalendarField(endYear, Calendar.DAY_OF_YEAR);
+				setMaximumCalendarField(endYear, Calendar.HOUR_OF_DAY);
+				setMaximumCalendarField(endYear, Calendar.MINUTE);
+				setMaximumCalendarField(endYear, Calendar.SECOND);
+				UI.printPerspective(viewFormat, storage.search(startYear, endYear));
+				break;
+			case CALENDAR:
+				Calendar startCalendar = null;
+				Calendar endCalendar = null;
+				UI.printPerspective(viewFormat, storage.search(startCalendar, endCalendar));
+				break;
+			default:
+			case INVALID:
+				showToUser(String.format(COMMAND_INVALID, currentViewCommand.getViewType()));
+				break;
 			}
-		} catch (Exception err) {
+		} catch (Exception err){
 			showToUser(err.getMessage());
 			err.printStackTrace();
 		}
 	}
 
+
 	protected static void updateCommand(Command command) throws Exception {
 		// TODO Auto-generated method stub
-
+		
 		CommandUpdate currentUpdateCommand = (CommandUpdate) command;
-
+		
 		// Create New Task
-
+		
 		CommandAdd currentAddCommand = currentUpdateCommand.getUpdatedTask();
 		String taskName = currentAddCommand.getTaskName();
 		Calendar startTime = currentAddCommand.getStartDate();
 		Calendar endTime = currentAddCommand.getEndDate();
 		ArrayList<String> tags = currentAddCommand.getTags();
-
-		// Get old task
-		/*
-		 * Note old method depriciated.
-		 */
-		oldTask = storage.search(currentUpdateCommand.getLineCode());
-		String oldTaskName = oldTask.getTaskName();
-		Calendar oldStartTime = oldTask.getStartTime();
-		Calendar oldEndTime = oldTask.getEndTime();
-		ArrayList<String> oldTags = oldTask.getTags();
-
-		if (taskName == null) {
-			taskName = oldTaskName;
-		}
-		if (startTime == null) {
-			startTime = oldStartTime;
-		}
-		if (endTime == null) {
-			endTime = oldEndTime;
-		}
-		if (tags.isEmpty()) {
-			tags = oldTags;
-		}
-
+		
 		/*
 		 * Temp fix for SP's code
 		 */
-
-		if (startTime != null && endTime == null) {
+		
+		if (startTime != null && endTime == null){
 			Calendar tempTime = startTime;
 			startTime = endTime;
 			endTime = tempTime;
-		} else if (startTime != null && endTime != null) {
-			if (startTime.after(endTime)) {
+		} else if (startTime != null && endTime != null){
+			if (startTime.after(endTime)){
 				Calendar tempTime = startTime;
 				startTime = endTime;
 				endTime = tempTime;
 			}
 		}
-
-		if (startTime == null && endTime == null) {
+		
+		if (startTime == null && endTime == null){
 			currentTask = new Task(taskName);
-		} else if (startTime == null) {
+		}else if(startTime == null){
 			currentTask = new Task(taskName, endTime);
-		} else {
+		}else{
 			currentTask = new Task(taskName, endTime, startTime);
 		}
-
-		// Add Tags
-		for (String tag : tags) {
+		
+		//Add Tags
+		for (String tag : tags){
 			currentTask.addTag(tag);
 		}
-
-		// delete old task
+		
+		//Get old task
+		/*
+		 * Note old method depriciated.
+		 */
+		oldTask = storage.search(currentUpdateCommand.getLineCode());
+		
+		//delete old task
 		try {
-			currentList = new TaskUIFormat().setOldTask(oldTask).setNewTask(
-					currentTask);
+			currentList = new TaskUIFormat().setOldTask(oldTask).setNewTask(currentTask);
 			storage.delete(oldTask);
 			storage.add(currentTask);
-
-		} catch (Exception err) {
+			
+		} catch (Exception err){
 			showToUser(err.getMessage());
 			err.printStackTrace();
 		}
-
-		showToUser(String.format(MESSAGE_UPDATE, oldTask.getTaskName(),
-				currentTask.getTaskName()));
+		
+		showToUser(String.format(MESSAGE_UPDATE, oldTask.getTaskName(), currentTask.getTaskName()));
+		
+		recordCommand();
 
 	}
 
@@ -536,197 +506,186 @@ public class ZombieTaskCommandHandler {
 		showToUser(String.format(MESSAGE_INVALID_COMMAND, commandString));
 	}
 
+	
 	protected static void undo() {
-		try {
+		try{
 			// Pop items from pastLists
-			if (pastCommandList.size() == 0) {
-				logger.log(Level.INFO, ERROR_EMPTY_UNDO_STACK);
+			if (pastCommandList.size() == 0){
+				logger.log(Level.INFO,ERROR_EMPTY_UNDO_STACK );
 				showToUser(ERROR_EMPTY_UNDO_STACK);
 				return;
 			}
-			currentCommandDescriptor = pastCommandDescriptorList
-					.remove(pastCommandDescriptorList.size() - 1);
+			currentCommandDescriptor = pastCommandDescriptorList.remove(pastCommandDescriptorList.size() - 1);
 			currentCommand = pastCommandList.remove(pastCommandList.size() - 1);
 			currentList = pastTaskList.remove(pastTaskList.size() - 1);
-
+			
 			// Execute undo
-
-			switch (currentCommandDescriptor) {
-				case COMMAND_ADD:
-					currentList = storage.delete(currentList);
-					break;
-				case COMMAND_DELETE:
-				case COMMAND_DELETE_NAME:
-				case COMMAND_DELETE_TAG:
-				case COMMAND_DELETE_TIME:
-				case COMMAND_DELETE_LOCATION:
-					storage.add(currentList);
-					break;
-				case COMMAND_UPDATE:
-					storage.delete(currentList.getNewTask());
-					storage.add(currentList.getOldTask());
-					break;
-				case COMMAND_DONE:
-					storage.toggleComplete(currentList);
-					break;
-				default:
-				case COMMAND_INVALID:
-					logger.log(Level.INFO, ERROR_INVALID_UNDO_REDO);
-					showToUser(ERROR_INVALID_UNDO_REDO);
+			
+			switch (currentCommandDescriptor){
+			case COMMAND_ADD:
+				currentList = storage.delete(currentList);
+				break;
+			case COMMAND_DELETE:
+			case COMMAND_DELETE_NAME:
+			case COMMAND_DELETE_TAG:
+			case COMMAND_DELETE_TIME:
+			case COMMAND_DELETE_LOCATION:
+				storage.add(currentList);
+				break;
+			case COMMAND_UPDATE:
+				storage.delete(currentList.getNewTask());
+				storage.add(currentList.getOldTask());
+				break;
+			case COMMAND_DONE:
+				storage.toggleComplete(currentList);
+				break;
+			default:
+			case COMMAND_INVALID:
+				logger.log(Level.INFO, ERROR_INVALID_UNDO_REDO);
+				showToUser(ERROR_INVALID_UNDO_REDO);
 			}
-
+			
 			// Push items into futureLists
 			futureCommandDescriptorList.add(currentCommandDescriptor);
 			futureCommandList.add(currentCommand);
 			futureTaskList.add(currentList);
-
+			
+			
 		} catch (Exception err) {
 			showToUser(err.getMessage());
 			err.printStackTrace();
 		}
 	}
-
+	
 	protected static void redo() {
-		try {
-			// Pop items from futureLists
-			if (futureCommandDescriptorList.size() == 0) {
-				logger.log(Level.INFO, ERROR_EMPTY_REDO_STACK);
+		try{
+			//Pop items from futureLists
+			if (futureCommandDescriptorList.size() == 0){
+				logger.log(Level.INFO,ERROR_EMPTY_REDO_STACK );
 				showToUser(ERROR_EMPTY_REDO_STACK);
 				return;
 			}
-			currentCommandDescriptor = futureCommandDescriptorList
-					.remove(futureCommandDescriptorList.size() - 1);
-			currentCommand = futureCommandList
-					.remove(futureCommandList.size() - 1);
+			currentCommandDescriptor = futureCommandDescriptorList.remove(futureCommandDescriptorList.size() - 1);
+			currentCommand = futureCommandList.remove(futureCommandList.size() - 1);
 			currentList = futureTaskList.remove(futureTaskList.size() - 1);
-
+			
+			
 			// Execute redo
-
-			switch (currentCommandDescriptor) {
-				case COMMAND_ADD:
-					storage.add(currentList);
-					break;
-				case COMMAND_DELETE:
-				case COMMAND_DELETE_NAME:
-				case COMMAND_DELETE_TAG:
-				case COMMAND_DELETE_TIME:
-				case COMMAND_DELETE_LOCATION:
-					storage.delete(currentList);
-					break;
-				case COMMAND_UPDATE:
-					storage.delete(currentList.getOldTask());
-					storage.add(currentList.getNewTask());
-					break;
-				case COMMAND_DONE:
-					storage.toggleComplete(currentList);
-					break;
-				default:
-				case COMMAND_INVALID:
-					logger.log(Level.INFO, ERROR_INVALID_UNDO_REDO);
-					showToUser(ERROR_INVALID_UNDO_REDO);
+			
+			switch (currentCommandDescriptor){
+			case COMMAND_ADD:
+				storage.add(currentList);
+				break;
+			case COMMAND_DELETE:
+			case COMMAND_DELETE_NAME:
+			case COMMAND_DELETE_TAG:
+			case COMMAND_DELETE_TIME:
+			case COMMAND_DELETE_LOCATION:
+				storage.delete(currentList);
+				break;
+			case COMMAND_UPDATE:
+				storage.delete(currentList.getOldTask());
+				storage.add(currentList.getNewTask());
+				break;
+			case COMMAND_DONE:
+				storage.toggleComplete(currentList);
+				break;
+			default:
+			case COMMAND_INVALID:
+				logger.log(Level.INFO, ERROR_INVALID_UNDO_REDO);
+				showToUser(ERROR_INVALID_UNDO_REDO);
 			}
-
+			
 			// Push items into pastLists
-
+			
 			pastCommandDescriptorList.add(currentCommandDescriptor);
 			pastCommandList.add(currentCommand);
 			pastTaskList.add(currentList);
-
+			
 		} catch (Exception err) {
 			showToUser(err.getMessage());
 			err.printStackTrace();
 		}
-
+		
 	}
-
+	
 	protected static void help(Command command) {
 		CommandHelp helpCommand = (CommandHelp) command;
 		String userInput = helpCommand.getHelpCommand();
-
-		if (userInput == null) {
-			window.modifyLabelText(MESSAGE_HELP_ADD + "\n"
-					+ MESSAGE_HELP_DELETE + "\n" + MESSAGE_HELP_UPDATE + "\n"
-					+ MESSAGE_HELP_SEARCH + "\n" + MESSAGE_HELP_VIEW + "\n"
-					+ MESSAGE_HELP_UNDO + "\n" + MESSAGE_HELP_REDO + "\n"
-					+ MESSAGE_HELP_DONE + "\n" + MESSAGE_HELP_EXIT);
+		
+		if(userInput == null){
+			window.modifyLabelText(MESSAGE_HELP_ADD + "\n" + MESSAGE_HELP_DELETE + "\n" + MESSAGE_HELP_UPDATE + "\n" + MESSAGE_HELP_SEARCH + "\n" + MESSAGE_HELP_VIEW+ "\n" + MESSAGE_HELP_UNDO+ "\n" + MESSAGE_HELP_REDO+ "\n" + MESSAGE_HELP_DONE + "\n" + MESSAGE_HELP_EXIT);
 			return;
 		}
-		switch (userInput) {
-			case COMMAND_ADD:
-				window.modifyLabelText(MESSAGE_HELP_ADD);
-				break;
-			case COMMAND_DELETE:
-				window.modifyLabelText(MESSAGE_HELP_DELETE);
-				break;
-			case COMMAND_UPDATE:
-				window.modifyLabelText(MESSAGE_HELP_UPDATE);
-				break;
-			case COMMAND_SEARCH:
-				window.modifyLabelText(MESSAGE_HELP_SEARCH);
-				break;
-			case COMMAND_VIEW:
-				window.modifyLabelText(MESSAGE_HELP_VIEW);
-				break;
-			case COMMAND_UNDO:
-				window.modifyLabelText(MESSAGE_HELP_UNDO);
-				break;
-			case COMMAND_REDO:
-				window.modifyLabelText(MESSAGE_HELP_REDO);
-				break;
-			case COMMAND_DONE:
-				window.modifyLabelText(MESSAGE_HELP_DONE);
-				break;
-			case COMMAND_EXIT:
-				window.modifyLabelText(MESSAGE_HELP_EXIT);
-				break;
-			default:
-				logger.log(Level.INFO,
-						String.format(MESSAGE_INVALID_COMMAND, userInput));
-				showToUser(String.format(MESSAGE_INVALID_COMMAND, userInput));
-				return;
-
+		switch(userInput){
+		case COMMAND_ADD:
+			window.modifyLabelText(MESSAGE_HELP_ADD);
+			break;
+		case COMMAND_DELETE:
+			window.modifyLabelText(MESSAGE_HELP_DELETE);
+			break;
+		case COMMAND_UPDATE:
+			window.modifyLabelText(MESSAGE_HELP_UPDATE);
+			break;
+		case COMMAND_SEARCH:
+			window.modifyLabelText(MESSAGE_HELP_SEARCH);
+			break;
+		case COMMAND_VIEW:
+			window.modifyLabelText(MESSAGE_HELP_VIEW);
+			break;
+		case COMMAND_UNDO:
+			window.modifyLabelText(MESSAGE_HELP_UNDO);
+			break;
+		case COMMAND_REDO:
+			window.modifyLabelText(MESSAGE_HELP_REDO);
+			break;
+		case COMMAND_DONE:
+			window.modifyLabelText(MESSAGE_HELP_DONE);
+			break;
+		case COMMAND_EXIT:
+			window.modifyLabelText(MESSAGE_HELP_EXIT);
+			break;	
+		default:
+			logger.log(Level.INFO,String.format(MESSAGE_INVALID_COMMAND, userInput) );
+			showToUser(String.format(MESSAGE_INVALID_COMMAND, userInput));
+			return;
+			
 		}
 	}
-
-	protected static void searchName(Command command) throws Exception {
+	
+	protected static void searchName(Command command) throws Exception{
 		CommandSearchName searchCommand = (CommandSearchName) command;
-		UI.printPerspective(FORMAT.AGENDA,
-				storage.searchName(searchCommand.getSearchString()));
+		UI.printPerspective(FORMAT.AGENDA, storage.searchName(searchCommand.getSearchString()));
 	}
-
-	protected static void deleteName(Command command) throws Exception {
+	
+	protected static void deleteName(Command command) throws Exception{
 		CommandDeleteName deleteCommand = (CommandDeleteName) command;
 		deleteList = storage.searchName(deleteCommand.getSearchString());
 		storage.delete(deleteList);
 		recordCommand();
 	}
-
-	protected static void searchTime(Command command) throws Exception {
+	
+	protected static void searchTime(Command command) throws Exception{
 		CommandSearchTime searchCommand = (CommandSearchTime) command;
-		UI.printPerspective(
-				FORMAT.AGENDA,
-				storage.search(searchCommand.getTimeStart(),
-						searchCommand.getTimeEnd()));
+		UI.printPerspective(FORMAT.AGENDA, storage.search(searchCommand.getTimeStart(), searchCommand.getTimeEnd()));
 	}
-
-	protected static void deleteTime(Command command) throws Exception {
+	
+	protected static void deleteTime(Command command) throws Exception{
 		CommandDeleteTime deleteCommand = (CommandDeleteTime) command;
-		deleteList = storage.search(deleteCommand.getTimeStart(),
-				deleteCommand.getTimeEnd());
+		deleteList = storage.search(deleteCommand.getTimeStart(), deleteCommand.getTimeEnd());
 		storage.delete(deleteList);
 		recordCommand();
 		/*
 		 * To be implemented UNDO and REDO
 		 */
 	}
-
-	protected static void searchTag(Command command) throws Exception {
+	
+	protected static void searchTag(Command command) throws Exception{
 		CommandSearchTag searchCommand = (CommandSearchTag) command;
-		UI.printPerspective(FORMAT.AGENDA,
-				storage.searchTag(searchCommand.getTag()));
+		UI.printPerspective(FORMAT.AGENDA, storage.searchTag(searchCommand.getTag()));
 	}
-
-	protected static void deleteTag(Command command) throws Exception {
+	
+	protected static void deleteTag(Command command) throws Exception{
 		CommandDeleteTag deleteCommand = (CommandDeleteTag) command;
 		deleteList = storage.searchTag(deleteCommand.getTag());
 		storage.delete(deleteList);
@@ -735,14 +694,13 @@ public class ZombieTaskCommandHandler {
 		 * To be implemented UNDO and REDO
 		 */
 	}
-
-	protected static void searchLocation(Command command) throws Exception {
+	
+	protected static void searchLocation(Command command) throws Exception{
 		CommandSearchLocation searchCommand = (CommandSearchLocation) command;
-		UI.printPerspective(FORMAT.AGENDA,
-				storage.searchLocation(searchCommand.getLocation()));
+		UI.printPerspective(FORMAT.AGENDA, storage.searchLocation(searchCommand.getLocation()));
 	}
-
-	protected static void deleteLocation(Command command) throws Exception {
+	
+	protected static void deleteLocation(Command command) throws Exception{
 		CommandDeleteLocation deleteCommand = (CommandDeleteLocation) command;
 		deleteList = storage.searchLocation(deleteCommand.getLocation());
 		storage.delete(deleteList);
@@ -751,36 +709,34 @@ public class ZombieTaskCommandHandler {
 		 * To be implemented UNDO and REDO
 		 */
 	}
-
-	protected static void doneCommand(Command command) throws Exception {
+	
+	protected static void doneCommand(Command command) throws Exception{
 		CommandDone doneCommand = (CommandDone) command;
 		ArrayList<String> lineCodes = doneCommand.getLineCode();
 		currentList = new TaskUIFormat();
-		for (String lineCode : lineCodes) {
-			currentTask = storage.search(lineCode);
+		for(String lineCode : lineCodes){
+			currentTask = storage.search(lineCode);			
 			currentList.addTask(currentTask);
 			storage.toggleComplete(currentTask);
-			if (currentTask.isCompleted()) {
-				showToUser(String.format(MESSAGE_DONE,
-						currentTask.getTaskName()));
-			} else {
-				showToUser(String.format(MESSAGE_UNDONE,
-						currentTask.getTaskName()));
+			if (currentTask.isCompleted()){
+				showToUser(String.format(MESSAGE_DONE, currentTask.getTaskName()));
+			}else{
+				showToUser(String.format(MESSAGE_UNDONE, currentTask.getTaskName()));
 			}
 		}
-
+		
 		recordCommand();
 	}
-
-	protected static void exit() {
+	
+	protected static void exit(){
 		ZombieTask.exitProgram();
 	}
-
+	
 	/*
 	 * commandList mutators
 	 */
-
-	private static boolean recordCommand() {
+	
+	private static boolean recordCommand(){
 		pastCommandDescriptorList.add(currentCommandDescriptor);
 		pastCommandList.add(currentCommand);
 		pastTaskList.add(currentList);
@@ -788,109 +744,109 @@ public class ZombieTaskCommandHandler {
 		return true;
 	}
 
+
 	private static void clearFutureLists() {
-		if (futureCommandList.size() > 0) {
+		if (futureCommandList.size() > 0){
 			futureCommandDescriptorList.clear();
 			futureCommandList.clear();
 			futureTaskList.clear();
 		}
 	}
-
+	/*
 	private static void clearPastLists() {
-		if (pastCommandList.size() > 0) {
+		if (pastCommandList.size() > 0){
 			pastCommandDescriptorList.clear();
 			pastCommandList.clear();
 			pastTaskList.clear();
 		}
-	}
-
+	}*/
+	
 	/*
 	 * Stub method for Commands
 	 */
-
-	static Command getCommand() {
+	
+	static Command getCommand(){
 		return currentCommand;
 	}
-
-	static boolean setCommand(Command newCommand) {
+	
+	static boolean setCommand(Command newCommand)
+	{
 		currentCommand = newCommand;
 		return SUCCESS;
 	}
-
+	
 	/*
 	 * Stub methods for CommandLists, CommandDescriptors and TaskLists
 	 */
-
-	static boolean setPastCommandList(ArrayList<Command> newCommandList) {
+	
+	static boolean setPastCommandList(ArrayList<Command> newCommandList){
 		pastCommandList = newCommandList;
 		return SUCCESS;
 	}
-
-	static ArrayList<Command> getPastCommandList() {
+	
+	static ArrayList<Command> getPastCommandList(){
 		return pastCommandList;
 	}
-
-	static boolean setFutureCommandList(ArrayList<Command> newCommandList) {
+	
+	static boolean setFutureCommandList(ArrayList<Command> newCommandList){
 		futureCommandList = newCommandList;
 		return SUCCESS;
 	}
-
-	static ArrayList<Command> getFutureCommandList() {
+	
+	static ArrayList<Command> getFutureCommandList(){
 		return futureCommandList;
 	}
-
-	static boolean setPastCommandDescriptorList(
-			ArrayList<String> newCommandDescriptorList) {
+	
+	static boolean setPastCommandDescriptorList(ArrayList<String> newCommandDescriptorList){
 		pastCommandDescriptorList = newCommandDescriptorList;
 		return SUCCESS;
 	}
-
-	static ArrayList<String> getPastCommandDescriptorList() {
+	
+	static ArrayList<String> getPastCommandDescriptorList(){
 		return pastCommandDescriptorList;
 	}
-
-	static boolean setFutureCommandDescriptorList(
-			ArrayList<String> newCommandDescriptorList) {
+	
+	static boolean setFutureCommandDescriptorList(ArrayList<String> newCommandDescriptorList){
 		futureCommandDescriptorList = newCommandDescriptorList;
 		return SUCCESS;
 	}
-
-	static ArrayList<String> getFutureCommandDescriptorList() {
+	
+	static ArrayList<String> getFutureCommandDescriptorList(){
 		return futureCommandDescriptorList;
 	}
-
-	static boolean setPastTaskList(ArrayList<TaskUIFormat> newTaskList) {
+	
+	static boolean setPastTaskList(ArrayList<TaskUIFormat> newTaskList){
 		pastTaskList = newTaskList;
 		return SUCCESS;
 	}
-
-	static ArrayList<TaskUIFormat> getPastTaskList() {
+	
+	static ArrayList<TaskUIFormat> getPastTaskList(){
 		return pastTaskList;
 	}
-
-	static boolean setFutureTaskList(ArrayList<TaskUIFormat> newTaskList) {
+	
+	static boolean setFutureTaskList(ArrayList<TaskUIFormat> newTaskList){
 		futureTaskList = newTaskList;
 		return SUCCESS;
 	}
-
-	static ArrayList<TaskUIFormat> getFutureTaskList() {
+	
+	static ArrayList<TaskUIFormat> getFutureTaskList(){
 		return futureTaskList;
 	}
-
-	static void setStorage(StorageAPI newStorage) {
+	
+	static void setStorage(StorageAPI newStorage){
 		storage = newStorage;
 	}
-
+	
 	private static void setMinimumCalendarField(Calendar time, int calendarField) {
 		time.set(calendarField, time.getActualMinimum(calendarField));
 	}
-
+	
 	private static void setMaximumCalendarField(Calendar time, int calendarField) {
 		time.set(calendarField, time.getActualMaximum(calendarField));
 	}
-
+	
 	private static void showToUser(String displayString) {
-		// System.out.println(displayString);
+		//System.out.println(displayString);
 		UI.printResponse(displayString);
 	}
 
