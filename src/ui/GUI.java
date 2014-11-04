@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.Font;
 
 import javax.swing.SwingConstants;
+import java.awt.Color;
 
 public class GUI {
 	
@@ -69,6 +70,7 @@ public class GUI {
 		frmZombietask.getContentPane().add(scrollPane_1);
 		
 		lblNewLabel = new JLabel("");
+		lblNewLabel.setForeground(Color.LIGHT_GRAY);
 		lblNewLabel.setVerticalAlignment(SwingConstants.TOP);
 		scrollPane_1.setViewportView(lblNewLabel);
 		lblNewLabel.setFont(new Font("Courier New", Font.BOLD, 12));

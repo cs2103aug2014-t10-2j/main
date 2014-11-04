@@ -69,7 +69,7 @@ public class UI
 	public static final String TAG_SEPARATOR = "; ";
 	public static final String BORDER = "----------------------------------------";
 	
-	public static final String LABEL_FORMAT = "<html><font>%s</font></html>";
+	public static final String LABEL_FORMAT = "<html><p><font>%s</font></p></html>";
 	
 	public static final int VERBOSITY_NAME_ONLY = 0;
 	public static final int VERBOSITY_TAG_INCLUSIVE = 1;

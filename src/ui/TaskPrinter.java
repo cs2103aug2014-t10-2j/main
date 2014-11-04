@@ -149,7 +149,7 @@ public class TaskPrinter {
 	}
 
 	private static String generateTabs(int tabs) {
-		return(tabs > 0) ? "\t" + generateTabs(tabs - 1) : "";
+		return(tabs > 0) ? "&nbsp&nbsp&nbsp&nbsp&nbsp" + generateTabs(tabs - 1) : "";
 	}
 	
 	public static String printColoredDateTime(Task task, char dateType) {
@@ -172,8 +172,8 @@ public class TaskPrinter {
 		if (task.isCompleted())		{	return DONE;	}
 		if (task.isOverdue())		{	return RED;	}
 		if (task.isFloatingTask())	{	return GREEN;	}
-		if (task.isDeadlineTask())	{	return YELLOW;	}
+		if (task.isDeadlineTask())	{	return ORANGE;	}
 		if (task.isFloatingTask())	{	return BLUE;	}
-		return ORANGE;
+		return YELLOW;
 	}
 }

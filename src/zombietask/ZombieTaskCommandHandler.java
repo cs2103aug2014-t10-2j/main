@@ -71,13 +71,6 @@ public class ZombieTaskCommandHandler {
 	
 	private final static String MESSAGE_INVALID_COMMAND = "Invalid Command:\n%s";
 	private final static String MESSAGE_HELP_ADD = "HELP<br><br>" + TaskPrinter.MAGENTA;
-	/*ansi()
-			.fg(Ansi.Color.DEFAULT).a("Add:\n\t")
-			.fg(Ansi.Color.MAGENTA).a("add different kinds of tasks to the task list including floating tasks, deadline tasks and timed tasks \n\t")
-			.fg(Ansi.Color.CYAN).a("add ").fg(Ansi.Color.RED).a("taskname\n\t")
-			.fg(Ansi.Color.CYAN).a("add ").fg(Ansi.Color.RED).a("taskname ").fg(Ansi.Color.GREEN).a("end time\n\t")
-			.fg(Ansi.Color.CYAN).a("add ").fg(Ansi.Color.RED).a("taskname ").fg(Ansi.Color.GREEN).a("start time to end time\n").reset().toString();
-	*/
 	private final static String MESSAGE_HELP_DELETE = ansi()	
 			.fg(Ansi.Color.DEFAULT).a("Delete:\n\t")
 			.fg(Ansi.Color.MAGENTA).a("delete a task with its index \n\t")
