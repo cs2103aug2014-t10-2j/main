@@ -443,6 +443,7 @@ public class Interpreter {
 		}
 
 		if (groups.isEmpty()) { // floating task
+			System.out.println("WTF! ");
 			taskName = getTaskName(userInputTemp, groups, tags, location);
 			return new CommandAdd(taskName, null, null, tags, location,
 					userInput, taskName == null);

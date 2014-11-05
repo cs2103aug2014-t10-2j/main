@@ -217,7 +217,7 @@ public class UI
 		Calendar start = delimitTime(Calendar.getInstance());
 		Calendar end = delimitTime(Calendar.getInstance());
 		end.add(Calendar.HOUR_OF_DAY, 6);
-		System.out.println(FORMAT_DATETIME.format(start.getTime()));
+		//System.out.println(FORMAT_DATETIME.format(start.getTime()));
 		for(int i = 0; i < 28; i++) {
 			str += "|- " + FORMAT_DATETIME.format(start.getTime()) + " : ";
 			for(Task task : processedTasks.getDeadlineTasks()) {
