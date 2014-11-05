@@ -84,6 +84,7 @@ public class UI
 	public static final FORMAT ANNUAL = FORMAT.ANNUAL;
 	public static final FORMAT INVALID = FORMAT.INVALID;
 	
+	private static final Format FORMAT_DATEONLY = new SimpleDateFormat("dd/MM/yy");
 	private static final Format FORMAT_DATETIME = new SimpleDateFormat("dd/MM/yy HH:mm");
 	private static final Format FORMAT_TIMEONLY = new SimpleDateFormat("HH:mm");
 	private static final Format FORMAT_TODAY = new SimpleDateFormat("dd MMMMM yyyy, HH:mm");
@@ -120,10 +121,10 @@ public class UI
 				case AGENDA:	str = printAgenda(tasks);	break;
 				case DAILY:		str = printDaily(tasks);	break;
 				case WEEKLY:	str = printWeekly(tasks);	break;
+				case MONTHLY:	str = printMonthly(tasks);	break;
 				/*
 				 * Temporary
 				 * 
-				case MONTHLY:	str = printMonthly(tasks);	break;
 				case ANNUAL:	str = printAnnual(tasks);	break;
 				*/
 				default:	return;
@@ -189,15 +190,12 @@ public class UI
 	private static String printDaily(TaskUIFormat tasks) throws Exception {
 		String str = new String(HEADER_DAILY);
 		TaskUIFormat processedTasks = new TaskUIFormat(null, processTasks(tasks), null);
-		for(Task task : getOverdueTasks(processedTasks).getDeadlineTasks())
-			str += task.getTaskName() + HEADER_LINE_SINGLE;
 		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + HEADER_LINE_SINGLE;
 		Calendar start = delimitTime(Calendar.getInstance());
 		Calendar end = delimitTime(Calendar.getInstance());
 		end.add(Calendar.HOUR_OF_DAY, 1);
-		//System.out.println(FORMAT_DATETIME.format(start.getTime()));
 		for(int i = 0; i < 24; i++) {
-			str += "|- " + FORMAT_DATETIME.format(start.getTime()) + " : ";
+			str += "|- " + FORMAT_TIMEONLY.format(start.getTime()) + " : ";
 			for(Task task : processedTasks.getDeadlineTasks()) {
 				if(!task.isOverdue() && withinTimePeriod(task.getEndTime(), start, end))
 					str += task.getTaskName() + " ";
@@ -211,8 +209,6 @@ public class UI
 	private static String printWeekly(TaskUIFormat tasks) throws Exception {
 		String str = new String(HEADER_WEEKLY);
 		TaskUIFormat processedTasks = new TaskUIFormat(null, processTasks(tasks), null);
-		for(Task task : getOverdueTasks(processedTasks).getDeadlineTasks())
-			str += task.getTaskName() + HEADER_LINE_SINGLE;
 		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + HEADER_LINE_SINGLE;
 		Calendar start = delimitTime(Calendar.getInstance());
 		Calendar end = delimitTime(Calendar.getInstance());
@@ -226,6 +222,28 @@ public class UI
 			}
 			start.add(Calendar.HOUR_OF_DAY, 6);
 			end.add(Calendar.HOUR_OF_DAY, 6);
+			str += HEADER_LINE_SINGLE;
+		}
+		return str + BORDER;
+	}
+	
+	private static String printMonthly(TaskUIFormat tasks) throws Exception {
+		String str = new String(HEADER_MONTHLY);
+		TaskUIFormat processedTasks = new TaskUIFormat(null, processTasks(tasks), null);
+		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + HEADER_LINE_SINGLE;
+		Calendar start = delimitTime(Calendar.getInstance());
+		start.set(Calendar.HOUR, 0);
+		Calendar end = delimitTime(Calendar.getInstance());
+		end.set(Calendar.HOUR, 0);
+		end.add(Calendar.DATE, 1);
+		for(int i = 0; i < 30; i++) {
+			str += "|- " + FORMAT_DATEONLY.format(start.getTime()) + " : ";
+			for(Task task : processedTasks.getDeadlineTasks()) {
+				if(!task.isOverdue() && withinTimePeriod(task.getEndTime(), start, end))
+					str += task.getTaskName() + " ";
+			}
+			start.add(Calendar.DATE, 1);
+			end.add(Calendar.DATE, 1);
 			str += HEADER_LINE_SINGLE;
 		}
 		return str + BORDER;

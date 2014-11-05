@@ -5,13 +5,18 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+
 import zombietask.ZombieTask;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import java.awt.KeyboardFocusManager;
 
 import javax.swing.SwingConstants;
+
 import java.awt.Color;
+import java.util.Collections;
 
 public class GUI {
 	
@@ -48,11 +53,26 @@ public class GUI {
 		textField.setBounds(10, 280, 425, 20);
 		frmZombietask.getContentPane().add(textField);
 		textField.setColumns(10);
-		textField.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e){
-				ZombieTask.userInput(textField.getText());
-				textField.setText(EMPTY_STRING);
+		textField.setFocusTraversalKeys(
+                KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,
+                Collections.EMPTY_SET);
+		textField.addKeyListener(new java.awt.event.KeyAdapter() {
+			public void keyPressed(java.awt.event.KeyEvent evt) {
+				switch (evt.getKeyCode()){
+				case java.awt.event.KeyEvent.VK_TAB:
+					ZombieTask.userInput("help " + textField.getText());
+					break;
+				case java.awt.event.KeyEvent.VK_ENTER:
+					ZombieTask.userInput(textField.getText());
+					textField.setText(EMPTY_STRING);
+					break;
+				case java.awt.event.KeyEvent.VK_HOME:
+					ZombieTask.userInput("view agenda");
+					break;
+				default:
+					break;
+				}
+		        
 			}
 		});
 		

@@ -443,12 +443,10 @@ public class Interpreter {
 		}
 
 		if (groups.isEmpty()) { // floating task
-			System.out.println("WTF! ");
 			taskName = getTaskName(userInputTemp, groups, tags, location);
 			return new CommandAdd(taskName, null, null, tags, location,
 					userInput, taskName == null);
 		} else {
-
 			// get first date
 			Date date1 = groups.get(0).getDates().get(0);
 			assert date1 != null;
@@ -478,9 +476,14 @@ public class Interpreter {
 
 			// this removes the first 2 time-related keywords
 			taskName = getTaskName(userInputTemp, groups, tags, location);
-			ArrayList<String> tagsTemp = new ArrayList<String>();
-			taskName = getTaskName(taskName, groups, tagsTemp, location);
-
+			
+			// handle case when taskName == null
+			
+			if (taskName != null){
+				ArrayList<String> tagsTemp = new ArrayList<String>();
+				taskName = getTaskName(taskName, groups, tagsTemp, location);
+			}
+			
 			if (cal1.compareTo(cal2) < 0) { // date1 before date2
 				return new CommandAdd(taskName, cal1, cal2, tags, location,
 						userInput, taskName == null);
@@ -514,7 +517,7 @@ public class Interpreter {
 				String userInputTemp = userInput.substring(spaceIndex + 1);
 				spaceIndex = userInputTemp.indexOf(" ");
 				userInputTemp = userInputTemp.substring(spaceIndex + 1);
-
+				System.out.println("WTF2! ");
 				CommandAdd updatedTask = (CommandAdd) getCommandAdd(userInputTemp);
 
 				return new CommandUpdate(lineCode, updatedTask, userInput,
