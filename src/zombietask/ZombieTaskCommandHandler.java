@@ -390,14 +390,19 @@ public class ZombieTaskCommandHandler {
 				UI.printPerspective(viewFormat, allTasks);
 				break;
 			case DAILY:
-				Calendar startDay = new GregorianCalendar();
+				Calendar startDay = Calendar.getInstance();
+				/*
 				setMinimumCalendarField(startDay, Calendar.HOUR_OF_DAY);
 				setMinimumCalendarField(startDay, Calendar.MINUTE);
 				setMinimumCalendarField(startDay, Calendar.SECOND);
-				Calendar endDay = new GregorianCalendar();
+				*/
+				Calendar endDay = Calendar.getInstance();
+				/*
 				setMaximumCalendarField(endDay, Calendar.HOUR_OF_DAY);
 				setMaximumCalendarField(endDay, Calendar.MINUTE);
 				setMaximumCalendarField(endDay, Calendar.SECOND);
+				*/
+				endDay.add(Calendar.DAY_OF_YEAR, 1);
 				UI.printPerspective(viewFormat, storage.search(startDay, endDay));
 				break;
 			case WEEKLY:

@@ -195,7 +195,7 @@ public class Storage {
 		}
 		
 		for(Task task : timedTasks){
-			if (task.getEndTime().compareTo(endTime)<=0 && task.getStartTime().compareTo(endTime)<=0){
+			if (task.getEndTime().compareTo(endTime)<=0 && task.getStartTime().compareTo(startTime)>=0){
 				searchTimedList.add(task);
 			}
 		}
