@@ -334,7 +334,7 @@ public class Task implements Comparable<Task> {
 		if (location == null){
 			return false;
 		}
-		return location.equalsIgnoreCase(newLocation) || location.equalsIgnoreCase(">" + newLocation);
+		return location.equalsIgnoreCase(newLocation) || location.equalsIgnoreCase("@" + newLocation);
 	}
 	
 	/**

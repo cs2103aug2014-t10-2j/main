@@ -37,7 +37,7 @@ public class Command {
 			Command.DELETE, Command.DELETE_NAME, Command.DELETE_TIME, Command.DELETE_TAG,
 			Command.DELETE_LOCATION, Command.UPDATE, Command.VIEW, Command.UNDO,
 			Command.REDO, Command.HELP, Command.DONE, Command.SEARCH, Command.SEARCH_NAME,
-			Command.SEARCH_TIME, Command.SEARCH_TAG, Command.EXIT);
+			Command.SEARCH_TIME, Command.SEARCH_TAG, Command.SEARCH_LOCATION, Command.EXIT);
 
 	String commandType = null;
 	String userInput = null;
