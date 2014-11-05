@@ -69,17 +69,21 @@ public class ZombieTaskCommandHandler {
 
 	public static final String TAB = "&nbsp&nbsp&nbsp&nbsp&nbsp";
 	private final static String MESSAGE_INVALID_COMMAND = "Invalid Command:\n%s";
-	private final static String MESSAGE_HELP_ADD = "HELP<br><br>Add:<br>".concat(TAB)
+	private final static String MESSAGE_HELP_ADD = TaskPrinter.ORANGE.concat("Add:<br>").concat(TAB)
 			.concat(TaskPrinter.MAGENTA).concat("add different kinds of tasks to the task list including floating tasks,<br>")
 			.concat(TAB).concat(" deadline tasks and timed tasks<br>").concat(TAB)
 			.concat(TaskPrinter.CYAN).concat("add ").concat(TaskPrinter.RED).concat("taskname<br>").concat(TAB)
-			.concat(TaskPrinter.CYAN).concat("add ").concat(TaskPrinter.RED).concat("taskname ").concat(TaskPrinter.GREEN).concat("end time<br>").concat(TAB)
-			.concat(TaskPrinter.CYAN).concat("add ").concat(TaskPrinter.RED).concat("taskname ").concat(TaskPrinter.GREEN).concat("start time to end time<br>");
-	private final static String MESSAGE_HELP_DELETE = "Delete:<br>".concat(TAB)
+			.concat(TaskPrinter.CYAN).concat("add ").concat(TaskPrinter.RED).concat("taskname ")
+			.concat(TaskPrinter.GREEN).concat("end time<br>").concat(TAB)
+			.concat(TaskPrinter.CYAN).concat("add ").concat(TaskPrinter.RED).concat("taskname ")
+			.concat(TaskPrinter.GREEN).concat("start time to end time<br>");
+	
+	private final static String MESSAGE_HELP_DELETE = TaskPrinter.ORANGE.concat("Delete:<br>").concat(TAB)
 			.concat(TaskPrinter.MAGENTA).concat("delete a task with its index <br>").concat(TAB)
 			.concat(TaskPrinter.CYAN).concat("delete ").concat(TaskPrinter.RED)
 			.concat("task number<br>");
-	private final static String MESSAGE_HELP_SEARCH = "Search:<br>".concat(TAB)
+	
+	private final static String MESSAGE_HELP_SEARCH = TaskPrinter.ORANGE.concat("Search:<br>").concat(TAB)
 			.concat(TaskPrinter.MAGENTA).concat("search tasks with task name, time or location <br>")
 			.concat(TAB).concat(TaskPrinter.CYAN).concat("search-name ").concat(TaskPrinter.RED)
 			.concat("task name <br>").concat(TAB).concat(TaskPrinter.CYAN).concat("search-name ")
@@ -88,31 +92,37 @@ public class ZombieTaskCommandHandler {
 			.concat(TaskPrinter.CYAN).concat("search-time ").concat(TaskPrinter.RED)
 			.concat("start time ").concat(TaskPrinter.GREEN).concat("to").concat(TaskPrinter.RED)
 			.concat(" end time <br>");
-	private final static String MESSAGE_HELP_UPDATE = "Update:<br>".concat(TAB)
+	
+	private final static String MESSAGE_HELP_UPDATE = TaskPrinter.ORANGE.concat("Update:<br>").concat(TAB)
 			.concat(TaskPrinter.MAGENTA)
 			.concat("update the information of the task with its index <br>").concat(TAB)
 			.concat(TaskPrinter.CYAN).concat("add ").concat(TaskPrinter.RED).concat("task number ")
 			.concat(TaskPrinter.RED).concat("start time ").concat(TaskPrinter.GREEN).concat("to")
 			.concat(TaskPrinter.RED).concat(" end time<br>");
-	private final static String MESSAGE_HELP_VIEW = "View:<br>".concat(TAB).concat(TaskPrinter.MAGENTA)
+	
+	private final static String MESSAGE_HELP_VIEW = TaskPrinter.ORANGE.concat("View:<br>").concat(TAB).concat(TaskPrinter.MAGENTA)
 			.concat("different kinds of views for tasks including agenda, daily and weekly <br>")
 			.concat(TAB).concat(TaskPrinter.CYAN).concat("view ").concat(TaskPrinter.RED)
 			.concat("agenda<br>").concat(TAB).concat(TaskPrinter.CYAN).concat("view ")
 			.concat(TaskPrinter.RED).concat("daily <br>").concat(TAB).concat(TaskPrinter.CYAN)
-			.concat("view ").concat(TaskPrinter.RED).concat("weekly <br>").concat(TAB);
-	private final static String MESSAGE_HELP_UNDO = "Undo:<br>".concat(TAB).concat(TaskPrinter.MAGENTA)
-			.concat("reverse the action to the previous state <br>").concat(TAB)
-			.concat(TaskPrinter.CYAN).concat("undo ");
-	private final static String MESSAGE_HELP_REDO = "Redo:<br>".concat(TAB)
-			.concat(TaskPrinter.MAGENTA).concat("go the the state before the undo action <br>")
-			.concat(TAB).concat(TaskPrinter.CYAN).concat("redo ");
-	private final static String MESSAGE_HELP_DONE = "".concat(TaskPrinter.MAGENTA).concat("Done:<br>")
-			.concat(TAB).concat(TaskPrinter.MAGENTA).concat("mark a task as completed or uncompleted <br>")
-			.concat(TAB).concat(TaskPrinter.CYAN).concat("done ");
+			.concat("view ").concat(TaskPrinter.RED).concat("weekly <br>");
 	
-	private final static String MESSAGE_HELP_EXIT = "Exit:<br>".concat(TAB)
+	private final static String MESSAGE_HELP_UNDO = TaskPrinter.ORANGE.concat("Undo:<br>").concat(TAB).concat(TaskPrinter.MAGENTA)
+			.concat("reverse the action to the previous state <br>").concat(TAB)
+			.concat(TaskPrinter.CYAN).concat("undo<br>");
+	
+	private final static String MESSAGE_HELP_REDO = TaskPrinter.ORANGE.concat("Redo:<br>").concat(TAB)
+			.concat(TaskPrinter.MAGENTA).concat("go the the state before the undo action <br>")
+			.concat(TAB).concat(TaskPrinter.CYAN).concat("redo<br>");
+	
+	private final static String MESSAGE_HELP_DONE = TaskPrinter.ORANGE.concat("Done:<br>")
+			.concat(TAB).concat(TaskPrinter.MAGENTA).concat("mark a task as completed or uncompleted <br>")
+			.concat(TAB).concat(TaskPrinter.CYAN).concat("done<br>");
+	
+	private final static String MESSAGE_HELP_EXIT = TaskPrinter.ORANGE.concat("Exit:<br>").concat(TAB)
 			.concat(TaskPrinter.MAGENTA).concat("exit the program <br>").concat(TAB)
 			.concat(TaskPrinter.CYAN).concat("exit ");
+	
 	private final static String MESSAGE_ADD = "Added %s to database";
 	private final static String MESSAGE_DELETE = "Deleted %s from database";
 	private final static String MESSAGE_DELETE_MULTIPLE = "Deleted %d tasks from database";

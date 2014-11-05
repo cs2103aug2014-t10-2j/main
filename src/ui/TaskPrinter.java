@@ -174,7 +174,7 @@ public class TaskPrinter {
 		if (task.isOverdue())		{	return RED;	}
 		if (task.isFloatingTask())	{	return GREEN;	}
 		if (task.isDeadlineTask())	{	return ORANGE;	}
-		if (task.isFloatingTask())	{	return BLUE;	}
+		if (task.isTimedTask())		{	return BLUE;	}
 		return YELLOW;
 	}
 }
