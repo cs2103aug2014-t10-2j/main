@@ -17,6 +17,7 @@ import javax.swing.SwingConstants;
 
 import java.awt.Color;
 import java.util.Collections;
+import java.util.Stack;
 
 public class GUI {
 	
@@ -28,12 +29,18 @@ public class GUI {
 	private JLabel lblNewLabel;
 	private JScrollPane scrollPane;
 	private JScrollPane scrollPane_1;
+	private Stack<String> pastTextField;
+	private Stack<String> futureTextField;
 		
-
 	/**
 	 * Create the application.
 	 */
+	
 	public GUI() {
+		
+		pastTextField = new Stack<String>();
+		futureTextField = new Stack<String>();
+		
 		frmZombietask = new JFrame();
 		frmZombietask.setTitle("ZombieTask");
 		frmZombietask.setBounds(100, 100, 560, 350);
@@ -43,7 +50,9 @@ public class GUI {
 		JButton btnNewButton = new JButton("Enter");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				addCurrentTextToPastList();
 				ZombieTask.userInput(textField.getText());
+				textField.setText(EMPTY_STRING);
 			}
 		});
 		btnNewButton.setBounds(445, 277, 89, 23);
@@ -63,11 +72,24 @@ public class GUI {
 					ZombieTask.userInput("help " + textField.getText());
 					break;
 				case java.awt.event.KeyEvent.VK_ENTER:
+					addCurrentTextToPastList();
 					ZombieTask.userInput(textField.getText());
 					textField.setText(EMPTY_STRING);
 					break;
 				case java.awt.event.KeyEvent.VK_HOME:
 					ZombieTask.userInput("view agenda");
+					break;
+				case java.awt.event.KeyEvent.VK_UP:
+					if (!pastTextField.isEmpty()){
+						futureTextField.push(textField.getText());
+						textField.setText(pastTextField.pop());
+					}
+					break;
+				case java.awt.event.KeyEvent.VK_DOWN:
+					if (!futureTextField.isEmpty()){
+						pastTextField.push(textField.getText());
+						textField.setText(futureTextField.pop());
+					}
 					break;
 				default:
 					break;
@@ -94,6 +116,13 @@ public class GUI {
 		lblNewLabel.setVerticalAlignment(SwingConstants.TOP);
 		scrollPane_1.setViewportView(lblNewLabel);
 		lblNewLabel.setFont(new Font("Courier New", Font.BOLD, 12));
+	}
+	
+	public void addCurrentTextToPastList(){
+		pastTextField.push(textField.getText());
+		if (!futureTextField.isEmpty()){
+			futureTextField.clear();
+		}
 	}
 	
 	public void modifyLabelText(String str) {
