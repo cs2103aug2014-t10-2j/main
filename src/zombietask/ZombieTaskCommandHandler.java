@@ -86,9 +86,9 @@ public class ZombieTaskCommandHandler {
 	private final static String MESSAGE_HELP_SEARCH = TaskPrinter.ORANGE.concat("Search:<br>").concat(TAB)
 			.concat(TaskPrinter.MAGENTA).concat("search tasks with task name, time or location <br>")
 			.concat(TAB).concat(TaskPrinter.CYAN).concat("search-name ").concat(TaskPrinter.RED)
-			.concat("task name <br>").concat(TAB).concat(TaskPrinter.CYAN).concat("search-name ")
-			.concat(TaskPrinter.RED).concat("#tag <br>").concat(TAB).concat(TaskPrinter.CYAN)
-			.concat("search-name ").concat(TaskPrinter.RED).concat(">location <br>").concat(TAB)
+			.concat("task name <br>").concat(TAB).concat(TaskPrinter.CYAN).concat("search-tag ")
+			.concat(TaskPrinter.RED).concat("tag <br>").concat(TAB).concat(TaskPrinter.CYAN)
+			.concat("search-location ").concat(TaskPrinter.RED).concat("location <br>").concat(TAB)
 			.concat(TaskPrinter.CYAN).concat("search-time ").concat(TaskPrinter.RED)
 			.concat("start time ").concat(TaskPrinter.GREEN).concat("to").concat(TaskPrinter.RED)
 			.concat(" end time <br>");
