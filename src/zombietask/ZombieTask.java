@@ -30,9 +30,6 @@ import logger.ZombieLogger;
  * Whoa hold on there, please wait till this is up first before making any
  * comments on how good or bad this project is.
  * 
- * @author ngsp94
- * @author ljiy369
- * @author nil
  * @author a0066754w
  * 
  * @version 0.0.0a
