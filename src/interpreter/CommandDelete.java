@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Class for Delete command, which contains line codes to identify task to
  * delete, and a boolean variable to indicate missing arguments.
  * 
- * @author A0115329J
+//@author A0115329J
  *
  */
 public class CommandDelete extends Command {

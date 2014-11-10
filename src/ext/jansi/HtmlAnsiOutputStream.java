@@ -25,7 +25,7 @@ import java.util.List;
 import ext.jansi.AnsiOutputStream;
 
 /**
- * @author <a href="http://code.dblock.org">Daniel Doubrovkine</a>
+//@author <a href="http://code.dblock.org">Daniel Doubrovkine</a>
  */
 public class HtmlAnsiOutputStream extends AnsiOutputStream {
 	

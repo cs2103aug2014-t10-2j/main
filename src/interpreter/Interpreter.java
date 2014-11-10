@@ -20,7 +20,7 @@ import exception.NoCommandException;
  * Parses the command and returns a command object identifying the correct
  * command and arguments.
  * 
- * @author A0115329J
+//@author A0115329J
  * 
  */
 public class Interpreter {

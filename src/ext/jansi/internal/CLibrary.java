@@ -27,7 +27,7 @@ import ext.hawtjni.runtime.Library;
 /**
  * Interface to access some low level POSIX functions.
  * 
- * @author <a href="http://hiramchirino.com">Hiram Chirino</a>
+//@author <a href="http://hiramchirino.com">Hiram Chirino</a>
  */
 @JniClass()
 public class CLibrary {

@@ -10,7 +10,7 @@ import storage.StorageAPI;
 import task.Task;
 import zombietask.ZombieTask;
 /**
- * @author a0108553h
+//@author a0108553h
  */
 public class TaskPrinter {
 	

@@ -90,7 +90,7 @@ import java.util.Set;
  * or <code>null</code>.</li>
  * </ul>
  *
- * @author JSON.org
+//@author JSON.org
  * @version 2014-05-03
  */
 public class JSONObject {

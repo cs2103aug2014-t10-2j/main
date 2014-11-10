@@ -26,8 +26,8 @@ import static ext.jansi.AnsiRenderer.*;
 /**
  * Print writer which supports automatic ANSI color rendering via {@link AnsiRenderer}.
  *
- * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @author <a href="http://hiramchirino.com">Hiram Chirino</a>
+//@author <a href="mailto:jason@planet57.com">Jason Dillon</a>
+//@author <a href="http://hiramchirino.com">Hiram Chirino</a>
  * @since 1.1
  */
 public class AnsiRenderWriter

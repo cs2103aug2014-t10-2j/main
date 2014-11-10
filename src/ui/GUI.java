@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.Stack;
 
 /**
- * @author a0108553h
+//@author a0108553h
  */
 
 public class GUI {

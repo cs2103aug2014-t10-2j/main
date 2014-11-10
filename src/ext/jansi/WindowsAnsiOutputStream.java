@@ -44,8 +44,8 @@ import ext.jansi.internal.Kernel32.COORD;
  * API's to change the console attributes.
  * 
  * @since 1.0
- * @author <a href="http://hiramchirino.com">Hiram Chirino</a>
- * @author Joris Kuipers
+//@author <a href="http://hiramchirino.com">Hiram Chirino</a>
+//@author Joris Kuipers
  */
 public final class WindowsAnsiOutputStream extends AnsiOutputStream {
 	

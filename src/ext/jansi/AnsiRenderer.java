@@ -41,8 +41,8 @@ import ext.jansi.Ansi.Color;
  *   <tt>@|bold,red Warning!|@</tt>
  * </pre>
  *
- * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
- * @author <a href="http://hiramchirino.com">Hiram Chirino</a>
+//@author <a href="mailto:jason@planet57.com">Jason Dillon</a>
+//@author <a href="http://hiramchirino.com">Hiram Chirino</a>
  * @since 1.1
  */
 public class AnsiRenderer

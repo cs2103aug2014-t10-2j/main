@@ -19,7 +19,7 @@ import zombietask.ZombieTaskCommandHandler;
  * 
  * Junit Tests for 
  * 
- * @author a0066754w
+//@author a0066754w
  *
  */
 

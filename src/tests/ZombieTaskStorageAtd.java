@@ -14,7 +14,7 @@ import zombietask.ZombieTask;
 public class ZombieTaskStorageAtd {
 	/**
 	 * Integration test
-	 * @author A0119480
+//@author A0119480
 	 * 
 	 */
 	File testfile = new File ("ZombieTest");

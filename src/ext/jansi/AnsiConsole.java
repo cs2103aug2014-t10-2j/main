@@ -28,7 +28,7 @@ import java.io.PrintStream;
 /**
  * Provides consistent access to an ANSI aware console PrintStream.
  * 
- * @author <a href="http://hiramchirino.com">Hiram Chirino</a>
+//@author <a href="http://hiramchirino.com">Hiram Chirino</a>
  * @since 1.0
  */
 public class AnsiConsole {

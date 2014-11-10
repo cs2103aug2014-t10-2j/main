@@ -27,7 +27,7 @@ SOFTWARE.
 /**
  * Convert a web browser cookie specification to a JSONObject and back.
  * JSON and Cookies are both notations for name/value pairs.
- * @author JSON.org
+//@author JSON.org
  * @version 2014-05-03
  */
 public class Cookie {

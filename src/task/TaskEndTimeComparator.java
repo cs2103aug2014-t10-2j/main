@@ -5,7 +5,7 @@ import java.util.Comparator;
 /**
  * This comparator compares two Tasks by their end time
  * 
- * @author jellymac
+//@author jellymac
  *
  */
 

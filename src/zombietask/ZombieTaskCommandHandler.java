@@ -35,9 +35,7 @@ import interpreter.CommandView;
  * 
  * Handles zombietask commands
  * 
- * @author a0066754w
- * @author A0119480
- * @author a0108553h
+//@author a0066754w
  * 
  */
 public class ZombieTaskCommandHandler {

@@ -16,7 +16,7 @@ import static java.lang.annotation.ElementType.*;
 
 /**
  * 
- * @author <a href="http://hiramchirino.com">Hiram Chirino</a>
+//@author <a href="http://hiramchirino.com">Hiram Chirino</a>
  */
 @Target({FIELD})
 @Retention(RetentionPolicy.RUNTIME)

@@ -1,6 +1,6 @@
 package ui;
 /**
- * @author a0108553h
+//@author a0108553h
  */
 public enum FORMAT
 {

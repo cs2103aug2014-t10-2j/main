@@ -9,7 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 /**
- * @author a0108553h
+//@author a0108553h
  */
 public class UIAtd {
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();

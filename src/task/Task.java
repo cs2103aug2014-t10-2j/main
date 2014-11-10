@@ -6,9 +6,9 @@ import java.util.Calendar;
 
 /**
  * Task Class for ZombieTask. Holds information for each class.
- * @author a0108553h
- * @author A0119480
- * @author jellymac
+//@author a0108553h
+//@author A0119480
+//@author jellymac
  */
 
 public class Task implements Comparable<Task> {	

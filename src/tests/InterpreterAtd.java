@@ -26,7 +26,7 @@ import ui.UI;
 /**
  * Automated test driver for Interpreter class.
  * 
- * @author A0115329J
+//@author A0115329J
  * 
  */
 public class InterpreterAtd {

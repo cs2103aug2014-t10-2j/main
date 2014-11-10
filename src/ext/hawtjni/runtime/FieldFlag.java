@@ -11,7 +11,7 @@ package ext.hawtjni.runtime;
 
 /**
  * 
- * @author <a href="http://hiramchirino.com">Hiram Chirino</a>
+//@author <a href="http://hiramchirino.com">Hiram Chirino</a>
  */
 public enum FieldFlag {
     /** 
