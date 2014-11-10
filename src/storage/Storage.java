@@ -20,7 +20,7 @@ import zombietask.ZombieTask;
 /**
  * Storage module for ZombieTask
  * 
- * @author ljiy369
+ * @author A0119480
  * @author jellymac
  */
 
