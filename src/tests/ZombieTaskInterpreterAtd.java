@@ -21,7 +21,7 @@ import zombietask.ZombieTaskCommandHandler;
 
 /**
  * To test ZombieTask's dependency on Interpreter
- * @author Ping 
+ * @author A0115329J 
  * 
  */
 public class ZombieTaskInterpreterAtd {

@@ -2,7 +2,7 @@ package interpreter;
 /**
  * Class for Delete Name command, which contains a search string and a boolean
  * variable to indicate missing arguments. 
- * @author SP
+ * @author a0066754w
  *
  */
 public class CommandDeleteName extends Command {

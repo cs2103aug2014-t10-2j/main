@@ -5,7 +5,7 @@ import java.util.Calendar;
 /**
  * Class for Delete Time command, which contains 2 sets of date and time and a
  * boolean variable to indicate missing arguments. 
- * @author SP
+ * @author a0066754w
  *
  */
 public class CommandDeleteTime extends Command {

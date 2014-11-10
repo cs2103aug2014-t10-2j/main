@@ -2,7 +2,7 @@ package interpreter;
 /**
  * Class for Help command, which contains a string to indicate type of view and
  * a boolean variable to indicate missing arguments. 
- * @author SP
+ * @author A0115329J
  *
  */
 public class CommandHelp extends Command {

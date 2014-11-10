@@ -2,7 +2,7 @@ package interpreter;
 /**
  * Class for Update command, which contains line code to identify task to
  * update, and a boolean variable to indicate missing arguments. 
- * @author SP
+ * @author A0115329J
  *
  */
 public class CommandUpdate extends Command {

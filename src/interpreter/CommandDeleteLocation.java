@@ -4,7 +4,7 @@ package interpreter;
 /**
  * Class for Delete Location command, which contains a search string and a boolean
  * variable to indicate missing arguments. 
- * @author SP
+ * @author a0066754w
  *
  */
 public class CommandDeleteLocation extends Command {

@@ -15,13 +15,12 @@ import zombietask.ZombieTask;
 import com.joestelmach.natty.*;
 
 import exception.NoCommandException;
-import exception.NoTaskNameException;
 
 /**
  * Parses the command and returns a command object identifying the correct
  * command and arguments.
  * 
- * @author SP
+ * @author A0115329J
  * 
  */
 public class Interpreter {
@@ -351,7 +350,6 @@ public class Interpreter {
 	 * @param userInput the command entered by the user
 	 * @param tags a list of tags parsed from user input
 	 * @return the task name, or a description of the task
-	 * @throws NoTaskNameException no task name specified
 	 */
 	private static String getTaskName(String userInput, List<DateGroup> groups,
 			ArrayList<String> tags, String location) {
