@@ -31,6 +31,13 @@ import interpreter.CommandSearchTime;
 import interpreter.CommandUpdate;
 import interpreter.CommandView;
 
+/**
+ * 
+ * Handles zombietask commands
+ * 
+ * @author a0066754w
+ *
+ */
 public class ZombieTaskCommandHandler {
 	
 	/*

@@ -11,7 +11,7 @@ import java.util.logging.SimpleFormatter;
  * 
  * Refer to http://tutorials.jenkov.com/java-logging/handlers.html
  * 
- * @author jellymac
+ * @author a0066754w
  *
  */
 

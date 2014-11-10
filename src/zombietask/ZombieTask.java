@@ -33,7 +33,7 @@ import logger.ZombieLogger;
  * @author ngsp94
  * @author ljiy369
  * @author nil
- * @author jellymac
+ * @author a0066754w
  * 
  * @version 0.0.0a
  * 
