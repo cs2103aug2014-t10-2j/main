@@ -20,6 +20,11 @@ import storage.StorageAPI;
 import task.Task;
 import task.TaskUIFormat;
 
+/**
+ * 
+ * @author A0119480
+ *
+ */
 public class StorageAPITest {
 	
 	StorageAPI testStorage = new StorageAPI();
@@ -85,9 +90,9 @@ public class StorageAPITest {
 		
 		testStorage.add(task4);
 		BufferedReader br = new BufferedReader(new FileReader(file));
-		result = br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine();
+		result = br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine();
 		br.close();
-		expected = "{  \"floatingTasks\": [    {      \"taskName\": \"tempTask\",      \"endTime\": null,      \"startTime\": null,      \"tags\": [],      \"subtasks\": []    }  ],  \"deadlineTasks\": [],  \"timedTasks\": []}";
+		expected = "{  \"floatingTasks\": [    {      \"taskName\": \"tempTask\",      \"endTime\": null,      \"startTime\": null,      \"tags\": [],      \"subtasks\": [],      \"location\": null,      \"completed\": false,      \"deleted\": false    }  ],  \"deadlineTasks\": [],  \"timedTasks\": [],  \"loggingLevel\": null}";
 		testStorage.delete(task4);
 		assertEquals("problems:",expected, result);
 		
@@ -104,9 +109,9 @@ public class StorageAPITest {
 		testStorage.add(deletedTask);
 		testStorage.delete(deletedTask);
 		BufferedReader br = new BufferedReader(new FileReader(file));
-		result = br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine();
+		result = br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine();
 		br.close();
-		expected = "{  \"floatingTasks\": [],  \"deadlineTasks\": [],  \"timedTasks\": []}";
+		expected = "{  \"floatingTasks\": [],  \"deadlineTasks\": [],  \"timedTasks\": [],  \"loggingLevel\": null}";
 		assertEquals("problems:",expected, result);
 		//fail("Not yet implemented");
 	}
