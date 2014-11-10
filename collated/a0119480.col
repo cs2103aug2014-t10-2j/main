@@ -1,0 +1,1478 @@
+//@author: a0119480
+
+
+
+	/**
+	 * origin: D:\everything\eclipseworkspace\ZombieTask\main\src\tests\ZombieTaskStorageAtd.java
+	 */
+
+	 * 
+	 */
+	File testfile = new File ("ZombieTest");
+	String expected = null;
+	String result = null;
+	
+	@Before
+	public void deleteFile() {
+		new File("ZombieTest").delete();
+	}
+	
+	@Test
+	public void testAddFloatingTask() throws Exception {
+		ZombieTask.testCommand("add homework");
+		BufferedReader br = new BufferedReader(new FileReader(testfile));
+		result = br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine();
+		br.close();
+		expected = "{  \"floatingTasks\": [    {      \"taskName\": \"homework\",      \"endTime\": null,      \"startTime\": null,      \"tags\": [],      \"subtasks\": [],      \"location\": null    }  ],  \"deadlineTasks\": [],  \"timedTasks\": []}";
+		assertEquals("problems:",expected, result);
+	}
+	
+	@Test
+	public void testAddDeadlineTask() throws Exception {
+		ZombieTask.testCommand("add dinner 6pm");
+		BufferedReader br = new BufferedReader(new FileReader(testfile));
+		result = br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine();
+		br.close();
+		expected = "{  \"floatingTasks\": [],  \"deadlineTasks\": [    {      \"taskName\": \"dinner\",      \"endTime\": {        \"year\": 2014,        \"month\": 9,        \"dayOfMonth\": 30,        \"hourOfDay\": 18,        \"minute\": 0,        \"second\": 0      },      \"startTime\": null,      \"tags\": [],      \"subtasks\": [],      \"location\": null    }  ],  \"timedTasks\": []}";
+		assertEquals("problems:",expected, result);
+	}
+	
+	@Test
+	public void testAddTimedTask() throws Exception {
+		ZombieTask.testCommand("add dinner 6pm to 7pm");
+		BufferedReader br = new BufferedReader(new FileReader(testfile));
+		result = br.readLine()+br.readLine()+br.readLine()+br.readLine()+br.readLine()+br.readLine()+br.readLine()+br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine();
+		br.close();
+		expected = "{  \"floatingTasks\": [],  \"deadlineTasks\": [],  \"timedTasks\": [    {      \"taskName\": \"dinner\",      \"endTime\": {        \"year\": 2014,        \"month\": 9,        \"dayOfMonth\": 30,        \"hourOfDay\": 19,        \"minute\": 0,        \"second\": 0      },      \"startTime\": {        \"year\": 2014,        \"month\": 9,        \"dayOfMonth\": 30,        \"hourOfDay\": 18,        \"minute\": 0,        \"second\": 0      },      \"tags\": [],      \"subtasks\": [],      \"location\": null    }  ]}";
+		assertEquals("problems:",expected, result);
+	}
+	
+	@Test
+	public void testDelete() throws Exception {
+		ZombieTask.testCommand("add homework");
+		ZombieTask.testCommand("delete f0");
+		BufferedReader br = new BufferedReader(new FileReader(testfile));
+		result = br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine();
+		br.close();
+		expected = "{  \"floatingTasks\": [],  \"deadlineTasks\": [],  \"timedTasks\": []}";
+		assertEquals("problems:",expected, result);
+	}
+	
+	@Test
+	public void testUpdate() throws Exception {
+		ZombieTask.testCommand("add homework");
+		ZombieTask.testCommand("update f0 dinner 9pm");
+		BufferedReader br = new BufferedReader(new FileReader(testfile));
+		result = br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine();
+		br.close();
+		expected = "{  \"floatingTasks\": [    {      \"taskName\": \"dinner\",      \"endTime\": null,      \"startTime\": null,      \"tags\": [],      \"subtasks\": [],      \"location\": null    }  ],  \"deadlineTasks\": [],  \"timedTasks\": []}";
+		assertEquals("problems:",expected, result);
+	}
+	
+	@Test
+	public void testUdoe() throws Exception {
+		ZombieTask.testCommand("add homework");
+		ZombieTask.testCommand("update f0 dinner 9pm");
+		ZombieTask.testCommand("undo");
+		BufferedReader br = new BufferedReader(new FileReader(testfile));
+		result = br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine();
+		br.close();
+		expected = "{  \"floatingTasks\": [    {      \"taskName\": \"dinner\",      \"endTime\": null,      \"startTime\": null,      \"tags\": [],      \"subtasks\": [],      \"location\": null    },    {      \"taskName\": \"homework\",      \"endTime\": null,      \"startTime\": null,      \"tags\": [],      \"subtasks\": [],      \"location\": null    }  ],  \"deadlineTasks\": [],  \"timedTasks\": []}";
+		assertEquals("problems:",expected, result);
+	}
+}
+	
+	
+
+	// End of segment: D:\everything\eclipseworkspace\ZombieTask\main\src\tests\ZombieTaskStorageAtd.java
+
+
+
+
+
+	/**
+	 * origin: D:\everything\eclipseworkspace\ZombieTask\main\src\tests\StorageAPITest.java
+	 */
+
+ *
+ */
+public class StorageAPITest {
+	
+	StorageAPI testStorage = new StorageAPI();
+	String filename = "ZombieStorage.txt";
+	static String filenameTest = "Text.txt";
+	File file = null;
+	
+	String expected = null;
+	String result = null;
+	String taskName = "tempTask";
+	String updateName = "updateName";
+	
+	int  testID = 0;
+	
+	Calendar deadline; 
+	Calendar date1 = new GregorianCalendar(2000,1,1) ;
+	Calendar date2 = new GregorianCalendar(2000,1,2) ;
+	
+	
+	Task task1 = null;
+	Task task2 = null; 
+	Task task3 = null; 
+	Task task4 = null; 
+	Task deletedTask=null;
+	/**
+	 *  clear the file and set 5 Tasks which will be used later
+	 * @throws Exception
+	 */
+	@Before
+	
+	public void setUp() throws Exception {
+		StorageAPI.createFile();
+		file = testStorage.getFile();
+		
+	    	FileWriter fw = new FileWriter(file,false);
+			fw.write("");
+			fw.flush();
+			fw.close();
+			task1 = new Task(taskName, date1);
+			task2 = new Task(updateName, date2);
+			task3 = new Task(updateName, deadline);
+			task4 = new Task(taskName);
+			deletedTask = new Task(taskName,date2);
+	}
+	
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+		
+		/*
+		 * Delete all used files
+		 */
+		
+		ZombieTaskAtd.deleteFile(filenameTest);
+	}
+	
+	/**
+	 * testing for addTask(Task)
+	 * @throws IOException
+	 */
+	@Test
+	
+	public void testAddTask() throws IOException {
+		
+		testStorage.add(task4);
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		result = br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine();
+		br.close();
+		expected = "{  \"floatingTasks\": [    {      \"taskName\": \"tempTask\",      \"endTime\": null,      \"startTime\": null,      \"tags\": [],      \"subtasks\": [],      \"location\": null,      \"completed\": false,      \"deleted\": false    }  ],  \"deadlineTasks\": [],  \"timedTasks\": [],  \"loggingLevel\": null}";
+		testStorage.delete(task4);
+		assertEquals("problems:",expected, result);
+		
+		//fail("Not yet implemented");
+	}
+
+	/**
+	 * testing for deleteTask(Task)
+	 * @throws IOException
+	 */
+	@Test
+	
+	public void testDeleteTask() throws IOException {
+		testStorage.add(deletedTask);
+		testStorage.delete(deletedTask);
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		result = br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine()+ br.readLine();
+		br.close();
+		expected = "{  \"floatingTasks\": [],  \"deadlineTasks\": [],  \"timedTasks\": [],  \"loggingLevel\": null}";
+		assertEquals("problems:",expected, result);
+		//fail("Not yet implemented");
+	}
+	
+	/**
+	 * testing for getAllTasks()
+	 * @throws Exception
+	 */
+	@Test
+	public void testDisplayAll() throws Exception{
+		
+		testStorage.add(task4);
+		testStorage.add(task2);
+		ArrayList <Task> expectedTest = new ArrayList <Task> ();
+		ArrayList<Task> floatingTasks = testStorage.getAllTasks().getFloatingTasks();
+		ArrayList<Task> deadlineTasks = testStorage.getAllTasks().getDeadlineTasks();
+		
+		expectedTest.add(task4);
+		expectedTest.add(task2);
+		
+		assertEquals(expectedTest.get(0).getSubtask(), floatingTasks.get(0).getSubtask());
+		assertEquals(expectedTest.get(0).getEndTime(), floatingTasks.get(0).getEndTime());
+		assertEquals(expectedTest.get(0).getTags(), floatingTasks.get(0).getTags());
+		assertEquals(expectedTest.get(0).getTaskName(), floatingTasks.get(0).getTaskName());
+		assertEquals(expectedTest.get(1).getSubtask(), deadlineTasks.get(0).getSubtask());
+		assertEquals(expectedTest.get(1).getEndTime(), deadlineTasks.get(0).getEndTime());
+		assertEquals(expectedTest.get(1).getTags(), deadlineTasks.get(0).getTags());
+		assertEquals(expectedTest.get(1).getTaskName(), deadlineTasks.get(0).getTaskName());
+		testStorage.delete(task4);
+		testStorage.delete(task2);
+	}
+	
+	/**
+	 * testing for search(int)
+	 * @throws Exception
+	 */
+	@Test
+	
+	public void testSearchIntArray() throws Exception {
+		testStorage.add(task4);
+		Task testResult = testStorage.search("f"+testID);
+		Task testExpected = task4;
+		
+		assertEquals(testExpected.getSubtask(),testResult.getSubtask());
+		assertEquals(testExpected.getEndTime(),testResult.getEndTime());
+		assertEquals(testExpected.getTags(),testResult.getTags());
+		assertEquals(testExpected.getTaskName(),testResult.getTaskName());
+
+		//fail("Not yet implemented");
+	}
+	
+	/**
+	 * testing for searchTwoDate(Calendar,Calendar)
+	 * @throws Exception
+	 */
+	@Test
+	
+	public void testSearchTwoDate() throws Exception {
+		
+		testStorage.add(task1);
+		testStorage.add(task2);
+		TaskUIFormat tempTest = testStorage.search(date1, date2);
+		ArrayList<Task> deadlineTasks = testStorage.getAllTasks().getDeadlineTasks();
+		ArrayList<Task> expectedTest= new ArrayList<Task>();
+		expectedTest.add(task1);
+		expectedTest.add(task2);
+		
+		assertEquals(expectedTest.get(0).getSubtask(),deadlineTasks.get(0).getSubtask());
+		assertEquals(expectedTest.get(0).getEndTime(),deadlineTasks.get(0).getEndTime());
+		assertEquals(expectedTest.get(0).getTags(),deadlineTasks.get(0).getTags());
+		assertEquals(expectedTest.get(0).getTaskName(),deadlineTasks.get(0).getTaskName());
+		assertEquals(expectedTest.get(1).getSubtask(),deadlineTasks.get(1).getSubtask());
+		assertEquals(expectedTest.get(1).getEndTime(),deadlineTasks.get(1).getEndTime());
+		assertEquals(expectedTest.get(1).getTags(),deadlineTasks.get(1).getTags());
+		assertEquals(expectedTest.get(1).getTaskName(),deadlineTasks.get(1).getTaskName());
+		testStorage.delete(task2);
+		testStorage.delete(task1);
+	}
+	
+	/**
+	 *  testing for searchName(String)
+	 * @throws Exception
+	 */
+	@Test 
+	
+	public  void testSearchName() throws Exception {
+		testStorage.add(task1);
+		testStorage.add(task2);
+		TaskUIFormat testResult = testStorage.searchName(taskName);
+		Task testTask = testResult.getDeadlineTasks().get(0);
+		Task testExpected = task1;
+		assertEquals(testExpected.getSubtask(),testTask.getSubtask());
+		assertEquals(testExpected.getEndTime(),testTask.getEndTime());
+		assertEquals(testExpected.getTags(),testTask.getTags());
+		assertEquals(testExpected.getTaskName(),testTask.getTaskName());
+		testStorage.delete(task1);
+		testStorage.delete(task2);
+	}
+	
+	/**
+	 *  testing for searchTag(String)
+	 * @throws Exception
+	 */
+	@Test
+	
+	public void testSearchTag() throws Exception {
+		testStorage.add(task1);
+		testStorage.add(task2);
+		task1.addTag("justForTest");
+		TaskUIFormat testResultList = testStorage.searchTag("justForTest");
+		Task testResult = testResultList.getDeadlineTasks().get(0);
+		Task testExpected = task1;
+		assertEquals(testExpected.getSubtask(),testResult.getSubtask());
+		assertEquals(testExpected.getEndTime(),testResult.getEndTime());
+		assertEquals(testExpected.getTags(),testResult.getTags());
+		assertEquals(testExpected.getTaskName(),testResult.getTaskName());
+		testStorage.delete(task1);
+		testStorage.delete(task2);
+	}
+
+	
+
+	/*
+	
+	@Test
+	public void testtask3Task() throws Exception {
+		
+		testStorage.update(tempTask, task3);
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		result = br.readLine();
+		br.close();
+		expected = "[{\"tags\":[],\"subtasks\":[],\"taskName\":\"updateName\"}]";
+		assertEquals("problems:",expected, result);
+		//fail("Not yet implemented");
+	}
+	
+	*/
+
+	
+
+	@Test
+	public void testSetFile() throws IOException {
+		testStorage.setFile(filenameTest);
+		StorageAPI.createFile();
+		file = testStorage.getFile();
+		
+		assertEquals(file.getName(),filenameTest);
+		//fail("Not yet implemented");
+	}
+
+	@Test
+	public void testCreateFile() throws IOException {
+		StorageAPI.createFile();
+		file = testStorage.getFile();
+		assertEquals(file.getName(),filename);
+		//fail("Not yet implemented");
+	}
+	
+	
+	
+	
+}
+
+	// End of segment: D:\everything\eclipseworkspace\ZombieTask\main\src\tests\StorageAPITest.java
+
+
+
+
+
+	/**
+	 * origin: D:\everything\eclipseworkspace\ZombieTask\main\src\storage\Storage.java
+	 */
+
+ */
+
+public class Storage {
+	
+	/*
+	 * CLASS ATTRIBUTES
+	 */
+	
+	private static final String MESSAGE_TIME_CONFLICT = "START TIME AFTER END TIME";
+	private static final String MESSAGE_INDEX_TOO_LARGE = "GIVEN INDEX IS TOO LARGE";
+	private static final String DEBUG_INVALID_IO = "INVALID IO STRING: %s";
+	private static final String DEBUG_HASNT_SORTED = "HAS NOT SORTED - HAS TO OPERATE FROM INSTANCE";
+	
+	private static final Pattern VALID_PATTERN = Pattern.compile("([a-zA-Z])([0-9]+)");
+	
+	private static final String FLOATING_ID = "f";
+	private static final String DEADLINE_ID = "d";
+	private static final String TIMED_ID = "t";
+	
+	private static final Comparator<Task> startTimeComparator = new TaskStartTimeComparator();
+	private static final Comparator<Task> endTimeComparator = new TaskEndTimeComparator();
+	
+	public static final ArrayList<Task> EMPTY_LIST = new ArrayList<Task>();
+	
+	/*
+	 * INSTANCE ATTRIBUTES
+	 */
+	
+	private ArrayList<Task> floatingTasks;
+	private ArrayList<Task> deadlineTasks;
+	private ArrayList<Task> timedTasks;
+	private Level loggingLevel;
+	private static Logger logger = ZombieTask.getLogger();
+	
+	/*
+	 * CONSTRUCTORS
+	 */
+	
+	public Storage(){
+		floatingTasks = new ArrayList<Task>();
+		deadlineTasks = new ArrayList<Task>();
+		timedTasks = new ArrayList<Task>();
+	}
+	
+	/*
+	 * Setter and getter methods
+	 */
+	
+	/*
+	public ArrayList<Task> getTaskList(){
+		return this.taskList;
+	}
+	*/
+	
+	public ArrayList<Task> getFloatingTasks() {
+		return floatingTasks;
+	}
+
+	public void setFloatingTasks(ArrayList<Task> floatingTasks) {
+		this.floatingTasks = floatingTasks;
+	}
+
+	public ArrayList<Task> getDeadlineTasks() {
+		return deadlineTasks;
+	}
+
+	public void setDeadlineTasks(ArrayList<Task> deadlineTasks) {
+		this.deadlineTasks = deadlineTasks;
+	}
+
+	public ArrayList<Task> getTimedTasks() {
+		return timedTasks;
+	}
+
+	public void setTimedTasks(ArrayList<Task> timedTasks) {
+		this.timedTasks = timedTasks;
+	}
+
+	public void addTask(Task newTask){
+		if(newTask.isDeadlineTask()){
+			this.deadlineTasks.add(newTask);
+		}else if (newTask.isFloatingTask()){
+			this.floatingTasks.add(newTask);
+		}else if (newTask.isTimedTask()){
+			this.timedTasks.add(newTask);
+		}else{
+			logger.log(Level.SEVERE, newTask.toString());
+		}
+		sortTimedTasks();
+		sortDeadlineTasks();
+		//this.taskList.add(newTask);
+	}
+	public void addTask(TaskUIFormat newTaskList){
+		for(Task task : newTaskList.getDeadlineTasks()){
+			this.deadlineTasks.add(task);
+		}
+		for(Task task : newTaskList.getFloatingTasks()){
+			this.floatingTasks.add(task);
+		}
+		for(Task task : newTaskList.getTimedTasks()){
+			this.timedTasks.add(task);
+		}
+	}
+	
+	private void sortTimedTasks(){
+		Collections.sort(timedTasks, startTimeComparator);
+	}
+	
+	private void sortDeadlineTasks(){
+		Collections.sort(deadlineTasks, endTimeComparator);
+	}
+	
+	public void removeTask(Task searchTask){
+		
+		if(searchTask.isDeadlineTask()){
+			this.deadlineTasks.remove(searchTask);
+		}else if (searchTask.isFloatingTask()){
+			this.floatingTasks.remove(searchTask);
+		}else if (searchTask.isTimedTask()){
+			this.timedTasks.remove(searchTask);
+		}else{
+			logger.log(Level.SEVERE, searchTask.toString());
+		}
+		//this.taskList.remove(searchTask);
+	}
+	
+	public void removeTask(TaskUIFormat deletedTaskList){
+		for(Task task : deletedTaskList.getDeadlineTasks()){
+			this.removeTask(task);
+		}
+		for(Task task : deletedTaskList.getFloatingTasks()){
+			this.removeTask(task);
+		}
+		for(Task task : deletedTaskList.getTimedTasks()){
+			this.removeTask(task);
+		}
+	}
+	
+	public void toggleComplete(TaskUIFormat taskList){
+		for(Task task : taskList.getDeadlineTasks()){
+			task.toggleComplete();
+		}
+		for(Task task : taskList.getFloatingTasks()){
+			task.toggleComplete();
+		}
+		for(Task task : taskList.getTimedTasks()){
+			task.toggleComplete();
+		}
+	}
+	
+	public void updateTask(Task originalTask, Task newTask){
+		removeTask(originalTask);
+		addTask(newTask);
+	}
+	
+	public TaskUIFormat searchTask(Calendar startTime, Calendar endTime) throws Exception{
+		if (startTime.after(endTime)){
+			Calendar tempTime = startTime;
+			startTime = endTime;
+			endTime = tempTime;
+			//throw new Exception(MESSAGE_TIME_CONFLICT);
+		}
+		
+		ArrayList<Task> searchDeadlineList = new ArrayList<Task> ();
+		ArrayList<Task> searchTimedList = new ArrayList<Task> ();
+		
+		for(Task task : deadlineTasks){
+			if (task.getEndTime().compareTo(endTime)<=0 && task.getEndTime().compareTo(startTime)>=0){
+				searchDeadlineList.add(task);
+			}
+		}
+		
+		for(Task task : timedTasks){
+			if (task.getEndTime().compareTo(endTime)<=0 && task.getStartTime().compareTo(startTime)>=0){
+				searchTimedList.add(task);
+			}
+		}
+		
+		return new TaskUIFormat(EMPTY_LIST, searchDeadlineList, searchTimedList);
+	}
+	
+	public Task search(String lineCode){
+	
+		
+		Matcher matcher = VALID_PATTERN.matcher(lineCode);
+		if (!matcher.find()){
+			return null;
+		}
+		
+		/*DEBUG
+		UI.printResponse("LC: " + lineCode + "\n");
+		UI.printResponse("GC: " + matcher.groupCount() + "\n");
+		UI.printResponse("G0: " + matcher.group(0) + "\n");
+		UI.printResponse("G1: " + matcher.group(1) + "\n");
+		UI.printResponse("G2: " + matcher.group(2) + "\n");
+		*/
+		
+		if (matcher.groupCount() < 2) {
+			logger.log(Level.SEVERE, String.format(DEBUG_INVALID_IO, lineCode),
+					new IOException());
+		}
+		
+		String taskType = matcher.group(1).toLowerCase();
+		int index = new Integer(matcher.group(2));
+		
+		try {
+			switch (taskType){
+			case FLOATING_ID:
+				return floatingTasks.get(index);
+			case DEADLINE_ID:
+				return deadlineTasks.get(index);
+			case TIMED_ID:
+				return timedTasks.get(index);
+			}
+		}catch (Exception e){
+			logger.log(Level.SEVERE, e.getMessage());
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public TaskUIFormat searchName(String taskName) throws Exception{
+		ArrayList<Task> searchFloatingList = new ArrayList<Task> ();
+		ArrayList<Task> searchDeadlineList = new ArrayList<Task> ();
+		ArrayList<Task> searchTimedList = new ArrayList<Task> ();
+		for(Task task : floatingTasks){
+			if(task.getTaskName().contains(taskName)){
+				searchFloatingList.add(task);
+			}
+		}
+		for(Task task : deadlineTasks){
+			if(task.getTaskName().contains(taskName)){
+				searchDeadlineList.add(task);
+			}
+		}
+		for(Task task : timedTasks){
+			if(task.getTaskName().contains(taskName)){
+				searchTimedList.add(task);
+			}
+		}
+		return new TaskUIFormat(searchFloatingList, searchDeadlineList, searchTimedList);
+	}
+	
+	public TaskUIFormat searchTag(String tagName) throws Exception{
+		ArrayList<Task> searchFloatingList = new ArrayList<Task> ();
+		ArrayList<Task> searchDeadlineList = new ArrayList<Task> ();
+		ArrayList<Task> searchTimedList = new ArrayList<Task> ();
+		for(Task task: floatingTasks){
+			if(task.hasTag(tagName)){
+				searchFloatingList.add(task);
+			}
+		}
+		
+		for(Task task: deadlineTasks){
+			if(task.hasTag(tagName)){
+				searchDeadlineList.add(task);
+			}
+		}
+		
+		for(Task task: timedTasks){
+			if(task.hasTag(tagName)){
+				searchTimedList.add(task);
+			}
+		}
+		return new TaskUIFormat(searchFloatingList, searchDeadlineList, searchTimedList);
+	}
+	
+	public TaskUIFormat searchLocation(String location){
+		ArrayList<Task> searchFloatingList = new ArrayList<Task> ();
+		ArrayList<Task> searchDeadlineList = new ArrayList<Task> ();
+		ArrayList<Task> searchTimedList = new ArrayList<Task> ();
+		for(Task task: floatingTasks){
+			if(task.isLocation(location)){
+				searchFloatingList.add(task);
+			}
+		}
+		
+		for(Task task: deadlineTasks){
+			if(task.isLocation(location)){
+				searchDeadlineList.add(task);
+			}
+		}
+		
+		for(Task task: timedTasks){
+			if(task.isLocation(location)){
+				searchTimedList.add(task);
+			}
+		}
+		return new TaskUIFormat(searchFloatingList, searchDeadlineList, searchTimedList);
+	}
+	
+	public TaskUIFormat getAllTasks(){
+		return new TaskUIFormat(floatingTasks, deadlineTasks, timedTasks);
+	}
+	
+	/**
+	 * Returns index of task with respect to the data inside
+	 * storage
+	 * 
+	 * @param task
+	 * @return
+	 */
+	
+	public String indexOf(Task task){
+		if (task.isFloatingTask()){
+			return "f".concat(String.valueOf(floatingTasks.indexOf(task)));
+		}
+		if (task.isDeadlineTask()){
+			return "d".concat(String.valueOf(deadlineTasks.indexOf(task)));
+		}
+		if (task.isTimedTask()){
+			return "t".concat(String.valueOf(timedTasks.indexOf(task)));
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns true if task clashes if existing tasks in storage
+	 * 
+	 * Floating Tasks always returns false.
+	 * 
+	 * Dateline Tasks returns true when it clashes with other dateline tasks
+	 * or timed tasks.
+	 * 
+	 * @param newTask
+	 * @return boolean value
+	 */
+	
+	public TaskUIFormat taskClash(Task newTask){
+		
+		TaskUIFormat clashedTasks = new TaskUIFormat();
+		
+		if (newTask.isFloatingTask()){
+			return clashedTasks;
+		}
+		
+		for (Task oldTask: timedTasks){
+			if (!newTask.equals(oldTask)){
+				if (newTask.taskClash(oldTask)){
+					clashedTasks.addTask(oldTask);
+				}
+			}
+		}
+		
+		for (Task oldTask: deadlineTasks){
+			if (!newTask.equals(oldTask)){
+				if (newTask.taskClash(oldTask)){
+					clashedTasks.addTask(oldTask);
+				}
+			}
+		}
+		
+		return clashedTasks;
+	}
+	
+	public Level getLoggingLevel() {
+		return loggingLevel;
+	}
+
+	public void setLoggingLevel(Level loggingLevel) {
+		this.loggingLevel = loggingLevel;
+	}
+
+}
+
+	// End of segment: D:\everything\eclipseworkspace\ZombieTask\main\src\storage\Storage.java
+
+
+
+
+
+	/**
+	 * origin: D:\everything\eclipseworkspace\ZombieTask\main\src\storage\StorageAPI.java
+	 */
+
+ *
+ */
+
+
+
+public class StorageAPI {
+	
+	/*
+	 * CLASS ATTRIBUTES
+	 */
+	
+	private static final String DEFAULT_FILE = "ZombieStorage.txt";
+	
+	/*
+	 * INSTANCE ATTRIBUTES
+	 */
+	
+	private static boolean hasRead = false;
+	private static String filename = DEFAULT_FILE;
+	private static File file = null;
+	private static BufferedReader br = null;
+	private static BufferedWriter bw = null;
+	private static StringBuilder sb = null;
+	private static String jsonTaskList = null;
+	private static Storage storage = null;
+	
+	/**
+	 * Constructor for storage module
+	 */
+	
+	public StorageAPI(){
+		readFileOnce();
+	}
+	
+	/**
+	 * Constructor for storage module
+	 * 
+	 * @param newFilename new file name
+	 */
+	
+	public StorageAPI(String newFilename){
+		if (newFilename != null) {
+			filename = newFilename;
+		}
+		readFileOnce();
+	}
+	
+	/*
+	 * FILE / FILENAME MUTATORS
+	 */
+	
+	/**
+	 * Sets filename
+	 * @param newFileName String for new filename
+	 * @throws IOException
+	 */
+	
+	public void setFile(String newFileName) throws IOException{
+		filename = newFileName;
+		hasRead = false;
+		readFileOnce();
+	}
+	
+	/**
+	 * Creates file
+	 * @return
+	 * @throws IOException
+	 */
+	
+	public static void createFile() throws IOException{
+		file = new File(filename);
+		if(!file.exists()){
+			file.createNewFile();
+		}
+	}
+	
+	public File getFile(){
+		return file;
+	}
+	
+	/**
+	 * Get file name
+	 * @return String representation of file name
+	 */
+	
+	public String getFileName(){
+		return file.getName();
+	}
+	
+	/**
+	 * Ensures file has been read once.
+	 * 
+	 * Defaults to new storage instance when uninitialized or during errors.
+	 */
+	
+	private static void readFileOnce(){
+		if (hasRead != false) {return; }
+		try{
+			createFile();
+			br = new BufferedReader(new FileReader(file));
+			sb = new StringBuilder();
+			String line;
+			while((line = br.readLine()) != null){
+				sb.append(line);
+			}
+			jsonTaskList = sb.toString();
+			if (jsonTaskList != null) {
+				storage = StorageJSONHandler.convertToStorage(jsonTaskList);
+				if (storage == null){
+					storage = new Storage();
+				}
+			}else{
+				storage = new Storage();
+			}
+		}catch (Exception err){
+			storage = new Storage();
+			ui.UI.printResponse(err.getMessage());
+		}
+		hasRead = true;
+	}
+	
+	/**
+	 * Writes storage into file
+	 * 
+	 * @throws IOException
+	 */
+	
+	private static void writeFile() throws IOException {
+		bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file.getName()), "utf-8"));
+		bw.write(StorageJSONHandler.convertToJSON(storage));
+		bw.flush();
+		bw.close();
+	}
+	
+	/*
+	 * Storage mutators
+	 */
+	
+	/**
+	 * Adds task to file
+	 * 
+	 * @param newTask
+	 * @return
+	 * @throws IOException
+	 */
+	
+	public Task add(Task newTask) throws IOException{
+		storage.addTask(newTask);
+		writeFile();
+		return newTask;
+	}
+	
+	public TaskUIFormat add(TaskUIFormat newTaskList) throws IOException{
+		storage.addTask(newTaskList);
+		writeFile();
+		return newTaskList;
+	}
+	/**
+	 * Removes task from file
+	 * 
+	 * @param task
+	 * @return
+	 * @throws IOException
+	 */
+	
+	public Task delete(Task task) throws IOException{
+		storage.removeTask(task);
+		writeFile();
+		return task;
+	}
+	
+	/**
+	 * support to remove many tasks at the same time(remove tasks between two times, remove tasks with the certain tag, location or name)
+	 * 
+	 * @param deletedTaskList
+	 * @return TaskUIFormat
+	 * @throws IOException
+	 */
+	
+	public TaskUIFormat delete(TaskUIFormat deletedTaskList) throws IOException{
+		storage.removeTask(deletedTaskList);
+		writeFile();
+		return deletedTaskList;
+	}
+	/**
+	 * Returns array list of all tasks
+	 * @return
+	 */
+	
+	public TaskUIFormat getAllTasks(){
+		return storage.getAllTasks();
+	}
+	
+	/**
+	 * Returns an arraylist of all tasks between start time and end time.
+	 * 
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 * @throws Exception
+	 */
+	
+	public TaskUIFormat search(Calendar startTime, Calendar endTime) throws Exception{
+		return storage.searchTask(startTime, endTime);
+	}
+	
+	/**
+	 * Returns task of a particular index
+	 * 
+	 * @param index
+	 * @return
+	 * @throws Exception
+	 */
+	
+	public Task search(String searchString) throws Exception{
+		return storage.search(searchString);
+	}
+	
+	/**
+	 * search task with a particular name
+	 * @param taskName
+	 * @return Task with particular name
+	 * @throws Exception
+	 */
+	
+	public TaskUIFormat searchName(String taskName) throws Exception{
+		return storage.searchName(taskName);
+	}
+	
+	/**
+	 * search task with particular tag
+	 * @param tagName
+	 * @return a Task ArrayList which contains all tasks that has the particular tag
+	 * @throws Exception
+	 */
+	
+	public TaskUIFormat searchTag(String tagName) throws Exception{
+		return storage.searchTag(tagName);
+	}
+	
+	/**
+	 * search tasks with particular location
+	 * @param location
+	 * @return a TaskUIFormat which contains all task that has a particular location
+	 * @throws Exception
+	 */
+	
+	public TaskUIFormat searchLocation(String location) throws Exception{
+		return storage.searchLocation(location);
+	}
+	
+	/**
+	 * Returns index of task with respect to the data inside
+	 * storage
+	 * 
+	 * @param task
+	 * @return
+	 */
+	
+	public String indexOf(Task task){
+		return storage.indexOf(task);
+	}
+	
+	/**
+	 * Returns true if task clashes if existing tasks in storage
+	 * 
+	 * Floating Tasks always returns false.
+	 * 
+	 * Dateline Tasks returns true when it clashes with other dateline tasks
+	 * or timed tasks.
+	 * 
+	 * @param newTask
+	 * @return boolean value
+	 */
+	
+	public TaskUIFormat taskClash(Task newTask){
+		return storage.taskClash(newTask);
+	}
+	
+	public void toggleComplete(Task task) throws IOException{
+		task.toggleComplete();
+		writeFile();
+	}
+	
+	public void toggleComplete(TaskUIFormat taskList) throws IOException{
+		storage.toggleComplete(taskList);
+		writeFile();
+	}
+	
+	public void toggleDelete(Task task) throws IOException{
+		task.toggleDelete();
+		writeFile();
+	}
+	
+}
+	// End of segment: D:\everything\eclipseworkspace\ZombieTask\main\src\storage\StorageAPI.java
+
+
+
+
+
+	/**
+	 * origin: D:\everything\eclipseworkspace\ZombieTask\main\src\storage\StorageJSONHandler.java
+	 */
+
+ *
+ */
+
+public class StorageJSONHandler {
+	
+	/**
+	 * Converts Task Object to JSON Format. Serializes null values and pretty printing is turned on.
+	 * 
+	 * @param task Task object as defined by ZombieTask package
+	 * @return JSON object represented as string
+	 */
+	
+	
+	public static String convertToJSON(Storage taskStorage){
+		GsonBuilder builder = new GsonBuilder();
+		builder.serializeNulls().setPrettyPrinting();
+		Gson gson = builder.create();
+		return gson.toJson(taskStorage);
+	}
+	
+	/**
+	 * Converts JSON string to Storage object
+	 * @param inputString
+	 * @return
+	 */
+	
+	public static Storage convertToStorage(String inputString){
+		Gson gson = new Gson();
+		return gson.fromJson(inputString, Storage.class);
+	}
+}
+
+	// End of segment: D:\everything\eclipseworkspace\ZombieTask\main\src\storage\StorageJSONHandler.java
+
+
+
+
+
+	/**
+	 * origin: D:\everything\eclipseworkspace\ZombieTask\main\src\task\Task.java
+	 */
+
+ */
+
+public class Task implements Comparable<Task> {	
+	/*
+	 * CLASS ATTRIBUTES
+	 */
+	
+	private static String MESSAGE_TIME_CONFLICT = "START TIME AFTER END TIME";
+	private static String MESSAGE_NO_SUBTASK = "THERE IS NO SUBTASK";
+	
+	/*
+	 * INSTANCE ATTRIBUTES
+	 */
+	
+	private String taskName = null;
+	private Calendar endTime = null;
+	private Calendar startTime = null;
+	private ArrayList<String> tags = new ArrayList<String>();
+	private ArrayList<Task> subtasks = new ArrayList<Task>();
+	private String location = null;
+	private boolean completed = false;
+	private boolean deleted = false;
+	
+	/*
+	 * CONSTRUCTORS
+	 */
+
+	/**
+	 * Constructor for task
+	 * @param taskName String identifier for Task
+	 */
+	
+	public Task(String taskName){
+		setTaskName(taskName);
+	}
+	
+	/**
+	 * Constructor for task
+	 * @param taskName String identifier for Task
+	 * @param endTime Calendar denoting end time
+	 * @throws Exception 
+	 */
+	
+	public Task(String taskName, Calendar endTime) throws Exception{
+		setTaskName(taskName);
+		setEndTime(endTime);
+	}
+	
+	/**
+	 * Constructor for Task
+	 * @param taskName String identifier for Task
+	 * @param endTime Calendar denoting end time
+	 * @param startTime Calendar denoting start time
+	 * @throws Exception 
+	 */
+	
+	public Task(String taskName, Calendar endTime, Calendar startTime) throws Exception{
+		setTaskName(taskName);
+		setEndTime(endTime);
+		setStartTime(startTime);
+	}
+	
+	public Task(String taskName, Calendar endTime, Calendar startTime, String location) throws Exception{
+		setTaskName(taskName);
+		setEndTime(endTime);
+		setStartTime(startTime);
+		setLocation(location);
+	}
+	
+	/*
+	 * TASKNAME MUTATORS
+	 */
+	
+	/**
+	 * Sets new task name
+	 * @param taskName String new task name
+	 */
+	
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
+	}
+	
+	/**
+	 * Gets task name from Task
+	 * @return String task name of Task
+	 */
+	
+	public String getTaskName() {
+		return this.taskName;
+	}
+	
+	/*
+	 * CALENDAR MUTATORS
+	 */
+	
+	/**
+	 * Checks existence of endTime
+	 * @return Boolean value indicating presence of end time
+	 */
+	
+	public boolean hasEndTime(){
+		return this.endTime != null;
+	}
+	
+	/**
+	 * Checks existence of startTime
+	 * @return Boolean value indicating presence of end startTime
+	 */
+	
+	public boolean hasStartTime(){
+		return this.startTime != null;
+	}
+	
+	/**
+	 * Sets end time
+	 * @param endTime new end time
+	 * @throws Exception 
+	 */
+	
+	public void setEndTime(Calendar endTime) throws Exception {
+		this.endTime = endTime;
+		checkTimeSanity();
+	}
+	
+	/**
+	 * Sets start time
+	 * @param startTime new start time
+	 * @throws Exception 
+	 */
+	
+	public void setStartTime(Calendar startTime) throws Exception{
+		this.startTime = startTime;
+		checkTimeSanity();
+	}
+	
+	/**
+	 * Returns end time
+	 * @return end time
+	 */
+	
+	public Calendar getEndTime() {
+		return this.endTime;
+	}
+	
+	/**
+	 * Returns start time
+	 * @return start time
+	 */
+	
+	public Calendar getStartTime() {
+		return this.startTime;
+	}
+	
+	/**
+	 * Returns whether Task is overdue.
+	 * @return boolean value that indicates whether end time has passed
+	 */
+	
+	public boolean isOverdue() {
+		if (this.isFloatingTask()){
+			return false;
+		}
+		return this.endTime.before(Calendar.getInstance());
+	}
+	
+	/**
+	 * Returns whether Task is a floating task
+	 * @return boolean value that indicates whether end time has passed
+	 */
+	
+	public boolean isFloatingTask() {
+		return this.endTime == null && this.startTime == null;
+	}
+	
+	public boolean isDeadlineTask() {
+		return (this.startTime == null && this.endTime != null);
+	}
+	
+	public boolean isTimedTask() {
+		return (this.startTime != null && this.endTime != null);
+	}
+	
+	/*
+	 * TAG MUTATORS
+	 */
+	
+	/**
+	 * Adds a string tag to a Task
+	 * @param tag String
+	 */
+	
+	public void addTag(String tag)
+	{
+		this.tags.add(tag);
+	}
+	
+	/**
+	 * Gets an arraylist of tags
+	 * @return ArrayList<String> tags
+	 */
+	
+	public ArrayList<String> getTags() {
+		return this.tags;
+	}
+	
+	/**
+	 * Checks whether tag exists in a Task
+	 * @param tag A string that identifies the tag
+	 * @return boolean value to indicate tag existence
+	 */
+	
+	public boolean hasTag(String tag) {
+		for (String currentTag : tags){
+			if (currentTag.equalsIgnoreCase(tag) || currentTag.equalsIgnoreCase("#"+tag)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Deletes tag
+	 * @param tag String (tag) to be removed from task
+	 */
+	
+	public void deleteTag(String tag)
+	{
+		ArrayList<String> tempTags = new ArrayList<String>();
+		for (String currentTag : tags){
+			if (!currentTag.equalsIgnoreCase(tag)){
+				tempTags.add(currentTag);
+			}
+		}
+		this.tags = tempTags;
+	}
+	
+	/*
+	 * SUBTASK MUTATORS
+	 */
+	
+	/**
+	 * Gets subtasks
+	 * @return ArrayList<Task> list of subtasks
+	 */
+
+	public ArrayList<Task> getSubtask(){
+		return subtasks;
+	}
+	
+	/**
+	 * Adds subtask to Task
+	 * @param subTask Task to be added to 
+	 * @throws Exception 
+	 */
+	
+	public void addSubtask(Task subTask) throws Exception{
+		if (subTask == null) {
+			throw new Exception(MESSAGE_NO_SUBTASK);
+		};
+		subtasks.add(subTask);
+	}
+	
+	/*
+	 * Comparators
+	 */
+	
+	public static boolean compareTaskName(Task task1, Task task2){
+		return task1.getTaskName().equalsIgnoreCase(task2.getTaskName());
+	}
+	
+	/**
+	 * Raises exception when start time is after end time
+	 * @throws Exception
+	 */
+	
+	private void checkTimeSanity() throws Exception{
+		if (startTime != null && endTime != null){
+			if (startTime.after(endTime)){
+				throw new Exception(MESSAGE_TIME_CONFLICT);
+			}
+		}
+	}
+	
+	/**
+	 * Compares time values between tasks based on endtime.
+	 * 
+	 * Default Comparator - End Time
+	 * 
+	 * @param task
+	 * @return 
+	 */
+	
+	public int compareTo(Task task){
+		return this.getEndTime().compareTo(task.getEndTime());
+	}
+	
+	/**
+	 * 
+	 * Checks whether Task is supposed to be carried out at the time of invocation.
+	 * 
+	 * @return true if current time is within timeframe of task
+	 */
+	
+	public boolean currentTimedTask(){
+		if (!isTimedTask()){
+			return false;
+		}
+		return this.endTime.after(Calendar.getInstance()) && this.startTime.before(Calendar.getInstance());
+	}
+	
+	/**
+	 * 
+	 * Returns task location
+	 * 
+	 * @return String
+	 */
+	
+	public String getLocation() {
+		return location;
+	}
+	
+	public boolean isLocation(String newLocation){
+		if (location == null){
+			return false;
+		}
+		return location.equalsIgnoreCase(newLocation) || location.equalsIgnoreCase("@" + newLocation);
+	}
+	
+	/**
+	 * 
+	 * Sets task location
+	 * 
+	 * @param location String
+	 * 
+	 */
+	
+	public void setLocation(String location) {
+		this.location = location;
+	}
+	
+	public boolean taskClash(Task otherTask){
+		if (this.equals(otherTask) || otherTask.isFloatingTask() || this.isFloatingTask()){
+			return false;
+		}
+		
+		if (otherTask.isDeadlineTask() && this.isDeadlineTask()){
+			return this.getEndTime().equals(otherTask.getEndTime());
+		}
+		
+		if (otherTask.isDeadlineTask() && this.isTimedTask()){
+			return otherTask.getEndTime().before(this.getEndTime()) && otherTask.getEndTime().after(this.getStartTime());
+		}
+		
+		if (otherTask.isTimedTask() && this.isDeadlineTask()){
+			return otherTask.getStartTime().before(this.getEndTime()) && otherTask.getEndTime().after(this.getEndTime());
+		}
+		
+		return !(this.getStartTime().after(otherTask.getEndTime()) || this.getEndTime().before(otherTask.getStartTime()));
+	}
+	
+	/**
+	 * Changes the status of completion in Task
+	 */
+	
+	public void toggleComplete() {
+		completed = !completed;
+	}
+	
+	public boolean isCompleted() {
+		return completed;
+	}
+
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
+	}
+	
+	/**
+	 * Changes the status of deletion in Task
+	 */
+	
+	public void toggleDelete(){
+		deleted = !deleted;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+}
+	// End of segment: D:\everything\eclipseworkspace\ZombieTask\main\src\task\Task.java
+
+
+
+
+
