@@ -133,7 +133,7 @@ public class ZombieTask {
 	 * @param command command to test
 	 */
 	public static void testCommand(String commandStr) {
-		initStorage("ZombieTest");
+		initStorage("ZombieStorage.txt");
 		UI.initUIOnce();
 		try {
 			Command command = Interpreter.getCommand(commandStr);
