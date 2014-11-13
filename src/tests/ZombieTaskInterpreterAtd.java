@@ -26,12 +26,6 @@ import zombietask.ZombieTaskCommandHandler;
  */
 public class ZombieTaskInterpreterAtd {
 
-	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-
-	@Before
-	public void setUpStreams() {
-		// System.setOut(new PrintStream(outContent));
-	}
 
 	@Before
 	public void deleteFile() {
@@ -51,9 +45,12 @@ public class ZombieTaskInterpreterAtd {
 		String commandCalled = ZombieTaskCommandHandler.getCommandCalled();
 		assertEquals(Command.ADD, commandCalled);
 		
+		// view cannot be tested since it is always called
+		/*
 		ZombieTask.testCommand("view agenda");
 		commandCalled = ZombieTaskCommandHandler.getCommandCalled();
 		assertEquals(Command.VIEW, commandCalled);
+		*/
 		
 		ZombieTask.testCommand("delete f0");
 		commandCalled = ZombieTaskCommandHandler.getCommandCalled();

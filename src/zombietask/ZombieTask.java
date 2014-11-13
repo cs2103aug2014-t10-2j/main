@@ -30,7 +30,7 @@ import logger.ZombieLogger;
  * Whoa hold on there, please wait till this is up first before making any
  * comments on how good or bad this project is.
  * 
-//@author a0066754w
+ * //@author a0066754w
  * 
  * @version 0.0.0a
  * 
@@ -43,7 +43,7 @@ public class ZombieTask {
 	 */
 
 	private static StorageAPI storage = new StorageAPI();
-	//private static Scanner sc = new Scanner(System.in);
+	// private static Scanner sc = new Scanner(System.in);
 	private static Logger logger = ZombieLogger.getLogger();
 
 	/*
@@ -53,7 +53,7 @@ public class ZombieTask {
 	private static String currentCommandString = null;
 	private static Command currentCommand = null;
 	private static GUI window = null;
-	
+
 	/*
 	 * Trick to obtain last day of month/year
 	 * http://stackoverflow.com/questions/19488658/get-last-day-of-month
@@ -69,8 +69,9 @@ public class ZombieTask {
 	private final static String MESSAGE_INVALID_FILENAME = "Invalid FileName: %s";
 	private final static String DEFAULT_FILENAME = "ZombieStorage.txt";
 	private final static boolean SUCCESS = true;
-	//private final static boolean FAILURE = false;
-	//private static boolean setExit = false;
+
+	// private final static boolean FAILURE = false;
+	// private static boolean setExit = false;
 
 	/**
 	 * Method that will be invoked when ZombieTask is called.
@@ -78,7 +79,7 @@ public class ZombieTask {
 	 * @param args
 	 * @throws Exception
 	 */
-	
+
 	public static void main(String[] args) throws Exception {
 		EventQueue.invokeAndWait(new Runnable() {
 			public void run() {
@@ -90,31 +91,31 @@ public class ZombieTask {
 				}
 			}
 		});
-		
+
 		ZombieTaskCommandHandler.setWindow(window);
-		
+
 		showToUser(MESSAGE_WELCOME);
-		if (args.length > 2){
+		if (args.length > 2) {
 			initStorage(args[1]);
-		}else{
+		} else {
 			initStorage(DEFAULT_FILENAME);
 		}
 		UI.initUIOnce();
 		userInput("view agenda");
 	}
-	
-	
+
 	public static void userInput(String str) {
 		try {
 			reinitializeCurrentVariables();
 			currentCommandString = str;
 			currentCommand = Interpreter.getCommand(currentCommandString);
-			if (currentCommand.hasMissingArgs() && !currentCommand.getCommandType().equals(Command.HELP)) {
-				logger.log(Level.INFO, String.format(
-						MESSAGE_MISSING_ARGUMENTS, currentCommandString));
-				//continue;
+			if (currentCommand.hasMissingArgs()
+					&& !currentCommand.getCommandType().equals(Command.HELP)) {
+				logger.log(Level.INFO, String.format(MESSAGE_MISSING_ARGUMENTS,
+						currentCommandString));
+				// continue;
 			}
-			
+
 			logger.log(Level.FINER, currentCommandString);
 			ZombieTaskCommandHandler.execute(currentCommand,
 					currentCommandString);
@@ -130,8 +131,12 @@ public class ZombieTask {
 	 * @param command command to test
 	 */
 	public static void testCommand(String commandStr) {
+		window = new GUI();
+		window.getFrmZombietask().setVisible(false);
+		ZombieTaskCommandHandler.setWindow(window);
 		initStorage("ZombieTest");
 		UI.initUIOnce();
+
 		try {
 			Command command = Interpreter.getCommand(commandStr);
 			ZombieTaskCommandHandler.execute(command, commandStr);
@@ -140,8 +145,8 @@ public class ZombieTask {
 			showToUser(err.toString());
 		}
 	}
-	
-	public static GUI getGUI(){
+
+	public static GUI getGUI() {
 		return window;
 	}
 

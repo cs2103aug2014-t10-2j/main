@@ -190,7 +190,9 @@ public class ZombieTaskCommandHandler {
 	
 	public static void execute() throws Exception {
 		currentCommandDescriptor = currentCommand.getCommandType();
-		commandCalled = currentCommandDescriptor;
+		if (currentCommandDescriptor != Command.VIEW) {
+			commandCalled = currentCommandDescriptor;
+		}
 		switch(currentCommandDescriptor){
 		case COMMAND_ADD:
 			addCommand(currentCommand);
@@ -925,7 +927,6 @@ public class ZombieTaskCommandHandler {
 	}
 	
 	private static void showToUser(String displayString) {
-		//System.out.println(displayString);
 		UI.printResponse(displayString);
 	}
 

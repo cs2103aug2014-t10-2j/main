@@ -26,7 +26,7 @@ import ui.UI;
 /**
  * Automated test driver for Interpreter class.
  * 
-//@author A0115329J
+ * //@author A0115329J
  * 
  */
 public class InterpreterAtd {
@@ -120,8 +120,8 @@ public class InterpreterAtd {
 		// to test parsing of deadline tasks
 
 		// Test 1: Basic test
-		Command command = Interpreter.getCommand("add today #food eat "
-				+ "something #impt @home");
+		Command command = Interpreter.getCommand("add today #food lunch "
+				+ "#impt @home");
 		assertEquals(Command.ADD, command.getCommandType());
 		CommandAdd add = (CommandAdd) command;
 
@@ -132,12 +132,12 @@ public class InterpreterAtd {
 		testTags(add.getTags(), "#food #impt");
 		assertEquals("@home", add.getLocation());
 
-		assertEquals("eat something", add.getTaskName());
-		assertEquals("add today #food eat something #impt @home",
-				add.getUserInput());
+		assertEquals("lunch", add.getTaskName());
+		assertEquals("add today #food lunch #impt @home", add.getUserInput());
 
 		// Test 2: case-insensitivity and white space
-		command = Interpreter.getCommand("   Add   30 Sep \n#food Eat #impt");
+		command = Interpreter
+				.getCommand("   Add   30 Sep \n#food Go and eat #impt");
 		assertEquals(Command.ADD, command.getCommandType());
 		add = (CommandAdd) command;
 
@@ -147,8 +147,9 @@ public class InterpreterAtd {
 				today.get(Calendar.SECOND));
 
 		testTags(add.getTags(), "#food #impt");
-		assertEquals("Eat", add.getTaskName());
-		assertEquals("   Add   30 Sep \n#food Eat #impt", add.getUserInput());
+		assertEquals("Go and eat", add.getTaskName());
+		assertEquals("   Add   30 Sep \n#food Go and eat #impt",
+				add.getUserInput());
 
 		// Test 3: unspecified command
 		command = Interpreter.getCommand("30 Sep Lunch @home #impt #food");
@@ -203,8 +204,7 @@ public class InterpreterAtd {
 
 		// Test 1: Basic test
 		Command command = Interpreter
-				.getCommand("add today 1pm to 2pm #food eat "
-						+ "something #impt @sch");
+				.getCommand("add today 1pm to 2pm #food have lunch #impt @sch");
 		assertEquals(Command.ADD, command.getCommandType());
 		CommandAdd add = (CommandAdd) command;
 		Calendar today = Calendar.getInstance();
@@ -214,14 +214,14 @@ public class InterpreterAtd {
 				today.get(Calendar.MONTH), today.get(Calendar.DATE), 14, 0, 0);
 
 		testTags(add.getTags(), "#food #impt");
-		assertEquals("eat something", add.getTaskName());
+		assertEquals("have lunch", add.getTaskName());
 		assertEquals("@sch", add.getLocation());
-		assertEquals("add today 1pm to 2pm #food eat something #impt @sch",
+		assertEquals("add today 1pm to 2pm #food have lunch #impt @sch",
 				add.getUserInput());
 
 		// Test 2: case-insensitivity and white space
 		command = Interpreter
-				.getCommand("   Add  30 Sep to 1 nov @house \n#food Eat");
+				.getCommand("   Add  30 Sep to 1 nov @house \n#impt Sleep");
 		assertEquals(Command.ADD, command.getCommandType());
 		add = (CommandAdd) command;
 
@@ -232,10 +232,10 @@ public class InterpreterAtd {
 				today.get(Calendar.HOUR_OF_DAY), today.get(Calendar.MINUTE),
 				today.get(Calendar.SECOND));
 
-		testTags(add.getTags(), "#food");
+		testTags(add.getTags(), "#impt");
 		assertEquals("@house", add.getLocation());
-		assertEquals("Eat", add.getTaskName());
-		assertEquals("   Add  30 Sep to 1 nov @house \n#food Eat",
+		assertEquals("Sleep", add.getTaskName());
+		assertEquals("   Add  30 Sep to 1 nov @house \n#impt Sleep",
 				add.getUserInput());
 
 		// Test 3: unspecified command
@@ -398,7 +398,7 @@ public class InterpreterAtd {
 		assertTrue(delete.hasMissingArgs());
 		assertEquals("delete", delete.getUserInput());
 	}
-	
+
 	@Test
 	public void testGetCommandDone() throws Exception {
 		// Test 1: Basic function
@@ -521,8 +521,7 @@ public class InterpreterAtd {
 		assertNull(updatedTask.getLocation());
 		assertNull(updatedTask.getStartDate());
 		assertNull(updatedTask.getEndDate());
-		
-		
+
 		// hybrid - date and tag
 		command = Interpreter.getCommand("update d2 #impt 9/11 2pm");
 		update = (CommandUpdate) command;
@@ -533,7 +532,7 @@ public class InterpreterAtd {
 		assertNull(updatedTask.getStartDate());
 		testDate(updatedTask.getEndDate(), today.get(Calendar.YEAR), 8, 11, 14,
 				0, 0);
-		
+
 		// hybrid - date and name
 		command = Interpreter.getCommand("update d2 #impt homework");
 		update = (CommandUpdate) command;
