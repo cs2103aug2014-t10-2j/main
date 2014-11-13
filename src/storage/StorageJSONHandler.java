@@ -11,8 +11,7 @@ import com.google.gson.Gson;
  * 
  * Refer to http://www.studytrails.com/java/json/java-google-json-introduction.jsp
  * 
- * @author A0119480
- * @author jellymac
+//@author A0119480
  *
  */
 

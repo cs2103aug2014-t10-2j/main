@@ -24,7 +24,7 @@ import java.io.IOException;
 /**
  * An ANSI string which reports the size of rendered text correctly (ignoring any ANSI escapes).
  *
- * @author <a href="mailto:jason@planet57.com">Jason Dillon</a>
+//@author <a href="mailto:jason@planet57.com">Jason Dillon</a>
  * @since 1.1
  */
 public class AnsiString

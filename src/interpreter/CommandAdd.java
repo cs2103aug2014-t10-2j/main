@@ -7,7 +7,7 @@ import java.util.Calendar;
  * Class for Add command, which contains task name, 2 sets of date and time, a
  * list of tags , a location and boolean variable to indicate missing arguments.
  * 
- * @author SP
+//@author A0115329J
  * 
  */
 

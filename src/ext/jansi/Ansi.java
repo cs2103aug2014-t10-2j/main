@@ -22,7 +22,7 @@ import java.util.concurrent.Callable;
 /**
  * Provides a fluent API for generating ANSI escape sequences.
  * 
- * @author <a href="http://hiramchirino.com">Hiram Chirino</a>
+//@author <a href="http://hiramchirino.com">Hiram Chirino</a>
  * @since 1.0
  */
 public class Ansi {

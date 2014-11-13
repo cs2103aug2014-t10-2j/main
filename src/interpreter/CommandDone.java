@@ -6,8 +6,7 @@ import java.util.ArrayList;
  * Class for Done command, which contains a string to 
  * indicate the task to be checked/unchecked as don and
  * a boolean variable to indicate missing arguments. 
- * @author SP
- *
+//@author a0066754w
  */
 public class CommandDone extends Command {
 	ArrayList<String> lineCode = null;

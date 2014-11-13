@@ -60,7 +60,7 @@ import java.util.regex.Pattern;
  *     windows, "lib${name}.jnilib" on OS X, and "lib${name}.so" on linux</li> 
  * </ul>
  * 
- * @author <a href="http://hiramchirino.com">Hiram Chirino</a>
+//@author <a href="http://hiramchirino.com">Hiram Chirino</a>
  */
 public class Library {
 

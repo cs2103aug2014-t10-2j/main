@@ -1,22 +1,6 @@
 package ui;
 /**
- * UI.java
- * Author: Lian Jie Nicholas
- * First Updated: 26/09/2014
- * Last Updated: 22/10/2014
- * 
- * UPDATE 16/10/2014:
- * 1. Renamed all references to yearly into annual.
- * 2. Method sortTasks to sort tasks by deadline before printing.
- * 2. All times set at 0min are allocated beneath hourly increments rather than before it.
- * 	  thus, deadlines set on 16/10/2014 00:00h are found within 16/10/2014 as opposed to
- * 	  15/10/2014.
- * 3. Removed printCalendar() method.
- * UPDATE 19/10/2014:
- * 1. Refactored hasOverdue() functionality
- * UPDATE 22/10/2014:
- * 1. Adapted to handle prefixes and getEndTime()
- * 2. Implemented ANSI Console color output
+//@author a0108553h
  */
 
 import java.text.Format;

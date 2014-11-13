@@ -19,6 +19,10 @@ import java.awt.Color;
 import java.util.Collections;
 import java.util.Stack;
 
+/**
+//@author a0108553h
+ */
+
 public class GUI {
 	
 	private static final String EMPTY_STRING = "";
@@ -36,6 +40,7 @@ public class GUI {
 	 * Create the application.
 	 */
 	
+	@SuppressWarnings("unchecked")
 	public GUI() {
 		
 		pastTextField = new Stack<String>();

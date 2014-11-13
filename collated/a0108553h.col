@@ -1,0 +1,747 @@
+//@author: a0108553h
+
+
+
+	/**
+	 * origin: D:\everything\eclipseworkspace\ZombieTask\main\src\tests\UIAtd.java
+	 */
+
+ */
+public class UIAtd {
+	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	
+	@Before
+	public void setUpStreams() {
+		System.setOut(new PrintStream(outContent));
+	}
+	@After
+	public void cleanUpStreams() {
+		System.setOut(null);
+	}
+	/*
+	@Test
+	public void testPrintResponse() {
+		fail("Not yet implemented");
+	}
+	@Test
+	public void testPrintPerspective() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetFormat() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testPrintTask() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testInitUIOnce() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testSortTasks() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testWithinTimePeriod() {
+		fail("Not yet implemented");
+	}
+*/
+}
+
+	// End of segment: D:\everything\eclipseworkspace\ZombieTask\main\src\tests\UIAtd.java
+
+
+
+
+
+	/**
+	 * origin: D:\everything\eclipseworkspace\ZombieTask\main\src\ui\TaskPrinter.java
+	 */
+
+ */
+public class TaskPrinter {
+	
+	public static final String BLACK = "<font color='BLACK'>";
+	public static final String BLUE = "<font color='BLUE'>";
+	public static final String CYAN = "<font color='CYAN'>";
+	public static final String GREEN = "<font color='GREEN'>";
+	public static final String GRAY = "<font color='GRAY'>";
+	public static final String MAGENTA = "<font color='MAGENTA'>";
+	public static final String ORANGE = "<font color='ORANGE'>";
+	public static final String RED = "<font color='RED'>";
+	public static final String YELLOW = "<font color='YELLOW'>";
+	public static final String DONE = "<font color='GRAY'>{DONE}";
+	
+	private static final Format FORMAT_DATETIME = new SimpleDateFormat("dd/MM/yy HH:mm");
+	private static final Format FORMAT_TIMEONLY = new SimpleDateFormat("HH:mm");
+	public static final int VERBOSITY_DECREMENT = 2;
+	public static final int TAB_INCREMENT = 1;
+	
+	public static final String FORMAT_NAME_DATE = "%s%s[%s] %s%s%s%s<br>"; // Tabs | Color | TaskID | Color | TaskName | Date | Color_Reset
+	public static final String FORMAT_TAGS = "%s%sTags: [%s]%s<br>"; // Tabs | Color | Tags | Color_Reset
+	public static final String TAG_SEPARATOR = "; ";
+	public static final String TAB = "&nbsp&nbsp&nbsp&nbsp&nbsp";
+	public static final String HEADER_LINE_DOUBLE = "<br><br>";
+	public static final String HEADER_LINE_SINGLE = "<br>";
+	
+	private static StorageAPI storage = ZombieTask.getStorage();
+	private static Logger logger = ZombieLogger.getLogger();
+	
+	public TaskPrinter()	{}
+	/**
+	 * Returns a pretty printing version of Task for printing.
+	 * 
+	 * Verbosity increases the amount of information printed out.
+	 * 	0 for name line only
+	 * 	1 for name + tags + location + time only
+	 * 
+	 * Tab is used for subTask pretty printing.
+	 * 
+	 * @param task
+	 * @param verbosity integer
+	 * @param tab integer
+	 * @return String
+	 */
+	
+	// Main Method
+	public static String printTask(Task task, int verbosity, int tabs) {
+		String response = "";
+		
+		// Exit Condition for recursive call
+		if (task == null || verbosity < 0)	{	return response;	}
+		logger.log(Level.FINE, task.toString());
+		
+		switch(verbosity) {
+		case 0:
+			response += printColoredName(task, tabs);
+			return response;
+		case 1:
+			response += printColoredName(task, tabs);
+			response += printColoredTags(task);
+			response += printColoredLocation(task);
+			response = response.concat(HEADER_LINE_SINGLE);
+			response += printDatesOfTask(task, tabs);
+			return response;
+		default:	return ".....";
+		}
+	}
+	
+	/**
+	 * Returns a pretty printing version of Task for printing.
+	 * 
+	 * Verbosity increases the amount of information printed out.
+	 * 	0 for name line only
+	 * 	1 for name + tags + location + time only
+	 * 
+	 * Tab is used for subTask pretty printing.
+	 * 
+	 * @param task
+	 * @param verbosity integer
+	 * @param tab integer
+	 * @param int 0 for start time, 1 for end time
+	 * @return String
+	 */
+	
+	public static String printTaskSingleLine(Task task, int verbosity, int tabs, int time) {
+		String response = "";
+		
+		// Exit Condition for recursive call
+		if (task == null || verbosity < 0)	{	return response;	}
+		logger.log(Level.FINE, task.toString());
+		
+		switch(verbosity) {
+		case 0:
+			response += printColoredName(task, tabs);
+			return response;
+		case 1:
+			response += printColoredName(task, tabs);
+			response += printColoredTags(task);
+			response = response.concat(HEADER_LINE_SINGLE);
+			response += printDatesOfTask(task, tabs);
+			return response;
+		default:	return ".....";
+		}
+	}
+	
+	// Accessory Methods
+	public static String printColoredName(Task task, int tabs) {
+		return generateTabs(tabs) + GRAY + "[" + storage.indexOf(task) + "] " + getTaskColor(task) + task.getTaskName();
+	}
+
+	public static String printColoredTags(Task task) {
+		String tags = " ";
+		for(String tag : task.getTags()) {
+			tags += tag;
+			if (task.getTags().indexOf(tag) != task.getTags().size() - 1)	tags += TAG_SEPARATOR;
+		}
+		return GRAY + tags;
+	}
+	
+	public static String printDatesOfTask(Task task, int tabs) {
+		String response = "";
+		if(task.isDeadlineTask())
+			response += generateTabs(tabs + TAB_INCREMENT).concat(printColoredDateTime(task, 'E'));
+		
+		if(task.isTimedTask()) {
+			response += generateTabs(tabs + TAB_INCREMENT).concat(printColoredDateTime(task, 'S'));
+			response = response.concat(HEADER_LINE_SINGLE);
+			response += generateTabs(tabs + TAB_INCREMENT).concat(printColoredDateTime(task, 'E'));
+		}
+		return response.concat(HEADER_LINE_SINGLE);
+	}
+	
+	public static String printColoredLocation(Task task){
+		String response = " ";
+		if (task.getLocation() != null){
+			response = response.concat(MAGENTA).concat(task.getLocation());
+		}
+		return response;
+	}
+
+	private static String generateTabs(int tabs) {
+		return(tabs > 0) ? TAB + generateTabs(tabs - 1) : "";
+	}
+	
+	public static String printColoredDateTime(Task task, char dateType) {
+		switch(dateType) {
+		case 'S':	return CYAN + "Start: " + FORMAT_DATETIME.format(task.getStartTime().getTime());
+		case 'E':	return CYAN + "End: " + FORMAT_DATETIME.format(task.getEndTime().getTime());
+		default:	return "";
+		}
+	}
+
+	public static String printColoredDate(Task task, char dateType) {
+		switch(dateType) {
+		case 'S':	return CYAN + "Start: " + FORMAT_TIMEONLY.format(task.getStartTime().getTime());
+		case 'E':	return CYAN + "End: " + FORMAT_TIMEONLY.format(task.getEndTime().getTime());
+		default:	return "";
+		}
+	}
+
+	private static String getTaskColor(Task task){
+		if (task.isCompleted())		{	return DONE;	}
+		if (task.isOverdue())		{	return RED;	}
+		if (task.isFloatingTask())	{	return GREEN;	}
+		if (task.isDeadlineTask())	{	return ORANGE;	}
+		if (task.isTimedTask())		{	return BLUE;	}
+		return YELLOW;
+	}
+}
+
+	// End of segment: D:\everything\eclipseworkspace\ZombieTask\main\src\ui\TaskPrinter.java
+
+
+
+
+
+	/**
+	 * origin: D:\everything\eclipseworkspace\ZombieTask\main\src\ui\GUI.java
+	 */
+
+ */
+
+public class GUI {
+	
+	private static final String EMPTY_STRING = "";
+
+	private JFrame frmZombietask;
+	private JTextField textField;
+	private JLabel label;
+	private JLabel lblNewLabel;
+	private JScrollPane scrollPane;
+	private JScrollPane scrollPane_1;
+	private Stack<String> pastTextField;
+	private Stack<String> futureTextField;
+		
+	/**
+	 * Create the application.
+	 */
+	
+	@SuppressWarnings("unchecked")
+	public GUI() {
+		
+		pastTextField = new Stack<String>();
+		futureTextField = new Stack<String>();
+		
+		frmZombietask = new JFrame();
+		frmZombietask.setTitle("ZombieTask");
+		frmZombietask.setBounds(100, 100, 560, 350);
+		frmZombietask.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmZombietask.getContentPane().setLayout(null);
+		
+		JButton btnNewButton = new JButton("Enter");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				addCurrentTextToPastList();
+				ZombieTask.userInput(textField.getText());
+				textField.setText(EMPTY_STRING);
+			}
+		});
+		btnNewButton.setBounds(445, 277, 89, 23);
+		frmZombietask.getContentPane().add(btnNewButton);
+		
+		textField = new JTextField();
+		textField.setBounds(10, 280, 425, 20);
+		frmZombietask.getContentPane().add(textField);
+		textField.setColumns(10);
+		textField.setFocusTraversalKeys(
+                KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,
+                Collections.EMPTY_SET);
+		textField.addKeyListener(new java.awt.event.KeyAdapter() {
+			public void keyPressed(java.awt.event.KeyEvent evt) {
+				switch (evt.getKeyCode()){
+				case java.awt.event.KeyEvent.VK_TAB:
+					ZombieTask.userInput("help " + textField.getText());
+					break;
+				case java.awt.event.KeyEvent.VK_ENTER:
+					addCurrentTextToPastList();
+					ZombieTask.userInput(textField.getText());
+					textField.setText(EMPTY_STRING);
+					break;
+				case java.awt.event.KeyEvent.VK_HOME:
+					ZombieTask.userInput("view agenda");
+					break;
+				case java.awt.event.KeyEvent.VK_UP:
+					if (!pastTextField.isEmpty()){
+						futureTextField.push(textField.getText());
+						textField.setText(pastTextField.pop());
+					}
+					break;
+				case java.awt.event.KeyEvent.VK_DOWN:
+					if (!futureTextField.isEmpty()){
+						pastTextField.push(textField.getText());
+						textField.setText(futureTextField.pop());
+					}
+					break;
+				default:
+					break;
+				}
+		        
+			}
+		});
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 67, 522, 208);
+		frmZombietask.getContentPane().add(scrollPane);
+		
+		label = new JLabel("");
+		label.setVerticalAlignment(SwingConstants.TOP);
+		scrollPane.setViewportView(label);
+		label.setFont(new Font("Courier New", Font.BOLD, 12));
+		
+		scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(12, 11, 522, 45);
+		frmZombietask.getContentPane().add(scrollPane_1);
+		
+		lblNewLabel = new JLabel("");
+		lblNewLabel.setForeground(Color.LIGHT_GRAY);
+		lblNewLabel.setVerticalAlignment(SwingConstants.TOP);
+		scrollPane_1.setViewportView(lblNewLabel);
+		lblNewLabel.setFont(new Font("Courier New", Font.BOLD, 12));
+	}
+	
+	public void addCurrentTextToPastList(){
+		pastTextField.push(textField.getText());
+		if (!futureTextField.isEmpty()){
+			futureTextField.clear();
+		}
+	}
+	
+	public void modifyLabelText(String str) {
+		label.setText(str);
+	}
+	
+	public void modifyUpperLabel(String str) {
+		lblNewLabel.setText(str);
+	}
+	
+	public void closeWindow() {
+		System.exit(0);
+	}
+	
+	public JFrame getFrmZombietask() {
+		return frmZombietask;
+	}
+
+	public void setFrmZombietask(JFrame frmZombietask) {
+		this.frmZombietask = frmZombietask;
+	}
+}
+
+	// End of segment: D:\everything\eclipseworkspace\ZombieTask\main\src\ui\GUI.java
+
+
+
+
+
+	/**
+	 * origin: D:\everything\eclipseworkspace\ZombieTask\main\src\ui\FORMAT.java
+	 */
+
+ */
+public enum FORMAT
+{
+	AGENDA, DAILY, WEEKLY, MONTHLY, ANNUAL, CALENDAR, INVALID;
+}
+	// End of segment: D:\everything\eclipseworkspace\ZombieTask\main\src\ui\FORMAT.java
+
+
+
+
+
+	/**
+	 * origin: D:\everything\eclipseworkspace\ZombieTask\main\src\ui\UI.java
+	 */
+
+ */
+
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import task.Task;
+import task.TaskUIFormat;
+import zombietask.ZombieTask;
+import ext.jansi.AnsiConsole;
+
+public class UI
+{
+	/*
+	 * Class Constants
+	 * 
+	 * Color Standardization
+	 * 
+	 * @Names
+	 * 
+	 * Red - Overdue
+	 * Blue - Floating Tasks
+	 * Yellow - Deadline Tasks
+	 * Green - Timed Tasks
+	 * 
+	 * @Tags
+	 * 
+	 * White - all
+	 * 
+	 * @SubTasks
+	 * 
+	 * Purple - all
+	 */
+	
+	public static final String HEADER_AGENDA = "(Agenda)<br><br>";
+	public static final String HEADER_DAILY = "(Daily)<br><br>";
+	public static final String HEADER_WEEKLY = "(Weekly)<br><br>";
+	public static final String HEADER_MONTHLY = "(Monthly)<br><br>";
+	public static final String HEADER_ANNUAL = "(Annual)<br><br>";
+	public static final String HEADER_TODAY = "Current Time: ";
+	public static final String HEADER_OVERDUE = "Overdue Tasks<br>";
+	public static final String HEADER_FLOATING_TASKS = "Floating Tasks<br>";
+	public static final String HEADER_SCHEDULED_TASKS = "Scheduled Tasks<br>";
+	public static final String HEADER_LINE_DOUBLE = "<br><br>";
+	public static final String HEADER_LINE_SINGLE = "<br>";
+	
+	public static final String FORMAT_NAME_DATE = "%s%s[%s] %s%s%s%s<br>"; // Tabs | Color | TaskID | Color | TaskName | Date | Color_Reset
+	public static final String FORMAT_TAGS = "%s%sTags: [%s]%s<br>"; // Tabs | Color | Tags | Color_Reset
+	public static final String TAG_SEPARATOR = "; ";
+	public static final String BORDER = "----------------------------------------";
+	
+	public static final String LABEL_FORMAT = "<html><p><font>%s</font></p></html>";
+	
+	public static final int VERBOSITY_NAME_ONLY = 0;
+	public static final int VERBOSITY_TAG_INCLUSIVE = 1;
+	public static final int VERBOSITY_SUBTASK_INCLUSIVE = 2;
+	public static final int VERBOSITY_DECREMENT = 2;
+	public static final int TAB_INCREMENT = 1;
+	
+	public static final FORMAT AGENDA = FORMAT.AGENDA;
+	public static final FORMAT DAILY = FORMAT.DAILY;
+	public static final FORMAT WEEKLY = FORMAT.WEEKLY;
+	public static final FORMAT MONTHLY = FORMAT.MONTHLY;
+	public static final FORMAT ANNUAL = FORMAT.ANNUAL;
+	public static final FORMAT INVALID = FORMAT.INVALID;
+	
+	private static final Format FORMAT_DATEONLY = new SimpleDateFormat("dd/MM/yy");
+	private static final Format FORMAT_DATETIME = new SimpleDateFormat("dd/MM/yy HH:mm");
+	private static final Format FORMAT_TIMEONLY = new SimpleDateFormat("HH:mm");
+	private static final Format FORMAT_TODAY = new SimpleDateFormat("dd MMMMM yyyy, HH:mm");
+	
+	private static final String EMPTY_STRING = "";
+	
+	private static final ArrayList<Task> EMPTY_LIST = new ArrayList<Task>();
+	
+	/*
+	 * Class variables
+	 */
+	
+	//private static Logger logger = ZombieLogger.getLogger();
+	private static boolean uiInit = false;
+	private static GUI window = null;
+	
+	/*
+	 *  PRIMARY METHODS
+	 */
+	
+	public static void printResponse(String response) {
+		window.modifyUpperLabel(String.format(LABEL_FORMAT, response));
+	}
+	
+	public static void printPerspective(FORMAT format, TaskUIFormat tasks)
+			throws Exception {
+			if(tasks.isEmpty()) {
+				window.modifyUpperLabel("No tasks within time period." + format);
+				window.modifyLabelText(EMPTY_STRING);
+				return;
+			}
+			String str;
+			switch(format) {
+				case AGENDA:	str = printAgenda(tasks);	break;
+				case DAILY:		str = printDaily(tasks);	break;
+				case WEEKLY:	str = printWeekly(tasks);	break;
+				case MONTHLY:	str = printMonthly(tasks);	break;
+				/*
+				 * Temporary
+				 * 
+				case ANNUAL:	str = printAnnual(tasks);	break;
+				*/
+				default:	return;
+			}
+			window.modifyLabelText(String.format(LABEL_FORMAT, str));
+		}
+	
+	/*
+	 * FORMAT METHODS
+	 */
+	
+	/**
+	 * Prints an agenda, a list of tasks according to type of task.
+	 * First up, all overdue tasks.
+	 * Secondly, all tasks, sorted chronologically.
+	 * 
+	 * @param tasks
+	 * @return String to be printed
+	 * @throws Exception
+	 */
+	
+	private static String printAgenda(TaskUIFormat tasks) throws Exception {
+		
+		String str = new String(HEADER_AGENDA);
+		
+		/*
+		 * Add overdue Tasks
+		 */
+		
+		TaskUIFormat overdueTasks = getOverdueTasks(tasks);
+		if (!overdueTasks.isEmpty()){
+			str = str.concat(HEADER_OVERDUE);
+			for (Task task : overdueTasks.getDeadlineTasks()){
+				str += TaskPrinter.printTask(task, 1, 0);
+			}
+			for (Task task : overdueTasks.getTimedTasks()){
+				str += TaskPrinter.printTask(task, 1, 0);
+			}
+			str = str.concat(HEADER_LINE_SINGLE);
+		}
+		/*
+		 * Add floating Tasks
+		 */
+		if (!tasks.getFloatingTasks().isEmpty()){
+			str = str.concat(HEADER_FLOATING_TASKS);
+			for (Task task : tasks.getFloatingTasks()){
+				str += TaskPrinter.printTask(task, 1, 0);
+			}
+			str = str.concat(HEADER_LINE_SINGLE);
+		}
+		/*
+		 * Add non-floating Tasks
+		 */
+		if (!tasks.getScheduledTasks().isEmpty()){
+			str = str.concat(HEADER_SCHEDULED_TASKS);
+			for (Task task : tasks.getScheduledTasks())
+				if(!task.isOverdue())	str += TaskPrinter.printTask(task, 1, 0);
+		}
+		assert (str != null);
+		return str + BORDER;
+	}
+	
+	private static String printDaily(TaskUIFormat tasks) throws Exception {
+		String str = new String(HEADER_DAILY);
+		TaskUIFormat processedTasks = new TaskUIFormat(null, processTasks(tasks), null);
+		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + HEADER_LINE_SINGLE;
+		Calendar start = delimitTime(Calendar.getInstance());
+		Calendar end = delimitTime(Calendar.getInstance());
+		end.add(Calendar.HOUR_OF_DAY, 1);
+		for(int i = 0; i < 24; i++) {
+			str += "|- " + FORMAT_TIMEONLY.format(start.getTime()) + " : ";
+			for(Task task : processedTasks.getDeadlineTasks()) {
+				if(!task.isOverdue() && withinTimePeriod(task.getEndTime(), start, end))
+					str += task.getTaskName() + " ";
+			}
+			start.add(Calendar.HOUR_OF_DAY, 1);
+			end.add(Calendar.HOUR_OF_DAY, 1);
+			str += HEADER_LINE_SINGLE;
+		}
+		return str + BORDER;
+	}
+	private static String printWeekly(TaskUIFormat tasks) throws Exception {
+		String str = new String(HEADER_WEEKLY);
+		TaskUIFormat processedTasks = new TaskUIFormat(null, processTasks(tasks), null);
+		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + HEADER_LINE_SINGLE;
+		Calendar start = delimitTime(Calendar.getInstance());
+		Calendar end = delimitTime(Calendar.getInstance());
+		end.add(Calendar.HOUR_OF_DAY, 6);
+		//System.out.println(FORMAT_DATETIME.format(start.getTime()));
+		for(int i = 0; i < 28; i++) {
+			str += "|- " + FORMAT_DATETIME.format(start.getTime()) + " : ";
+			for(Task task : processedTasks.getDeadlineTasks()) {
+				if(!task.isOverdue() && withinTimePeriod(task.getEndTime(), start, end))
+					str += task.getTaskName() + " ";
+			}
+			start.add(Calendar.HOUR_OF_DAY, 6);
+			end.add(Calendar.HOUR_OF_DAY, 6);
+			str += HEADER_LINE_SINGLE;
+		}
+		return str + BORDER;
+	}
+	
+	private static String printMonthly(TaskUIFormat tasks) throws Exception {
+		String str = new String(HEADER_MONTHLY);
+		TaskUIFormat processedTasks = new TaskUIFormat(null, processTasks(tasks), null);
+		str += "Today, " + FORMAT_TODAY.format(Calendar.getInstance().getTime()) + HEADER_LINE_SINGLE;
+		Calendar start = delimitTime(Calendar.getInstance());
+		start.set(Calendar.HOUR, 0);
+		Calendar end = delimitTime(Calendar.getInstance());
+		end.set(Calendar.HOUR, 0);
+		end.add(Calendar.DATE, 1);
+		for(int i = 0; i < 30; i++) {
+			str += "|- " + FORMAT_DATEONLY.format(start.getTime()) + " : ";
+			for(Task task : processedTasks.getDeadlineTasks()) {
+				if(!task.isOverdue() && withinTimePeriod(task.getEndTime(), start, end))
+					str += task.getTaskName() + " ";
+			}
+			start.add(Calendar.DATE, 1);
+			end.add(Calendar.DATE, 1);
+			str += HEADER_LINE_SINGLE;
+		}
+		return str + BORDER;
+	}
+	
+	public static FORMAT getFormat(String formatString)
+	{
+		switch(formatString.toLowerCase())
+		{
+			case "agenda":		return FORMAT.AGENDA;
+			case "daily":		return FORMAT.DAILY;
+			case "weekly":		return FORMAT.WEEKLY;
+			case "monthly":		return FORMAT.MONTHLY;
+			case "annual":		return FORMAT.ANNUAL;
+			case "calendar":	return FORMAT.CALENDAR;
+			default:			return FORMAT.INVALID;
+		}
+	}
+	
+	private static TaskUIFormat getOverdueTasks(TaskUIFormat tasks){
+		ArrayList<Task> searchDeadlineList = new ArrayList<Task>();
+		ArrayList<Task> searchTimedList = new ArrayList<Task>();
+		for (Task task : tasks.getDeadlineTasks()){
+			if (task.isOverdue())	searchDeadlineList.add(task);
+		}
+		for (Task task : tasks.getTimedTasks()){
+			if (task.isOverdue())	searchTimedList.add(task);
+		}
+		return new TaskUIFormat(EMPTY_LIST, searchDeadlineList, searchTimedList);
+	}
+	
+	
+	/*
+	 *  MISCELLENEOUS METHODS
+	 */
+	
+	// Standardizes Calendar.getInstance() by zeroing smaller values
+	private static Calendar delimitTime(Calendar time)
+	{
+		time.set(Calendar.MINUTE, 0);
+		time.set(Calendar.SECOND, 0);
+		time.set(Calendar.MILLISECOND, 0);
+		return time;
+	}
+	
+	public static String printTask(Task task, int verbosity, int tabs) {
+		return TaskPrinter.printTask(task, verbosity, tabs);
+	}
+	
+	public static void initUIOnce() {
+		if (!uiInit){
+			initUI();
+			window = ZombieTask.getGUI();
+		}
+	}
+	
+	private static void initUI(){
+		System.setProperty("jansi.passthrough", "true");
+		AnsiConsole.systemInstall();
+	}
+	
+	private static ArrayList<Task> processTasks(TaskUIFormat tasks) throws Exception
+	{
+		ArrayList<Task> pTasks = new ArrayList<Task>();
+		for(Task task : tasks.getScheduledTasks()) {
+			if(task.isTimedTask()) {
+				pTasks.add(new Task(TaskPrinter.printTask(task, 0, 0) + " " + 
+						TaskPrinter.printColoredDate(task, 'S'), task.getStartTime()));
+				pTasks.add(new Task(TaskPrinter.printTask(task, 0, 0) + " " + 
+						TaskPrinter.printColoredDate(task, 'E'), task.getEndTime()));
+			}
+			else if(task.isDeadlineTask())
+				pTasks.add(new Task(TaskPrinter.printTask(task, 0, 0) + " " + 
+						TaskPrinter.printColoredDate(task, 'E'), task.getEndTime()));
+		}
+		return sortTasks(pTasks);
+	}
+	
+	public static ArrayList<Task> sortTasks(ArrayList<Task> tasks) {
+		ArrayList<Task> floatingTasks = new ArrayList<Task>();
+		for(int i = 1; i < tasks.size(); i++) {
+			if(tasks.get(i).isFloatingTask())	floatingTasks.add(tasks.remove(i));
+		}
+		for(int j = 1; j < tasks.size(); j++)
+		for(int k = 0; k < tasks.size(); k++)
+		if(tasks.get(j).getEndTime().before(tasks.get(k).getEndTime()))
+			tasks.add(k, tasks.remove(j));
+		tasks.addAll(floatingTasks);
+		return tasks;
+	}
+	/*
+	 * DEPRECIATED
+	 */
+	
+	
+	public static boolean withinTimePeriod(Calendar time, Calendar begin, Calendar end)
+	{
+		if(time == null)	return false;
+		return (time.compareTo(begin) >= 0 && time.compareTo(end) < 0);
+	}
+}
+
+	// End of segment: D:\everything\eclipseworkspace\ZombieTask\main\src\ui\UI.java
+
+
+
+
+
+	/**
+	 * origin: D:\everything\eclipseworkspace\ZombieTask\main\src\task\Task.java
+	 */
+
+	// End of segment: D:\everything\eclipseworkspace\ZombieTask\main\src\task\Task.java
+
+
+
+
+

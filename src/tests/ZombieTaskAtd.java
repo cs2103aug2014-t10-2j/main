@@ -19,9 +19,7 @@ import zombietask.ZombieTaskCommandHandler;
  * 
  * Junit Tests for 
  * 
- * @author jellymac
- * 
- * @version 0.0.0a
+//@author a0066754w
  *
  */
 

@@ -53,7 +53,7 @@ SOFTWARE.
  * you. Objects and arrays can be nested up to 20 levels deep.
  * <p>
  * This can sometimes be easier than using a JSONObject to build a string.
- * @author JSON.org
+//@author JSON.org
  * @version 2011-11-24
  */
 public class JSONWriter {

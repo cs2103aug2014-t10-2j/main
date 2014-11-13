@@ -32,7 +32,7 @@ import java.util.Iterator;
  * JSONObject, and to covert a JSONArray or JSONObject into an XML text using
  * the JsonML transform.
  *
- * @author JSON.org
+//@author JSON.org
  * @version 2014-05-03
  */
 public class JSONML {

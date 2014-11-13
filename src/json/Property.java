@@ -30,7 +30,7 @@ import java.util.Properties;
 
 /**
  * Converts a Property file data into JSONObject and back.
- * @author JSON.org
+//@author JSON.org
  * @version 2014-05-03
  */
 public class Property {

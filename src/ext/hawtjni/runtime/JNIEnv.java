@@ -11,7 +11,7 @@ package ext.hawtjni.runtime;
  *  for the value.
  * </p>
  *
- * @author <a href="http://hiramchirino.com">Hiram Chirino</a>
+//@author <a href="http://hiramchirino.com">Hiram Chirino</a>
  */
 public class JNIEnv {
     private JNIEnv() {}

@@ -8,7 +8,9 @@ import java.io.PrintStream;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
+/**
+//@author a0108553h
+ */
 public class UIAtd {
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	
@@ -20,11 +22,11 @@ public class UIAtd {
 	public void cleanUpStreams() {
 		System.setOut(null);
 	}
+	/*
 	@Test
 	public void testPrintResponse() {
 		fail("Not yet implemented");
 	}
-/*
 	@Test
 	public void testPrintPerspective() {
 		fail("Not yet implemented");

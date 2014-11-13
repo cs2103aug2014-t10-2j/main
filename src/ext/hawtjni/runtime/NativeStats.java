@@ -39,7 +39,7 @@ import java.util.Map.Entry;
  * </li>
  * </ol>
  * 
- * @author <a href="http://hiramchirino.com">Hiram Chirino</a>
+//@author <a href="http://hiramchirino.com">Hiram Chirino</a>
  */
 public class NativeStats {
 

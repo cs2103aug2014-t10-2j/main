@@ -2,7 +2,7 @@ package exception;
 
 /**
  * Exception for empty user input
- * @author SP
+//@author A0115329J
  *
  */
 public class NoCommandException extends Exception {

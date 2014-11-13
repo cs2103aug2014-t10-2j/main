@@ -7,7 +7,7 @@ import java.util.List;
  * Class to create command objects with command type and arguments. Super-class
  * of CommandAdd, CommandDelete, CommandUpdate, CommandView and CommandUndo.
  * 
- * @author SP
+//@author A0115329J
  * 
  */
 public class Command {

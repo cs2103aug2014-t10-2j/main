@@ -30,10 +30,13 @@ import interpreter.CommandSearchTag;
 import interpreter.CommandSearchTime;
 import interpreter.CommandUpdate;
 import interpreter.CommandView;
+
 /**
- * @author jellymac
- * @author A0119480
- *
+ * 
+ * Handles zombietask commands
+ * 
+//@author a0066754w
+ * 
  */
 public class ZombieTaskCommandHandler {
 	

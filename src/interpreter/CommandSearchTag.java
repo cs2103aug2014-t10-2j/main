@@ -3,7 +3,7 @@ package interpreter;
 /**
  * Class for Search Tag command, which contains a String tag and a
  * boolean variable to indicate missing arguments. 
- * @author SP
+//@author a0066754w
  *
  */
 public class CommandSearchTag extends Command {

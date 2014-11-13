@@ -34,8 +34,8 @@ import java.util.ArrayList;
  * sent out to the underlying OutputStream.  Subclasses should
  * actually perform the ANSI escape behaviors.
  * 
- * @author <a href="http://hiramchirino.com">Hiram Chirino</a>
- * @author Joris Kuipers
+//@author <a href="http://hiramchirino.com">Hiram Chirino</a>
+//@author Joris Kuipers
  * @since 1.0
  */
 public class AnsiOutputStream extends FilterOutputStream {

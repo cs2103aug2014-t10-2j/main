@@ -2,7 +2,7 @@ package interpreter;
 /**
  * Class for Search Name command, which contains a search string and a boolean
  * variable to indicate missing arguments. 
- * @author SP
+//@author A0115329J
  *
  */
 public class CommandSearchName extends Command {

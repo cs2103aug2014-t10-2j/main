@@ -27,7 +27,7 @@ import static ext.hawtjni.runtime.MethodFlag.*;
 
 /**
  * 
- * @author <a href="http://hiramchirino.com">Hiram Chirino</a>
+//@author <a href="http://hiramchirino.com">Hiram Chirino</a>
  */
 @JniClass(conditional="defined(_WIN32) || defined(_WIN64)")
 public class Kernel32 {

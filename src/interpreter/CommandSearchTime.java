@@ -5,7 +5,7 @@ import java.util.Calendar;
 /**
  * Class for Search Time command, which contains 2 sets of date and time and a
  * boolean variable to indicate missing arguments. 
- * @author SP
+//@author A0115329J
  *
  */
 public class CommandSearchTime extends Command {
