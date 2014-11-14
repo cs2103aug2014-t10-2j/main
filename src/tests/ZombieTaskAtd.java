@@ -4,6 +4,7 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 
+import interpreter.Command;
 import interpreter.Interpreter;
 
 import org.junit.After;
@@ -12,6 +13,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import exception.NoCommandException;
+import ui.GUI;
+import ui.UI;
 import zombietask.ZombieTask;
 import zombietask.ZombieTaskCommandHandler;
 
@@ -43,6 +47,7 @@ public class ZombieTaskAtd {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+		ZombieTask.initForTest();
 	}
 
 	@AfterClass
@@ -137,43 +142,9 @@ public class ZombieTaskAtd {
 		}
 	}
 	
-	public void addCommandTester02() {
-		fail("Not yet implemented");
-	}
-	
 	@Test
-	public void deleteCommandTester() {
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void viewCommandTester() {
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void updateCommandTester() {
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void invalidCommandTester() {
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void undoCommandTester() {
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void redoCommandTester() {
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void helpCommandTester() {
-		fail("Not yet implemented");
+	public void helpCommandTester() throws NoCommandException {
+		ZombieTask.setCurrentCommand(Interpreter.getCommand("help"));
 	}
 	
 	/*
@@ -181,40 +152,25 @@ public class ZombieTaskAtd {
 	 */
 	
 	@Test
-	public void addCommandToListTester() {
-		fail("Not yet implemented");
+	public void undoTester() throws Exception {
+		executeCommand("delete-name nooby");
+		executeCommand("add nooby 16 Sep");
+		executeCommand("undo");
+		assertEquals("Undo", ZombieTask.getStorage().searchName("nooby").size(), 0);
 	}
 	
 	@Test
-	public void removeLastCommandFromListTester() {
-		fail("Not yet implemented");
+	public void redoTester() throws Exception {
+		executeCommand("delete-name noobydooby");
+		executeCommand("add noobydooby 17 Sep");
+		executeCommand("undo");
+		executeCommand("redo");
+		assertEquals("Undo", ZombieTask.getStorage().searchName("noobydooby").size(), 1);
 	}
 	
-	/*
-	 * Storage Testing
-	 */
-	
-	@Test
-	public void storageTest() {
-		fail("Not yet implemented");
-	}
-	
-	/*
-	 * Interpreter Testing
-	 */
-	
-	@Test
-	public void interpreterTest() {
-		fail("Not yet implemented");
-	}
-	
-	/*
-	 * UI Testing
-	 */
-	
-	@Test
-	public void uiTest() {
-		fail("Not yet implemented");
+	private void executeCommand(String commandString) throws Exception{
+		Command command = Interpreter.getCommand(commandString);
+		ZombieTaskCommandHandler.execute(command, commandString);
 	}
 	
 }

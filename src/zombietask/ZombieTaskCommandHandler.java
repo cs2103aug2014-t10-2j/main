@@ -137,13 +137,18 @@ public class ZombieTaskCommandHandler {
 	//private final static String MESSAGE_OUTOFBOUNDS = "Warning: input %s is out of bounds";
 	private final static String MESSAGE_DONE = "Marked %s as done";
 	private final static String MESSAGE_UNDONE = "Marked %s as undone";
-	private final static String MESSAGE_CLASH_WARNING = "Warning<br>&nbsp&nbsp&nbsp&nbsp&nbsp Tasks"
-			+ " %s and %d other task(s) clashes<br>Clashed Tasks:<br>"; //"Warning:\n\tTasks %s and %s clashes";
+	private final static String MESSAGE_CLASH_WARNING = TaskPrinter.RED.concat("Warning").concat("<br>&nbsp&nbsp&nbsp&nbsp&nbsp Tasks"
+			+ " %s and %d other task(s) clashes").concat(TaskPrinter.BLACK).concat("<br>Clashed Tasks:<br>"); //"Warning:\n\tTasks %s and %s clashes";
+	private final static String MESSAGE_NULL_TASKNAME = "Unable to add empty task";
+	private final static String MESSAGE_ERROR_ADD = "Unable to add new task\n";
+	private final static String MESSAGE_UNABLE_UNDO = "Unable to undo previous task\n";
+	private final static String MESSAGE_ERROR_VIEW = "Unable to open view";
 	//private final static String MESSAGE_CLASH_MORE_THAN_ONE = "Warning\n\tTasks %s and %d other task(s) clashes";
 	
 	private final static String ERROR_EMPTY_UNDO_STACK = "There is nothing to undo!";
 	private final static String ERROR_EMPTY_REDO_STACK = "There is nothing to redo!";
 	private final static String ERROR_INVALID_UNDO_REDO = "Invalid command on undo stack";
+	
 	
 	
 	/*
@@ -307,6 +312,11 @@ public class ZombieTaskCommandHandler {
 			 * End of fix
 			 */
 			
+			if (taskName == null){
+				showToUser(MESSAGE_NULL_TASKNAME);
+				return;
+			}
+			
 			//Create Task
 			currentTask = null;
 			
@@ -355,7 +365,7 @@ public class ZombieTaskCommandHandler {
 			
 		} catch (Exception err){
 			err.printStackTrace();
-			showToUser(err.getMessage());
+			showToUser(MESSAGE_ERROR_ADD + err.getMessage());
 		}
 	}
 
@@ -464,7 +474,7 @@ public class ZombieTaskCommandHandler {
 				break;
 			}
 		} catch (Exception err){
-			showToUser(err.getMessage());
+			showToUser(MESSAGE_ERROR_VIEW + err.getMessage());
 			err.printStackTrace();
 		}
 	}
@@ -628,7 +638,7 @@ public class ZombieTaskCommandHandler {
 			
 			
 		} catch (Exception err) {
-			showToUser(err.getMessage());
+			showToUser(MESSAGE_UNABLE_UNDO + err.getMessage());
 			err.printStackTrace();
 		}
 	}
@@ -728,7 +738,6 @@ public class ZombieTaskCommandHandler {
 			logger.log(Level.INFO,String.format(MESSAGE_INVALID_COMMAND, userInput) );
 			showToUser(String.format(MESSAGE_INVALID_COMMAND, userInput));
 			return;
-			
 		}
 		
 		window.modifyLabelText(String.format(UI.LABEL_FORMAT, response));

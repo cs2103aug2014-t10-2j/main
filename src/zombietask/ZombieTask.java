@@ -134,7 +134,7 @@ public class ZombieTask {
 		window = new GUI();
 		window.getFrmZombietask().setVisible(false);
 		ZombieTaskCommandHandler.setWindow(window);
-		initStorage("ZombieTest");
+		initStorage("ZombieStorage.txt");
 		UI.initUIOnce();
 
 		try {
@@ -144,6 +144,18 @@ public class ZombieTask {
 			err.printStackTrace();
 			showToUser(err.toString());
 		}
+	}
+	
+	/**
+	 * Init method for tests
+	 * 
+	 */
+	public static void initForTest() {
+		window = new GUI();
+		window.getFrmZombietask().setVisible(false);
+		ZombieTaskCommandHandler.setWindow(window);
+		initStorage("ZombieStorage.txt");
+		UI.initUIOnce();
 	}
 
 	public static GUI getGUI() {
@@ -166,8 +178,9 @@ public class ZombieTask {
 			showToUser(String.format(MESSAGE_INVALID_FILENAME, args));
 		} finally {
 			ZombieTaskCommandHandler.setStorage(storage);
-			showToUser(String
+			/*showToUser(String
 					.format(MESSAGE_FILE_OPENED, storage.getFileName()));
+			*/
 		}
 	}
 
